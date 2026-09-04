@@ -1,0 +1,730 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		156B5F576ADEE4A31A71FFC4 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
+		166D280A9F1C332F9CC97111 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
+		19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
+		1A277B89FD3591C84EBF7FE7 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
+		21E99802222AC51327F153A0 /* PlayTimerMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */; };
+		2AD99B961988492268928367 /* PlayTimerMonitorExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B65B21B707155C7B312E7D /* AppModel.swift */; };
+		3039013CDE1AFE4EC2CD6BD8 /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
+		3066C2AFCEF3217B7BAE4D16 /* PlayTimerShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3C9C7932651889E669ED9E23 /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
+		41C68DE2190E88FA96F5F1AF /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
+		448B6FE4FA8EF4058FAD4752 /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
+		4912588BFF8ECA190202E5B1 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
+		4AD4C3ACC022343327CE2C7F /* ParentGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6819E9535876443E315D598 /* ParentGateView.swift */; };
+		4B70A5137BCD7BD6A857544A /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
+		4F37048BFBD960B774A82B16 /* PlayTimerShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */; };
+		5313AEA0A85F118E80AFE745 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
+		554CFEBA515F95B7C81819FC /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
+		560EE7CBFF0EAE20C6A4A9D4 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
+		5D185CDF65C754B286C4321B /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
+		61E606E43B2594F0B5847F8B /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
+		639CD557559455AE584531A1 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
+		674FEA66E2276FFF194E3520 /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
+		6787870937FF930A08CDB60D /* ParentPINStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481A5D92767F5C6087EF123 /* ParentPINStore.swift */; };
+		6B2D63933AC1967E2E9178B9 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
+		6BD2E5CAE2B4F5D393945790 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
+		6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
+		6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
+		756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */; };
+		8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */; };
+		84FACF5A90AD9AFB7B2AE8C4 /* PlayTimerShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8AD1A1B218B0E670A76FF259 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
+		8CF77146984BD80F16C2BFF2 /* DeviceActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */; };
+		93856E745A22D434FB31CC38 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
+		A8B589A9A2CFD0C80A7040FC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
+		AA5208511C027EB5A30ECB39 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
+		ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
+		AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */; };
+		B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
+		C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E94A560EE265B6AB53709 /* ContentView.swift */; };
+		C4E4471598344838928CC037 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
+		CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
+		D2B81469126CCE6B4EA8B5E4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
+		DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
+		EC1C7173D27D8BA675FE16D5 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4D9951AF80473F9C0CCF277A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DB9082416D726908240313D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 728F7B0DF785807A8D8DAB33;
+			remoteInfo = PlayTimerShieldConfigurationExtension;
+		};
+		A6AAF0D7630F306B3527076D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DB9082416D726908240313D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45C70FCFE2B307A01F9DCA05;
+			remoteInfo = PlayTimerMonitorExtension;
+		};
+		E8A2EEA823077369DE6522C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DB9082416D726908240313D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 659B41839666073F38A1AD4F;
+			remoteInfo = PlayTimerShieldActionExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		74897A48C7E32DF45416CDE1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2AD99B961988492268928367 /* PlayTimerMonitorExtension.appex in Embed Foundation Extensions */,
+				84FACF5A90AD9AFB7B2AE8C4 /* PlayTimerShieldConfigurationExtension.appex in Embed Foundation Extensions */,
+				3066C2AFCEF3217B7BAE4D16 /* PlayTimerShieldActionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerMonitorExtension.swift; sourceTree = "<group>"; };
+		422E94A560EE265B6AB53709 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldActionExtension.swift; sourceTree = "<group>"; };
+		5481A5D92767F5C6087EF123 /* ParentPINStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentPINStore.swift; sourceTree = "<group>"; };
+		607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaySession+DeviceActivity.swift"; sourceTree = "<group>"; };
+		6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldController.swift; sourceTree = "<group>"; };
+		6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBiometricAuthenticator.swift; sourceTree = "<group>"; };
+		6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityService.swift; sourceTree = "<group>"; };
+		75180D8DFD24BE719289C28F /* PlaySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySession.swift; sourceTree = "<group>"; };
+		8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerShieldActionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIdentifiers.swift; sourceTree = "<group>"; };
+		9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateStore.swift; sourceTree = "<group>"; };
+		9F302515E35B09DE0D98D5FE /* PlayTimer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PlayTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldConfigurationExtension.swift; sourceTree = "<group>"; };
+		AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerShieldConfigurationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerApp.swift; sourceTree = "<group>"; };
+		D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerMonitorExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9B65B21B707155C7B312E7D /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPhase.swift; sourceTree = "<group>"; };
+		F6819E9535876443E315D598 /* ParentGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentGateView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2443F5B2D1EDAAA4CA87731C /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */,
+				08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */,
+				75180D8DFD24BE719289C28F /* PlaySession.swift */,
+				607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */,
+				F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */,
+				9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */,
+				6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */,
+				F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */,
+			);
+			name = Shared;
+			path = Sources/Shared;
+			sourceTree = "<group>";
+		};
+		35AB5E742BB4FA7979367A95 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D9B65B21B707155C7B312E7D /* AppModel.swift */,
+				422E94A560EE265B6AB53709 /* ContentView.swift */,
+				6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */,
+				6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */,
+				F6819E9535876443E315D598 /* ParentGateView.swift */,
+				5481A5D92767F5C6087EF123 /* ParentPINStore.swift */,
+				BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */,
+			);
+			name = App;
+			path = Sources/App;
+			sourceTree = "<group>";
+		};
+		50168368B56B3435880E02E9 /* ShieldConfigurationExtension */ = {
+			isa = PBXGroup;
+			children = (
+				AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */,
+			);
+			name = ShieldConfigurationExtension;
+			path = Sources/ShieldConfigurationExtension;
+			sourceTree = "<group>";
+		};
+		7E919EB67CDADDAF5EA7E79B = {
+			isa = PBXGroup;
+			children = (
+				35AB5E742BB4FA7979367A95 /* App */,
+				8F6B001F3EAC799C69FAA919 /* MonitorExtension */,
+				2443F5B2D1EDAAA4CA87731C /* Shared */,
+				BA5710045F8BD9F9B7ABEE13 /* ShieldActionExtension */,
+				50168368B56B3435880E02E9 /* ShieldConfigurationExtension */,
+				E1C10A7F41CBA1C666E2F595 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8F6B001F3EAC799C69FAA919 /* MonitorExtension */ = {
+			isa = PBXGroup;
+			children = (
+				0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */,
+			);
+			name = MonitorExtension;
+			path = Sources/MonitorExtension;
+			sourceTree = "<group>";
+		};
+		BA5710045F8BD9F9B7ABEE13 /* ShieldActionExtension */ = {
+			isa = PBXGroup;
+			children = (
+				4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */,
+			);
+			name = ShieldActionExtension;
+			path = Sources/ShieldActionExtension;
+			sourceTree = "<group>";
+		};
+		E1C10A7F41CBA1C666E2F595 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F302515E35B09DE0D98D5FE /* PlayTimer.app */,
+				D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */,
+				8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */,
+				AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		45C70FCFE2B307A01F9DCA05 /* PlayTimerMonitorExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7976A724F31624B3CF2044CE /* Build configuration list for PBXNativeTarget "PlayTimerMonitorExtension" */;
+			buildPhases = (
+				A60CD230FF4614CFEB32D4D8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlayTimerMonitorExtension;
+			packageProductDependencies = (
+			);
+			productName = PlayTimerMonitorExtension;
+			productReference = D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		659B41839666073F38A1AD4F /* PlayTimerShieldActionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52EE3CFAA1B72FE508D3FEDE /* Build configuration list for PBXNativeTarget "PlayTimerShieldActionExtension" */;
+			buildPhases = (
+				C612401C36B5430AF63B1127 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlayTimerShieldActionExtension;
+			packageProductDependencies = (
+			);
+			productName = PlayTimerShieldActionExtension;
+			productReference = 8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		728F7B0DF785807A8D8DAB33 /* PlayTimerShieldConfigurationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5D56850D34FC88438517C15 /* Build configuration list for PBXNativeTarget "PlayTimerShieldConfigurationExtension" */;
+			buildPhases = (
+				DC9DE8E204069D179232FF65 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlayTimerShieldConfigurationExtension;
+			packageProductDependencies = (
+			);
+			productName = PlayTimerShieldConfigurationExtension;
+			productReference = AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FEBAD3096FDB763EB51AB4E6 /* PlayTimer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0EC32F4194D29631C7B5664 /* Build configuration list for PBXNativeTarget "PlayTimer" */;
+			buildPhases = (
+				1F264D8D014A6932A6574895 /* Sources */,
+				74897A48C7E32DF45416CDE1 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CF2874B338E93AE1E78EC910 /* PBXTargetDependency */,
+				F85D27230AB89E01475C8B86 /* PBXTargetDependency */,
+				9160F1C7F47CFE015D43C73B /* PBXTargetDependency */,
+			);
+			name = PlayTimer;
+			packageProductDependencies = (
+			);
+			productName = PlayTimer;
+			productReference = 9F302515E35B09DE0D98D5FE /* PlayTimer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5DB9082416D726908240313D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					45C70FCFE2B307A01F9DCA05 = {
+						DevelopmentTeam = "";
+					};
+					659B41839666073F38A1AD4F = {
+						DevelopmentTeam = "";
+					};
+					728F7B0DF785807A8D8DAB33 = {
+						DevelopmentTeam = "";
+					};
+					FEBAD3096FDB763EB51AB4E6 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 746F9D558C99EEF9A315D193 /* Build configuration list for PBXProject "PlayTimer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7E919EB67CDADDAF5EA7E79B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E1C10A7F41CBA1C666E2F595 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FEBAD3096FDB763EB51AB4E6 /* PlayTimer */,
+				45C70FCFE2B307A01F9DCA05 /* PlayTimerMonitorExtension */,
+				659B41839666073F38A1AD4F /* PlayTimerShieldActionExtension */,
+				728F7B0DF785807A8D8DAB33 /* PlayTimerShieldConfigurationExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1F264D8D014A6932A6574895 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				156B5F576ADEE4A31A71FFC4 /* ActivityIdentifiers.swift in Sources */,
+				A8B589A9A2CFD0C80A7040FC /* AppConstants.swift in Sources */,
+				2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */,
+				C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */,
+				8CF77146984BD80F16C2BFF2 /* DeviceActivityService.swift in Sources */,
+				756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */,
+				4AD4C3ACC022343327CE2C7F /* ParentGateView.swift in Sources */,
+				6787870937FF930A08CDB60D /* ParentPINStore.swift in Sources */,
+				6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */,
+				4912588BFF8ECA190202E5B1 /* PlaySession.swift in Sources */,
+				AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */,
+				19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */,
+				5D185CDF65C754B286C4321B /* SharedStateStore.swift in Sources */,
+				B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */,
+				AA5208511C027EB5A30ECB39 /* UserSettings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A60CD230FF4614CFEB32D4D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				554CFEBA515F95B7C81819FC /* ActivityIdentifiers.swift in Sources */,
+				93856E745A22D434FB31CC38 /* AppConstants.swift in Sources */,
+				639CD557559455AE584531A1 /* PlaySession+DeviceActivity.swift in Sources */,
+				6B2D63933AC1967E2E9178B9 /* PlaySession.swift in Sources */,
+				21E99802222AC51327F153A0 /* PlayTimerMonitorExtension.swift in Sources */,
+				4B70A5137BCD7BD6A857544A /* SessionPhase.swift in Sources */,
+				3039013CDE1AFE4EC2CD6BD8 /* SharedStateStore.swift in Sources */,
+				674FEA66E2276FFF194E3520 /* ShieldController.swift in Sources */,
+				8AD1A1B218B0E670A76FF259 /* UserSettings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C612401C36B5430AF63B1127 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4E4471598344838928CC037 /* ActivityIdentifiers.swift in Sources */,
+				CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */,
+				560EE7CBFF0EAE20C6A4A9D4 /* PlaySession+DeviceActivity.swift in Sources */,
+				DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */,
+				8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */,
+				ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */,
+				448B6FE4FA8EF4058FAD4752 /* SharedStateStore.swift in Sources */,
+				41C68DE2190E88FA96F5F1AF /* ShieldController.swift in Sources */,
+				166D280A9F1C332F9CC97111 /* UserSettings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC9DE8E204069D179232FF65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5313AEA0A85F118E80AFE745 /* ActivityIdentifiers.swift in Sources */,
+				6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */,
+				1A277B89FD3591C84EBF7FE7 /* PlaySession+DeviceActivity.swift in Sources */,
+				6BD2E5CAE2B4F5D393945790 /* PlaySession.swift in Sources */,
+				4F37048BFBD960B774A82B16 /* PlayTimerShieldConfigurationExtension.swift in Sources */,
+				EC1C7173D27D8BA675FE16D5 /* SessionPhase.swift in Sources */,
+				61E606E43B2594F0B5847F8B /* SharedStateStore.swift in Sources */,
+				3C9C7932651889E669ED9E23 /* ShieldController.swift in Sources */,
+				D2B81469126CCE6B4EA8B5E4 /* UserSettings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9160F1C7F47CFE015D43C73B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 659B41839666073F38A1AD4F /* PlayTimerShieldActionExtension */;
+			targetProxy = E8A2EEA823077369DE6522C5 /* PBXContainerItemProxy */;
+		};
+		CF2874B338E93AE1E78EC910 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45C70FCFE2B307A01F9DCA05 /* PlayTimerMonitorExtension */;
+			targetProxy = A6AAF0D7630F306B3527076D /* PBXContainerItemProxy */;
+		};
+		F85D27230AB89E01475C8B86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 728F7B0DF785807A8D8DAB33 /* PlayTimerShieldConfigurationExtension */;
+			targetProxy = 4D9951AF80473F9C0CCF277A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		24326F22FAEBFCF094B8EB31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldActionExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerShieldActionExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wenlei.PlayTimer.shield-action";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2C78779F7AE746D243695847 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Config/PlayTimer-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenlei.PlayTimer;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B3365B45D0508E2619F0A4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldActionExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerShieldActionExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wenlei.PlayTimer.shield-action";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A2D5A78914FD31AE0A229618 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldConfigurationExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerShieldConfigurationExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wenlei.PlayTimer.shield-configuration";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CA171CD65A2B30C97A28B9B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		CC13918CBE3F6546A9ABF3E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerMonitorExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerMonitorExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenlei.PlayTimer.monitor;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D6CEC4598593E4B5904453F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerMonitorExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerMonitorExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenlei.PlayTimer.monitor;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E0A68796E34FE8A4C1D5A51E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldConfigurationExtension.entitlements;
+				INFOPLIST_FILE = "Config/PlayTimerShieldConfigurationExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.wenlei.PlayTimer.shield-configuration";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F37ADB01D0F8C03BC360BC43 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		FF7FEDD2CAC85DD010CBB10C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/PlayTimer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Config/PlayTimer-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenlei.PlayTimer;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52EE3CFAA1B72FE508D3FEDE /* Build configuration list for PBXNativeTarget "PlayTimerShieldActionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B3365B45D0508E2619F0A4C /* Debug */,
+				24326F22FAEBFCF094B8EB31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		746F9D558C99EEF9A315D193 /* Build configuration list for PBXProject "PlayTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA171CD65A2B30C97A28B9B5 /* Debug */,
+				F37ADB01D0F8C03BC360BC43 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7976A724F31624B3CF2044CE /* Build configuration list for PBXNativeTarget "PlayTimerMonitorExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6CEC4598593E4B5904453F9 /* Debug */,
+				CC13918CBE3F6546A9ABF3E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D0EC32F4194D29631C7B5664 /* Build configuration list for PBXNativeTarget "PlayTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C78779F7AE746D243695847 /* Debug */,
+				FF7FEDD2CAC85DD010CBB10C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D5D56850D34FC88438517C15 /* Build configuration list for PBXNativeTarget "PlayTimerShieldConfigurationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0A68796E34FE8A4C1D5A51E /* Debug */,
+				A2D5A78914FD31AE0A229618 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5DB9082416D726908240313D /* Project object */;
+}

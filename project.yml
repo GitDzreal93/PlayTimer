@@ -1,0 +1,110 @@
+name: PlayTimer
+options:
+  bundleIdPrefix: com.wenlei
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "26.3"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "2"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    DEVELOPMENT_TEAM: ""
+targets:
+  PlayTimer:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/App
+      - Sources/Shared
+    info:
+      path: Config/PlayTimer-Info.plist
+      properties:
+        CFBundleDisplayName: PlayTimer
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    entitlements:
+      path: Config/PlayTimer.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.wenlei.PlayTimer
+        com.apple.developer.family-controls: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wenlei.PlayTimer
+        SUPPORTS_MACCATALYST: false
+    dependencies:
+      - target: PlayTimerMonitorExtension
+      - target: PlayTimerShieldConfigurationExtension
+      - target: PlayTimerShieldActionExtension
+  PlayTimerMonitorExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Sources/MonitorExtension
+      - Sources/Shared
+    entitlements:
+      path: Config/PlayTimerMonitorExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.wenlei.PlayTimer
+        com.apple.developer.family-controls: true
+    info:
+      path: Config/PlayTimerMonitorExtension-Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerMonitorExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wenlei.PlayTimer.monitor
+        SKIP_INSTALL: true
+  PlayTimerShieldConfigurationExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Sources/ShieldConfigurationExtension
+      - Sources/Shared
+    entitlements:
+      path: Config/PlayTimerShieldConfigurationExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.wenlei.PlayTimer
+        com.apple.developer.family-controls: true
+    info:
+      path: Config/PlayTimerShieldConfigurationExtension-Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerShieldConfigurationExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wenlei.PlayTimer.shield-configuration
+        SKIP_INSTALL: true
+  PlayTimerShieldActionExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Sources/ShieldActionExtension
+      - Sources/Shared
+    entitlements:
+      path: Config/PlayTimerShieldActionExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.wenlei.PlayTimer
+        com.apple.developer.family-controls: true
+    info:
+      path: Config/PlayTimerShieldActionExtension-Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ManagedSettings.shield-action-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerShieldActionExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.wenlei.PlayTimer.shield-action
+        SKIP_INSTALL: true
