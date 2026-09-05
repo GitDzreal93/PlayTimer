@@ -24,13 +24,13 @@ final class PlayTimerShieldConfigurationExtension: ShieldConfigurationDataSource
         let subtitle = subtitleText(for: session)
 
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterial,
-            backgroundColor: UIColor(red: 0.95, green: 0.98, blue: 0.97, alpha: 1),
+            backgroundBlurStyle: .systemChromeMaterialDark,
+            backgroundColor: UIColor(red: 0.04, green: 0.12, blue: 0.14, alpha: 1),
             icon: UIImage(systemName: "pause.circle.fill"),
-            title: ShieldConfiguration.Label(text: "该休息一下了", color: .label),
-            subtitle: ShieldConfiguration.Label(text: subtitle, color: .secondaryLabel),
-            primaryButtonLabel: ShieldConfiguration.Label(text: "查看休息时间", color: .white),
-            primaryButtonBackgroundColor: UIColor.systemTeal
+            title: ShieldConfiguration.Label(text: "该休息一下了", color: .white),
+            subtitle: ShieldConfiguration.Label(text: subtitle, color: UIColor(red: 0.82, green: 0.94, blue: 0.92, alpha: 1)),
+            primaryButtonLabel: ShieldConfiguration.Label(text: "查看休息时间", color: UIColor(red: 0.03, green: 0.10, blue: 0.11, alpha: 1)),
+            primaryButtonBackgroundColor: UIColor(red: 0.52, green: 0.93, blue: 0.86, alpha: 1)
         )
     }
 

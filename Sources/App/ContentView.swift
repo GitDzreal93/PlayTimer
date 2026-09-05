@@ -5,6 +5,7 @@ struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var now = Date()
     @State private var activeSheet: ActiveSheet?
+    @State private var lastAnnouncedPhase: SessionPhase?
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -12,7 +13,7 @@ struct ContentView: View {
         NavigationStack {
             ZStack {
                 LinearGradient(
-                    colors: [Color(red: 0.95, green: 0.98, blue: 0.97), Color(red: 0.98, green: 0.96, blue: 0.91)],
+                    colors: backgroundColors,
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -55,6 +56,7 @@ struct ContentView: View {
         .onReceive(ticker) { value in
             now = value
             model.markWaitingParentIfNeeded()
+            playPhaseCueIfNeeded()
         }
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
@@ -124,6 +126,32 @@ struct ContentView: View {
             get: { model.alertMessage != nil },
             set: { if !$0 { model.alertMessage = nil } }
         )
+    }
+
+    private var backgroundColors: [Color] {
+        switch model.phase {
+        case .break:
+            return [Color(red: 0.03, green: 0.10, blue: 0.12), Color(red: 0.05, green: 0.18, blue: 0.19)]
+        case .waitingParent:
+            return [Color(red: 0.05, green: 0.13, blue: 0.11), Color(red: 0.10, green: 0.20, blue: 0.16)]
+        default:
+            return [Color(red: 0.95, green: 0.98, blue: 0.97), Color(red: 0.98, green: 0.96, blue: 0.91)]
+        }
+    }
+
+    private func playPhaseCueIfNeeded() {
+        let phase = model.phase
+        defer { lastAnnouncedPhase = phase }
+
+        guard lastAnnouncedPhase != nil, phase != lastAnnouncedPhase else { return }
+        switch phase {
+        case .break:
+            PlayTimerAudioCueService.playBreakStartedCue()
+        case .waitingParent:
+            PlayTimerAudioCueService.playBreakFinishedCue()
+        case .ready, .playing, .error:
+            break
+        }
     }
 
     private func perform(_ action: ParentAction) {
@@ -437,7 +465,7 @@ private struct BreakView: View {
     var onParentControl: () -> Void
 
     var body: some View {
-        StatePanel(
+        RestStatePanel(
             icon: "pause.circle.fill",
             title: "休息一下",
             subtitle: remainingText,
@@ -459,7 +487,7 @@ private struct WaitingParentView: View {
     var onContinue: () -> Void
 
     var body: some View {
-        StatePanel(
+        RestStatePanel(
             icon: "checkmark.circle.fill",
             title: "休息完成",
             subtitle: "请把 iPad 交给爸爸妈妈",
@@ -468,6 +496,56 @@ private struct WaitingParentView: View {
             buttonIcon: "lock.fill",
             action: onContinue
         )
+    }
+}
+
+private struct RestStatePanel: View {
+    var icon: String
+    var title: String
+    var subtitle: String
+    var detail: String
+    var buttonTitle: String
+    var buttonIcon: String
+    var action: () -> Void
+
+    var body: some View {
+        VStack(spacing: 28) {
+            Image(systemName: icon)
+                .font(.system(size: 84))
+                .foregroundStyle(Color(red: 0.52, green: 0.93, blue: 0.86))
+
+            VStack(spacing: 12) {
+                Text(title)
+                    .font(.system(size: 52, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+
+                Text(subtitle)
+                    .font(.system(size: 80, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .minimumScaleFactor(0.65)
+                    .multilineTextAlignment(.center)
+
+                if !detail.isEmpty {
+                    Text(detail)
+                        .font(.title2.bold())
+                        .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.92))
+                        .multilineTextAlignment(.center)
+                }
+            }
+
+            Button(action: action) {
+                Label(buttonTitle, systemImage: buttonIcon)
+                    .frame(maxWidth: 300)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(Color(red: 0.52, green: 0.93, blue: 0.86))
+            .foregroundStyle(Color(red: 0.03, green: 0.10, blue: 0.11))
+        }
+        .padding(32)
+        .frame(maxWidth: 680)
     }
 }
 
