@@ -20,6 +20,10 @@ PlayTimer is a native iPadOS spike for a shared-iPad child mode:
 - Biometric verification uses Face ID / Touch ID only, then falls back to the app PIN.
 - Shared session state is stored as JSON in the App Group container.
 - ManagedSettings uses a named store shared by the app and extensions.
+- App collections use `FamilyActivityPicker` and store only application tokens.
+- Parents can create multiple named app collections, similar to playlists, such as "English study" and "Games".
+- If no app collection is selected, PlayTimer falls back to whole-iPad usage timing.
+- If an app collection is selected, child mode shields all other apps during play and only times the apps in the selected collection.
 
 ## Real iPad Checklist
 

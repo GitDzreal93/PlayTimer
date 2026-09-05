@@ -6,6 +6,7 @@ import Foundation
 final class AppModel: ObservableObject {
     @Published var session: PlaySession?
     @Published var settings: UserSettings
+    @Published var allowedAppCollections: [AllowedAppCollection]
     @Published var authorizationStatus: AuthorizationStatus
     @Published var hasParentPIN: Bool
     @Published var isBusy = false
@@ -17,9 +18,11 @@ final class AppModel: ObservableObject {
 
     init() {
         settings = stateStore.loadSettings()
+        allowedAppCollections = stateStore.loadAllowedAppCollections()
         session = stateStore.loadSession()
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         hasParentPIN = pinStore.hasPIN
+        normalizeSelectedCollection()
     }
 
     var phase: SessionPhase {
@@ -30,8 +33,25 @@ final class AppModel: ObservableObject {
         authorizationStatus == .approved
     }
 
+    var allowedAppCount: Int {
+        selectedAllowedAppCollection?.applicationCount ?? 0
+    }
+
+    var selectedAllowedAppCollection: AllowedAppCollection? {
+        guard let selectedID = settings.selectedAllowedAppCollectionID else {
+            return nil
+        }
+        return allowedAppCollections.first { $0.id == selectedID }
+    }
+
+    var selectedAllowedAppSelection: FamilyActivitySelection {
+        selectedAllowedAppCollection?.selection ?? FamilyActivitySelection()
+    }
+
     func refresh() async {
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
+        allowedAppCollections = stateStore.loadAllowedAppCollections()
+        normalizeSelectedCollection()
         session = stateStore.loadSession()
         if let session, session != self.session {
             try? stateStore.saveSession(session)
@@ -67,6 +87,58 @@ final class AppModel: ObservableObject {
         } catch {
             alertMessage = error.localizedDescription
         }
+    }
+
+    func saveAllowedAppSelection(_ selection: FamilyActivitySelection) {
+        let sanitized = selection.sanitizedForAllowedApps()
+        guard let selectedID = settings.selectedAllowedAppCollectionID else {
+            createAllowedAppCollection(name: "默认合集", selection: sanitized)
+            return
+        }
+        updateAllowedAppSelection(sanitized, for: selectedID)
+    }
+
+    func createAllowedAppCollection(name: String, selection: FamilyActivitySelection = FamilyActivitySelection()) {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let collection = AllowedAppCollection.make(
+            name: trimmedName.isEmpty ? nextCollectionName() : trimmedName,
+            selection: selection
+        )
+
+        allowedAppCollections.append(collection)
+        settings.selectedAllowedAppCollectionID = collection.id
+        persistCollectionsAndSettings()
+    }
+
+    func selectAllowedAppCollection(_ id: UUID?) {
+        settings.selectedAllowedAppCollectionID = id
+        persistSettings()
+    }
+
+    func renameAllowedAppCollection(_ id: UUID, name: String) {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty,
+              let index = allowedAppCollections.firstIndex(where: { $0.id == id })
+        else {
+            return
+        }
+
+        allowedAppCollections[index] = allowedAppCollections[index].renamed(trimmedName)
+        persistCollections()
+    }
+
+    func updateAllowedAppSelection(_ selection: FamilyActivitySelection, for id: UUID) {
+        guard let index = allowedAppCollections.firstIndex(where: { $0.id == id }) else { return }
+        allowedAppCollections[index] = allowedAppCollections[index].replacingSelection(selection)
+        persistCollections()
+    }
+
+    func deleteAllowedAppCollection(_ id: UUID) {
+        allowedAppCollections.removeAll { $0.id == id }
+        if settings.selectedAllowedAppCollectionID == id {
+            settings.selectedAllowedAppCollectionID = allowedAppCollections.first?.id
+        }
+        persistCollectionsAndSettings()
     }
 
     func createPIN(_ pin: String) -> Bool {
@@ -110,15 +182,20 @@ final class AppModel: ObservableObject {
 
         let newSession = PlaySession.new(
             playMinutes: settings.selectedPlayMinutes,
-            breakMinutes: settings.selectedBreakMinutes
+            breakMinutes: settings.selectedBreakMinutes,
+            allowedApplicationCount: allowedAppCount
         )
 
         do {
             if let session {
                 activityService.stopMonitoring(session: session)
             }
-            try await activityService.startMonitoring(session: newSession)
-            ShieldController.clearChildModeShield()
+            let allowedApplications = selectedAllowedAppSelection.applicationTokens
+            try await activityService.startMonitoring(
+                session: newSession,
+                allowedApplications: allowedApplications
+            )
+            ShieldController.applyAllowedAppsShield(allowedApplications: allowedApplications)
             try stateStore.saveSession(newSession)
             session = newSession
         } catch {
@@ -147,6 +224,48 @@ final class AppModel: ObservableObject {
         do {
             try stateStore.saveSession(refreshed)
             session = refreshed
+        } catch {
+            alertMessage = error.localizedDescription
+        }
+    }
+
+    private func normalizeSelectedCollection() {
+        guard let selectedID = settings.selectedAllowedAppCollectionID else { return }
+
+        let selectedExists = allowedAppCollections.contains { $0.id == selectedID }
+        if !selectedExists {
+            settings.selectedAllowedAppCollectionID = nil
+            persistSettings()
+        }
+    }
+
+    private func nextCollectionName() -> String {
+        let base = "新合集"
+        guard allowedAppCollections.contains(where: { $0.name == base }) else { return base }
+
+        var index = 2
+        while allowedAppCollections.contains(where: { $0.name == "\(base) \(index)" }) {
+            index += 1
+        }
+        return "\(base) \(index)"
+    }
+
+    private func persistCollectionsAndSettings() {
+        persistCollections()
+        persistSettings()
+    }
+
+    private func persistCollections() {
+        do {
+            try stateStore.saveAllowedAppCollections(allowedAppCollections)
+        } catch {
+            alertMessage = error.localizedDescription
+        }
+    }
+
+    private func persistSettings() {
+        do {
+            try stateStore.saveSettings(settings)
         } catch {
             alertMessage = error.localizedDescription
         }

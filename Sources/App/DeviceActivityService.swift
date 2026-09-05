@@ -1,10 +1,11 @@
 import DeviceActivity
 import Foundation
+import ManagedSettings
 
 struct DeviceActivityService {
     private let center = DeviceActivityCenter()
 
-    func startMonitoring(session: PlaySession) async throws {
+    func startMonitoring(session: PlaySession, allowedApplications: Set<ApplicationToken>) async throws {
         stopMonitoring(session: session)
 
         let schedule = DeviceActivitySchedule(
@@ -17,9 +18,16 @@ struct DeviceActivityService {
         let threshold = DateComponents(minute: session.playDurationMinutes)
         let event: DeviceActivityEvent
         if #available(iOS 17.4, *) {
-            event = DeviceActivityEvent(threshold: threshold, includesPastActivity: false)
+            event = DeviceActivityEvent(
+                applications: allowedApplications,
+                threshold: threshold,
+                includesPastActivity: false
+            )
         } else {
-            event = DeviceActivityEvent(threshold: threshold)
+            event = DeviceActivityEvent(
+                applications: allowedApplications,
+                threshold: threshold
+            )
         }
 
         try center.startMonitoring(

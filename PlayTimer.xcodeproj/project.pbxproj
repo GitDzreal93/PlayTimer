@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FB2101BD2B79B899BD31B1B /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		156B5F576ADEE4A31A71FFC4 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
 		166D280A9F1C332F9CC97111 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
@@ -36,6 +37,7 @@
 		6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
 		6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */; };
+		8037B05BD5A760AD443F8CA3 /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */; };
 		84FACF5A90AD9AFB7B2AE8C4 /* PlayTimerShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8AD1A1B218B0E670A76FF259 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
@@ -46,12 +48,15 @@
 		ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
 		AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */; };
 		B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
+		C0B5AF5B0E4C87E76E66A1DE /* AllowedAppCollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */; };
 		C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E94A560EE265B6AB53709 /* ContentView.swift */; };
 		C4E4471598344838928CC037 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
+		C58CDD80CF88B4323C82FA45 /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		D2B81469126CCE6B4EA8B5E4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
 		EC1C7173D27D8BA675FE16D5 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
+		FCD1133487E24373B51C181C /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +102,7 @@
 /* Begin PBXFileReference section */
 		08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerMonitorExtension.swift; sourceTree = "<group>"; };
+		0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedAppCollectionsView.swift; sourceTree = "<group>"; };
 		422E94A560EE265B6AB53709 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldActionExtension.swift; sourceTree = "<group>"; };
 		5481A5D92767F5C6087EF123 /* ParentPINStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentPINStore.swift; sourceTree = "<group>"; };
@@ -104,6 +110,7 @@
 		6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldController.swift; sourceTree = "<group>"; };
 		6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBiometricAuthenticator.swift; sourceTree = "<group>"; };
 		6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityService.swift; sourceTree = "<group>"; };
+		73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedAppCollection.swift; sourceTree = "<group>"; };
 		75180D8DFD24BE719289C28F /* PlaySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySession.swift; sourceTree = "<group>"; };
 		8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerShieldActionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIdentifiers.swift; sourceTree = "<group>"; };
@@ -124,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */,
+				73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */,
 				08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */,
 				75180D8DFD24BE719289C28F /* PlaySession.swift */,
 				607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */,
@@ -139,6 +147,7 @@
 		35AB5E742BB4FA7979367A95 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */,
 				D9B65B21B707155C7B312E7D /* AppModel.swift */,
 				422E94A560EE265B6AB53709 /* ContentView.swift */,
 				6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */,
@@ -327,6 +336,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				156B5F576ADEE4A31A71FFC4 /* ActivityIdentifiers.swift in Sources */,
+				0FB2101BD2B79B899BD31B1B /* AllowedAppCollection.swift in Sources */,
+				C0B5AF5B0E4C87E76E66A1DE /* AllowedAppCollectionsView.swift in Sources */,
 				A8B589A9A2CFD0C80A7040FC /* AppConstants.swift in Sources */,
 				2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */,
 				C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */,
@@ -349,6 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				554CFEBA515F95B7C81819FC /* ActivityIdentifiers.swift in Sources */,
+				FCD1133487E24373B51C181C /* AllowedAppCollection.swift in Sources */,
 				93856E745A22D434FB31CC38 /* AppConstants.swift in Sources */,
 				639CD557559455AE584531A1 /* PlaySession+DeviceActivity.swift in Sources */,
 				6B2D63933AC1967E2E9178B9 /* PlaySession.swift in Sources */,
@@ -365,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4E4471598344838928CC037 /* ActivityIdentifiers.swift in Sources */,
+				8037B05BD5A760AD443F8CA3 /* AllowedAppCollection.swift in Sources */,
 				CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */,
 				560EE7CBFF0EAE20C6A4A9D4 /* PlaySession+DeviceActivity.swift in Sources */,
 				DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */,
@@ -381,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5313AEA0A85F118E80AFE745 /* ActivityIdentifiers.swift in Sources */,
+				C58CDD80CF88B4323C82FA45 /* AllowedAppCollection.swift in Sources */,
 				6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */,
 				1A277B89FD3591C84EBF7FE7 /* PlaySession+DeviceActivity.swift in Sources */,
 				6BD2E5CAE2B4F5D393945790 /* PlaySession.swift in Sources */,

@@ -5,6 +5,7 @@ struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var parentAction: ParentAction?
     @State private var now = Date()
+    @State private var isCollectionManagerPresented = false
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -42,6 +43,10 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $isCollectionManagerPresented) {
+            AllowedAppCollectionsView()
+                .environmentObject(model)
+        }
         .onReceive(ticker) { value in
             now = value
             model.markWaitingParentIfNeeded()
@@ -67,6 +72,8 @@ struct ContentView: View {
         case .ready:
             ReadyView(onStart: {
                 parentAction = .start
+            }, onEditAllowedApps: {
+                parentAction = .editAllowedApps
             })
         case .playing:
             PlayingView(onParentControl: {
@@ -110,6 +117,8 @@ struct ContentView: View {
             await model.startChildMode()
         case .end:
             model.endChildMode()
+        case .editAllowedApps:
+            isCollectionManagerPresented = true
         case .continueAfterBreak:
             break
         }
@@ -198,9 +207,35 @@ private struct PINSetupView: View {
 private struct ReadyView: View {
     @EnvironmentObject private var model: AppModel
     var onStart: () -> Void
+    var onEditAllowedApps: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("允许使用的 App")
+                    .font(.title.bold())
+
+                HStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(allowedAppsTitle)
+                            .font(.title3.bold())
+                        Text(allowedAppsSubtitle)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    Button(action: onEditAllowedApps) {
+                        Label("修改", systemImage: "slider.horizontal.3")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                }
+                .padding(18)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
+
             Text("给孩子玩多久？")
                 .font(.largeTitle.bold())
 
@@ -232,6 +267,20 @@ private struct ReadyView: View {
             .disabled(model.isBusy)
         }
     }
+
+    private var allowedAppsTitle: String {
+        guard let collection = model.selectedAllowedAppCollection else {
+            return "不使用 App 合集"
+        }
+        return "\(collection.name) · \(collection.applicationCount) 个 App"
+    }
+
+    private var allowedAppsSubtitle: String {
+        if model.allowedAppCount == 0 {
+            return "开始后按全部 App / 网页实际使用计时"
+        }
+        return "开始后只允许这些 App，并只统计这些 App"
+    }
 }
 
 private struct PlayingView: View {
@@ -243,11 +292,20 @@ private struct PlayingView: View {
             icon: "timer",
             title: "儿童模式进行中",
             subtitle: "本轮额度：\(model.session?.playDurationMinutes ?? AppConstants.defaultPlayMinutes) 分钟实际使用",
-            detail: "时间用完后会自动休息 \(model.session?.breakDurationMinutes ?? AppConstants.defaultBreakMinutes) 分钟",
+            detail: detailText,
             buttonTitle: "家长控制",
             buttonIcon: "lock.fill",
             action: onParentControl
         )
+    }
+
+    private var detailText: String {
+        let breakMinutes = model.session?.breakDurationMinutes ?? AppConstants.defaultBreakMinutes
+        let count = model.session?.allowedApplicationCount ?? 0
+        if count == 0 {
+            return "当前按全部 App / 网页计时，时间用完后休息 \(breakMinutes) 分钟"
+        }
+        return "当前只允许 \(count) 个 App，时间用完后休息 \(breakMinutes) 分钟"
     }
 }
 

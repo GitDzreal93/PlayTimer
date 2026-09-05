@@ -5,6 +5,7 @@ enum ParentAction: String, Identifiable {
     case end
     case continueAfterBreak
     case nextRound
+    case editAllowedApps
 
     var id: String { rawValue }
 
@@ -18,6 +19,8 @@ enum ParentAction: String, Identifiable {
             "休息完成"
         case .nextRound:
             "再玩一轮"
+        case .editAllowedApps:
+            "修改允许 App"
         }
     }
 }
