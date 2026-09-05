@@ -30,54 +30,56 @@ struct StartConfirmationView: View {
     var onConfirm: () -> Void
 
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: 24) {
+            HStack(alignment: .firstTextBaseline, spacing: 16) {
                 Label("确认开始", systemImage: "play.circle.fill")
                     .font(.largeTitle.bold())
                     .foregroundStyle(.teal)
+                    .lineLimit(1)
 
-                VStack(alignment: .leading, spacing: 16) {
-                    summaryRow(icon: "square.grid.2x2.fill", title: "允许 App", value: context.collectionSummary)
-                    summaryRow(icon: "timer", title: "玩耍时长", value: "\(context.playMinutes) 分钟")
-                    summaryRow(icon: "pause.circle.fill", title: "休息时长", value: "\(context.breakMinutes) 分钟")
-                }
-                .padding(18)
-                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                Spacer()
 
-                if context.isTestModeEnabled {
-                    Label("测试模式已开启，这一轮会使用 1 分钟额度。", systemImage: "testtube.2")
-                        .font(.headline)
-                        .foregroundStyle(.orange)
-                }
-
-                if let emptyCollectionMessage = context.emptyCollectionMessage {
-                    Label(emptyCollectionMessage, systemImage: "exclamationmark.triangle.fill")
-                        .font(.headline)
-                        .foregroundStyle(.orange)
-                }
-
-                Spacer(minLength: 0)
-
-                Button {
+                Button("取消") {
                     dismiss()
-                    onConfirm()
-                } label: {
-                    Label("确认开始", systemImage: "checkmark.circle.fill")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .buttonStyle(.bordered)
             }
-            .padding(32)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
-                        dismiss()
-                    }
-                }
+
+            VStack(alignment: .leading, spacing: 16) {
+                summaryRow(icon: "square.grid.2x2.fill", title: "允许 App", value: context.collectionSummary)
+                summaryRow(icon: "timer", title: "玩耍时长", value: "\(context.playMinutes) 分钟")
+                summaryRow(icon: "pause.circle.fill", title: "休息时长", value: "\(context.breakMinutes) 分钟")
             }
+            .padding(18)
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+
+            if context.isTestModeEnabled {
+                Label("测试模式已开启，这一轮会使用 1 分钟额度。", systemImage: "testtube.2")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+            }
+
+            if let emptyCollectionMessage = context.emptyCollectionMessage {
+                Label(emptyCollectionMessage, systemImage: "exclamationmark.triangle.fill")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+            }
+
+            Spacer(minLength: 12)
+
+            Button {
+                dismiss()
+                onConfirm()
+            } label: {
+                Label("确认开始", systemImage: "checkmark.circle.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
         }
-        .presentationDetents([.medium])
+        .padding(32)
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
     }
 
     private func summaryRow(icon: String, title: String, value: String) -> some View {

@@ -92,7 +92,7 @@ struct ContentView: View {
                 activeSheet = .parentGate(.editAllowedApps)
             })
         case .playing:
-            PlayingView(onParentControl: {
+            PlayingView(now: now, onParentControl: {
                 activeSheet = .parentGate(.end)
             })
         case .break:
@@ -346,18 +346,67 @@ private struct ReadyView: View {
 
 private struct PlayingView: View {
     @EnvironmentObject private var model: AppModel
+    var now: Date
     var onParentControl: () -> Void
 
     var body: some View {
-        StatePanel(
-            icon: "timer",
-            title: "儿童模式进行中",
-            subtitle: "本轮额度：\(model.session?.playDurationMinutes ?? AppConstants.defaultPlayMinutes) 分钟实际使用",
-            detail: detailText,
-            buttonTitle: "家长控制",
-            buttonIcon: "lock.fill",
-            action: onParentControl
-        )
+        VStack(spacing: 28) {
+            Image(systemName: "timer.circle.fill")
+                .font(.system(size: 72))
+                .foregroundStyle(.teal)
+
+            VStack(spacing: 10) {
+                Text("儿童模式进行中")
+                    .font(.largeTitle.bold())
+                    .multilineTextAlignment(.center)
+
+                Text(remainingText)
+                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .multilineTextAlignment(.center)
+
+                Text("预计剩余时间")
+                    .font(.title3.bold())
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                ProgressView(value: progress)
+                    .tint(.teal)
+
+                Text(detailText)
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+            }
+
+            Button(action: onParentControl) {
+                Label("家长控制", systemImage: "lock.fill")
+                    .frame(maxWidth: 280)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+    }
+
+    private var remainingText: String {
+        let remaining = max(0, totalSeconds - elapsedSeconds)
+        return String(format: "%02d:%02d", remaining / 60, remaining % 60)
+    }
+
+    private var progress: Double {
+        guard totalSeconds > 0 else { return 0 }
+        return min(1, max(0, Double(elapsedSeconds) / Double(totalSeconds)))
+    }
+
+    private var elapsedSeconds: Int {
+        guard let startedAt = model.session?.startedAt else { return 0 }
+        return max(0, Int(now.timeIntervalSince(startedAt)))
+    }
+
+    private var totalSeconds: Int {
+        (model.session?.playDurationMinutes ?? AppConstants.defaultPlayMinutes) * 60
     }
 
     private var detailText: String {
@@ -366,14 +415,14 @@ private struct PlayingView: View {
         let collectionName = model.session?.allowedCollectionName
         if count == 0 {
             if let collectionName {
-                return "\(collectionName) 里还没有 App，当前按全部 App / 网页计时，时间用完后休息 \(breakMinutes) 分钟"
+                return "\(collectionName) 里还没有 App，当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
             }
-            return "当前按全部 App / 网页计时，时间用完后休息 \(breakMinutes) 分钟"
+            return "当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
         }
         if let collectionName {
-            return "当前允许 \(collectionName) 中的 \(count) 个 App，时间用完后休息 \(breakMinutes) 分钟"
+            return "当前允许 \(collectionName) 中的 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
         }
-        return "当前只允许 \(count) 个 App，时间用完后休息 \(breakMinutes) 分钟"
+        return "当前只允许 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
     }
 }
 
