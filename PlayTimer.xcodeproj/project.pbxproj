@@ -298,16 +298,20 @@
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					45C70FCFE2B307A01F9DCA05 = {
-						DevelopmentTeam = 4BM8MVYGH9;
+						DevelopmentTeam = FUU4946D45;
+						ProvisioningStyle = Automatic;
 					};
 					659B41839666073F38A1AD4F = {
-						DevelopmentTeam = 4BM8MVYGH9;
+						DevelopmentTeam = FUU4946D45;
+						ProvisioningStyle = Automatic;
 					};
 					728F7B0DF785807A8D8DAB33 = {
-						DevelopmentTeam = 4BM8MVYGH9;
+						DevelopmentTeam = FUU4946D45;
+						ProvisioningStyle = Automatic;
 					};
 					FEBAD3096FDB763EB51AB4E6 = {
-						DevelopmentTeam = 4BM8MVYGH9;
+						DevelopmentTeam = FUU4946D45;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -435,6 +439,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldActionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerShieldActionExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -454,6 +460,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimer-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -470,6 +478,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldActionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerShieldActionExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -487,6 +497,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldConfigurationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerShieldConfigurationExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -536,7 +548,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 4BM8MVYGH9;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -570,6 +582,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerMonitorExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerMonitorExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -587,6 +601,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerMonitorExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerMonitorExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -604,6 +620,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimerShieldConfigurationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimerShieldConfigurationExtension-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -653,7 +671,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 4BM8MVYGH9;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -682,6 +700,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/PlayTimer.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FUU4946D45;
 				INFOPLIST_FILE = "Config/PlayTimer-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
