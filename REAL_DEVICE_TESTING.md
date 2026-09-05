@@ -1,6 +1,6 @@
 # PlayTimer 真机测试清单
 
-这份清单是为了把 PlayTimer 跑到你的 iPad 真机上。当前工程已经配置为 iPad-only，并且已经写入本机检测到的 Apple Development Team：`4BM8MVYGH9`。
+这份清单是为了把 PlayTimer 跑到你的 iPad 真机上。当前工程已经配置为 iPad-only，并且已经写入本机检测到的 Apple Development Team：`FUU4946D45`。
 
 ## 现在已经准备好的部分
 
@@ -22,7 +22,7 @@
 4. 打开 Xcode。
 5. Xcode 顶部菜单打开 `Settings...`，进入 `Accounts`。
 6. 点左下角 `+`，登录你的 Apple Developer 账号。
-7. 选中账号后，确认 Team 列表里能看到 `4BM8MVYGH9`。
+7. 选中账号后，确认 Team 列表里能看到 `FUU4946D45`。
 8. 打开本工程：`PlayTimer.xcodeproj`。
 9. 顶部运行设备选择你的 iPad，不要选模拟器。
 10. 左侧点蓝色项目图标 `PlayTimer`，进入 `Signing & Capabilities`。
@@ -88,7 +88,7 @@
 4. 打开测试模式。
 5. 建一个 App 合集，比如“英语学习”，选择 1-2 个 App。
 6. 开始儿童模式，确认开始页里显示正确合集和 `1 分钟`。
-7. 切到允许的 App 使用，等 1 分钟阈值触发。
-8. 验证到点后其他 App 被 Shield。
-9. 休息结束后，用家长 PIN 或 Face ID / Touch ID 开始下一轮。
-
+7. 第一次出现通知权限弹窗时，点允许。
+8. 切到允许的 App 使用，等 1 分钟阈值触发。
+9. 验证到点后其他 App 被 Shield，并能收到休息开始通知。
+10. 休息结束后，用家长 PIN 或 Face ID / Touch ID 开始下一轮。

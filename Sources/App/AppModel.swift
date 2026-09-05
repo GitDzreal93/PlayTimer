@@ -1,6 +1,7 @@
 import Combine
 import FamilyControls
 import Foundation
+import UserNotifications
 
 @MainActor
 final class AppModel: ObservableObject {
@@ -14,9 +15,12 @@ final class AppModel: ObservableObject {
 
     private let stateStore = SharedStateStore.shared
     private let activityService = DeviceActivityService()
+    private let notificationService = PlayTimerNotificationService.shared
+    private let notificationDelegate = PlayTimerNotificationDelegate()
     private let pinStore = ParentPINStore()
 
     init() {
+        UNUserNotificationCenter.current().delegate = notificationDelegate
         settings = stateStore.loadSettings()
         allowedAppCollections = stateStore.loadAllowedAppCollections()
         session = stateStore.loadSession()
@@ -202,7 +206,9 @@ final class AppModel: ObservableObject {
         do {
             if let session {
                 activityService.stopMonitoring(session: session)
+                notificationService.cancelSessionNotifications(session)
             }
+            _ = await notificationService.requestAuthorizationIfNeeded()
             let allowedApplications = selectedAllowedAppSelection.applicationTokens
             try await activityService.startMonitoring(
                 session: newSession,
@@ -211,6 +217,7 @@ final class AppModel: ObservableObject {
             ShieldController.applyAllowedAppsShield(allowedApplications: allowedApplications)
             try stateStore.saveSession(newSession)
             session = newSession
+            notificationService.notifySessionStarted(newSession)
         } catch {
             alertMessage = error.localizedDescription
         }
@@ -223,6 +230,7 @@ final class AppModel: ObservableObject {
         do {
             if let session {
                 activityService.stopMonitoring(session: session)
+                notificationService.cancelSessionNotifications(session)
             }
             ShieldController.clearChildModeShield()
             try stateStore.saveSession(nil)

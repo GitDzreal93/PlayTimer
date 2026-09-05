@@ -374,6 +374,11 @@ private struct PlayingView: View {
                 ProgressView(value: progress)
                     .tint(.teal)
 
+                Label("通知中心也会提示开始、休息和结束", systemImage: "bell.badge.fill")
+                    .font(.headline)
+                    .foregroundStyle(.teal)
+                    .frame(maxWidth: .infinity, alignment: .center)
+
                 Text(detailText)
                     .font(.title3)
                     .foregroundStyle(.secondary)

@@ -17,6 +17,7 @@
 		2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B65B21B707155C7B312E7D /* AppModel.swift */; };
 		3039013CDE1AFE4EC2CD6BD8 /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
 		3066C2AFCEF3217B7BAE4D16 /* PlayTimerShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3144BF58D3425CE08D326F05 /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		3C9C7932651889E669ED9E23 /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
 		41C68DE2190E88FA96F5F1AF /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
 		448B6FE4FA8EF4058FAD4752 /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
@@ -35,8 +36,10 @@
 		6B2D63933AC1967E2E9178B9 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
 		6BD2E5CAE2B4F5D393945790 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
 		6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */; };
+		6D8638DD96A2EAEC8C1CDDB2 /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */; };
+		7D9DFF97B74D0D54F96385FC /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		8037B05BD5A760AD443F8CA3 /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */; };
 		84FACF5A90AD9AFB7B2AE8C4 /* PlayTimerShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -48,6 +51,7 @@
 		AA5208511C027EB5A30ECB39 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
 		AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */; };
+		B0AB15AEB0AE79C1F245809A /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */; };
 		C0B5AF5B0E4C87E76E66A1DE /* AllowedAppCollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */; };
 		C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E94A560EE265B6AB53709 /* ContentView.swift */; };
@@ -55,6 +59,7 @@
 		C58CDD80CF88B4323C82FA45 /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		D2B81469126CCE6B4EA8B5E4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
+		DDF8E08D3E419488839EC4CE /* PlayTimerNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A24F139F2A4947C8DE3EE /* PlayTimerNotificationDelegate.swift */; };
 		DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75180D8DFD24BE719289C28F /* PlaySession.swift */; };
 		EC1C7173D27D8BA675FE16D5 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
 		FCD1133487E24373B51C181C /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
@@ -105,6 +110,7 @@
 		0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerMonitorExtension.swift; sourceTree = "<group>"; };
 		0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedAppCollectionsView.swift; sourceTree = "<group>"; };
 		422E94A560EE265B6AB53709 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerNotificationService.swift; sourceTree = "<group>"; };
 		4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldActionExtension.swift; sourceTree = "<group>"; };
 		5481A5D92767F5C6087EF123 /* ParentPINStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentPINStore.swift; sourceTree = "<group>"; };
 		5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartConfirmationView.swift; sourceTree = "<group>"; };
@@ -120,6 +126,7 @@
 		9F302515E35B09DE0D98D5FE /* PlayTimer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PlayTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldConfigurationExtension.swift; sourceTree = "<group>"; };
 		AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerShieldConfigurationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B47A24F139F2A4947C8DE3EE /* PlayTimerNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerNotificationDelegate.swift; sourceTree = "<group>"; };
 		BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerApp.swift; sourceTree = "<group>"; };
 		D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerMonitorExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9B65B21B707155C7B312E7D /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
@@ -137,6 +144,7 @@
 				08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */,
 				75180D8DFD24BE719289C28F /* PlaySession.swift */,
 				607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */,
+				433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */,
 				F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */,
 				9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */,
 				6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */,
@@ -157,6 +165,7 @@
 				F6819E9535876443E315D598 /* ParentGateView.swift */,
 				5481A5D92767F5C6087EF123 /* ParentPINStore.swift */,
 				BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */,
+				B47A24F139F2A4947C8DE3EE /* PlayTimerNotificationDelegate.swift */,
 				5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */,
 			);
 			name = App;
@@ -355,6 +364,8 @@
 				6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */,
 				4912588BFF8ECA190202E5B1 /* PlaySession.swift in Sources */,
 				AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */,
+				DDF8E08D3E419488839EC4CE /* PlayTimerNotificationDelegate.swift in Sources */,
+				6D8638DD96A2EAEC8C1CDDB2 /* PlayTimerNotificationService.swift in Sources */,
 				19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */,
 				5D185CDF65C754B286C4321B /* SharedStateStore.swift in Sources */,
 				B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */,
@@ -373,6 +384,7 @@
 				639CD557559455AE584531A1 /* PlaySession+DeviceActivity.swift in Sources */,
 				6B2D63933AC1967E2E9178B9 /* PlaySession.swift in Sources */,
 				21E99802222AC51327F153A0 /* PlayTimerMonitorExtension.swift in Sources */,
+				3144BF58D3425CE08D326F05 /* PlayTimerNotificationService.swift in Sources */,
 				4B70A5137BCD7BD6A857544A /* SessionPhase.swift in Sources */,
 				3039013CDE1AFE4EC2CD6BD8 /* SharedStateStore.swift in Sources */,
 				674FEA66E2276FFF194E3520 /* ShieldController.swift in Sources */,
@@ -389,6 +401,7 @@
 				CAEB25C0DF7C1935C0949675 /* AppConstants.swift in Sources */,
 				560EE7CBFF0EAE20C6A4A9D4 /* PlaySession+DeviceActivity.swift in Sources */,
 				DFB894DBE85841EE93225F97 /* PlaySession.swift in Sources */,
+				7D9DFF97B74D0D54F96385FC /* PlayTimerNotificationService.swift in Sources */,
 				8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */,
 				ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */,
 				448B6FE4FA8EF4058FAD4752 /* SharedStateStore.swift in Sources */,
@@ -406,6 +419,7 @@
 				6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */,
 				1A277B89FD3591C84EBF7FE7 /* PlaySession+DeviceActivity.swift in Sources */,
 				6BD2E5CAE2B4F5D393945790 /* PlaySession.swift in Sources */,
+				B0AB15AEB0AE79C1F245809A /* PlayTimerNotificationService.swift in Sources */,
 				4F37048BFBD960B774A82B16 /* PlayTimerShieldConfigurationExtension.swift in Sources */,
 				EC1C7173D27D8BA675FE16D5 /* SessionPhase.swift in Sources */,
 				61E606E43B2594F0B5847F8B /* SharedStateStore.swift in Sources */,
