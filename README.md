@@ -23,7 +23,10 @@ PlayTimer is a native iPadOS spike for a shared-iPad child mode:
 - App collections use `FamilyActivityPicker` and store only application tokens.
 - Parents can create multiple named app collections, similar to playlists, such as "English study" and "Games".
 - If no app collection is selected, PlayTimer falls back to whole-iPad usage timing.
+- If no apps are selected, the parent sees a confirmation warning before the session starts.
 - If an app collection is selected, child mode shields all other apps during play and only times the apps in the selected collection.
+- Parent verification now opens a start confirmation sheet showing the selected collection, play duration, and break duration before child mode begins.
+- Test mode can be toggled from the toolbar and runs the next session with a 1-minute play duration without changing the saved normal duration.
 
 ## Real iPad Checklist
 
@@ -32,6 +35,4 @@ PlayTimer is a native iPadOS spike for a shared-iPad child mode:
 3. Ensure the app and extension bundle IDs have Family Controls and App Groups enabled.
 4. Use the same App Group ID in all targets: `group.com.wenlei.PlayTimer`.
 5. Run on a real iPad. Screen Time APIs cannot be fully validated in the simulator.
-6. Grant Screen Time authorization, create a PIN, start a short test session, leave the app, and use another app until the threshold triggers.
-
-For faster testing, temporarily add a 1-minute play option in `Sources/Shared/AppConstants.swift`.
+6. Grant Screen Time authorization, create a PIN, enable test mode if needed, start a short test session, leave the app, and use another app until the threshold triggers.

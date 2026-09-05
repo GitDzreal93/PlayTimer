@@ -3,9 +3,8 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var model: AppModel
-    @State private var parentAction: ParentAction?
     @State private var now = Date()
-    @State private var isCollectionManagerPresented = false
+    @State private var activeSheet: ActiveSheet?
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -33,31 +32,48 @@ struct ContentView: View {
             }
             .navigationTitle("PlayTimer")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .topBarTrailing) {
                     if model.hasParentPIN, model.isAuthorized {
                         Toggle(isOn: biometricBinding) {
                             Label("Face ID", systemImage: "faceid")
                         }
                         .toggleStyle(.button)
+
+                        Button {
+                            model.saveSettings(isTestModeEnabled: !model.settings.isTestModeEnabled)
+                        } label: {
+                            Label(
+                                model.settings.isTestModeEnabled ? "关闭测试模式" : "测试模式",
+                                systemImage: "testtube.2"
+                            )
+                        }
+                        .tint(model.settings.isTestModeEnabled ? .orange : .accentColor)
                     }
                 }
             }
-        }
-        .sheet(isPresented: $isCollectionManagerPresented) {
-            AllowedAppCollectionsView()
-                .environmentObject(model)
         }
         .onReceive(ticker) { value in
             now = value
             model.markWaitingParentIfNeeded()
         }
-        .sheet(item: $parentAction) { action in
-            ParentGateView(action: action) {
-                Task {
-                    await perform(action)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .parentGate(let action):
+                ParentGateView(action: action) {
+                    perform(action)
+                }
+                .environmentObject(model)
+            case .appCollections:
+                AllowedAppCollectionsView()
+                    .environmentObject(model)
+            case .startConfirmation(let context):
+                StartConfirmationView(context: context) {
+                    activeSheet = nil
+                    Task {
+                        await model.startChildMode()
+                    }
                 }
             }
-            .environmentObject(model)
         }
         .alert("提示", isPresented: alertBinding) {
             Button("好", role: .cancel) {}
@@ -71,21 +87,21 @@ struct ContentView: View {
         switch model.phase {
         case .ready:
             ReadyView(onStart: {
-                parentAction = .start
+                activeSheet = .parentGate(.start)
             }, onEditAllowedApps: {
-                parentAction = .editAllowedApps
+                activeSheet = .parentGate(.editAllowedApps)
             })
         case .playing:
             PlayingView(onParentControl: {
-                parentAction = .end
+                activeSheet = .parentGate(.end)
             })
         case .break:
             BreakView(now: now, onParentControl: {
-                parentAction = .end
+                activeSheet = .parentGate(.end)
             })
         case .waitingParent:
             WaitingParentView {
-                parentAction = .continueAfterBreak
+                activeSheet = .parentGate(.continueAfterBreak)
             }
         case .error:
             ErrorStateView {
@@ -110,17 +126,42 @@ struct ContentView: View {
         )
     }
 
-    private func perform(_ action: ParentAction) async {
-        parentAction = nil
+    private func perform(_ action: ParentAction) {
         switch action {
-        case .start, .nextRound:
-            await model.startChildMode()
+        case .start, .nextRound, .continueAfterBreak:
+            activeSheet = .startConfirmation(makeStartConfirmationContext())
         case .end:
             model.endChildMode()
+            activeSheet = nil
         case .editAllowedApps:
-            isCollectionManagerPresented = true
-        case .continueAfterBreak:
-            break
+            activeSheet = .appCollections
+        }
+    }
+
+    private func makeStartConfirmationContext() -> StartConfirmationContext {
+        StartConfirmationContext(
+            collectionName: model.selectedAllowedAppCollection?.name,
+            applicationCount: model.allowedAppCount,
+            playMinutes: model.effectivePlayMinutes,
+            breakMinutes: model.settings.selectedBreakMinutes,
+            isTestModeEnabled: model.settings.isTestModeEnabled
+        )
+    }
+}
+
+private enum ActiveSheet: Identifiable {
+    case parentGate(ParentAction)
+    case appCollections
+    case startConfirmation(StartConfirmationContext)
+
+    var id: String {
+        switch self {
+        case .parentGate(let action):
+            return "parent-\(action.id)"
+        case .appCollections:
+            return "app-collections"
+        case .startConfirmation(let context):
+            return "start-confirmation-\(context.id.uuidString)"
         }
     }
 }
@@ -177,9 +218,15 @@ private struct PINSetupView: View {
                 SecureField("4-6 位数字", text: $pin)
                     .keyboardType(.numberPad)
                     .textContentType(.oneTimeCode)
+                    .onChange(of: pin) { value in
+                        pin = sanitizedPIN(value)
+                    }
                 SecureField("再输入一次", text: $confirmPIN)
                     .keyboardType(.numberPad)
                     .textContentType(.oneTimeCode)
+                    .onChange(of: confirmPIN) { value in
+                        confirmPIN = sanitizedPIN(value)
+                    }
             }
             .textFieldStyle(.roundedBorder)
             .font(.title3)
@@ -200,7 +247,12 @@ private struct PINSetupView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
+            .disabled(!canAttemptSave)
         }
+    }
+
+    private var canAttemptSave: Bool {
+        (4...6).contains(pin.count) && (4...6).contains(confirmPIN.count)
     }
 }
 
@@ -234,6 +286,15 @@ private struct ReadyView: View {
                 }
                 .padding(18)
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
+
+            if model.settings.isTestModeEnabled {
+                Label("测试模式：本轮会按 1 分钟计时", systemImage: "testtube.2")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
 
             Text("给孩子玩多久？")
@@ -302,8 +363,15 @@ private struct PlayingView: View {
     private var detailText: String {
         let breakMinutes = model.session?.breakDurationMinutes ?? AppConstants.defaultBreakMinutes
         let count = model.session?.allowedApplicationCount ?? 0
+        let collectionName = model.session?.allowedCollectionName
         if count == 0 {
+            if let collectionName {
+                return "\(collectionName) 里还没有 App，当前按全部 App / 网页计时，时间用完后休息 \(breakMinutes) 分钟"
+            }
             return "当前按全部 App / 网页计时，时间用完后休息 \(breakMinutes) 分钟"
+        }
+        if let collectionName {
+            return "当前允许 \(collectionName) 中的 \(count) 个 App，时间用完后休息 \(breakMinutes) 分钟"
         }
         return "当前只允许 \(count) 个 App，时间用完后休息 \(breakMinutes) 分钟"
     }
@@ -417,4 +485,8 @@ private struct DurationSegmentedPicker: View {
         }
         .pickerStyle(.segmented)
     }
+}
+
+private func sanitizedPIN(_ value: String) -> String {
+    String(value.filter(\.isNumber).prefix(6))
 }

@@ -13,6 +13,7 @@ struct PlaySession: Codable, Equatable {
     var activityNameRawValue: String
     var eventNameRawValue: String
     var allowedApplicationCount: Int
+    var allowedCollectionName: String?
 
     init(
         sessionID: UUID,
@@ -26,7 +27,8 @@ struct PlaySession: Codable, Equatable {
         errorMessage: String?,
         activityNameRawValue: String,
         eventNameRawValue: String,
-        allowedApplicationCount: Int
+        allowedApplicationCount: Int,
+        allowedCollectionName: String?
     ) {
         self.sessionID = sessionID
         self.phase = phase
@@ -40,12 +42,14 @@ struct PlaySession: Codable, Equatable {
         self.activityNameRawValue = activityNameRawValue
         self.eventNameRawValue = eventNameRawValue
         self.allowedApplicationCount = allowedApplicationCount
+        self.allowedCollectionName = allowedCollectionName
     }
 
     static func new(
         playMinutes: Int,
         breakMinutes: Int,
         allowedApplicationCount: Int,
+        allowedCollectionName: String?,
         now: Date = Date()
     ) -> PlaySession {
         let sessionID = UUID()
@@ -61,7 +65,8 @@ struct PlaySession: Codable, Equatable {
             errorMessage: nil,
             activityNameRawValue: "PlayTimerChildMode-\(sessionID.uuidString)",
             eventNameRawValue: "PlayTimerUsageLimit-\(sessionID.uuidString)",
-            allowedApplicationCount: allowedApplicationCount
+            allowedApplicationCount: allowedApplicationCount,
+            allowedCollectionName: allowedCollectionName
         )
     }
 
@@ -91,6 +96,7 @@ extension PlaySession {
         case activityNameRawValue
         case eventNameRawValue
         case allowedApplicationCount
+        case allowedCollectionName
     }
 
     init(from decoder: Decoder) throws {
@@ -107,5 +113,6 @@ extension PlaySession {
         activityNameRawValue = try container.decode(String.self, forKey: .activityNameRawValue)
         eventNameRawValue = try container.decode(String.self, forKey: .eventNameRawValue)
         allowedApplicationCount = try container.decodeIfPresent(Int.self, forKey: .allowedApplicationCount) ?? 0
+        allowedCollectionName = try container.decodeIfPresent(String.self, forKey: .allowedCollectionName)
     }
 }

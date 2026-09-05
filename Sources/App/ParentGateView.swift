@@ -47,12 +47,9 @@ struct ParentGateView: View {
 
                 if action == .continueAfterBreak, isVerified {
                     Button {
-                        dismiss()
-                        Task {
-                            await model.startChildMode()
-                        }
+                        onVerified()
                     } label: {
-                        Label("再玩 \(model.settings.selectedPlayMinutes) 分钟", systemImage: "play.fill")
+                        Label("再玩 \(model.effectivePlayMinutes) 分钟", systemImage: "play.fill")
                             .frame(maxWidth: 280)
                     }
                     .buttonStyle(.borderedProminent)
@@ -89,6 +86,9 @@ struct ParentGateView: View {
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                         .frame(maxWidth: 320)
+                        .onChange(of: pin) { value in
+                            pin = String(value.filter(\.isNumber).prefix(6))
+                        }
 
                     if didFail {
                         Text("PIN 不正确。")
@@ -107,6 +107,7 @@ struct ParentGateView: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .disabled(!(4...6).contains(pin.count))
                 }
             }
             .padding(32)
@@ -125,7 +126,6 @@ struct ParentGateView: View {
         if action == .continueAfterBreak {
             isVerified = true
         } else {
-            dismiss()
             onVerified()
         }
     }

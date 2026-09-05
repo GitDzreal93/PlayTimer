@@ -43,6 +43,7 @@
 		8AD1A1B218B0E670A76FF259 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		8CF77146984BD80F16C2BFF2 /* DeviceActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */; };
 		93856E745A22D434FB31CC38 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
+		9CF36FAA7C31A9A1D6BC9244 /* StartConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */; };
 		A8B589A9A2CFD0C80A7040FC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		AA5208511C027EB5A30ECB39 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		ABF6C7A5EB42CCC803C4D308 /* SessionPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */; };
@@ -106,6 +107,7 @@
 		422E94A560EE265B6AB53709 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldActionExtension.swift; sourceTree = "<group>"; };
 		5481A5D92767F5C6087EF123 /* ParentPINStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentPINStore.swift; sourceTree = "<group>"; };
+		5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartConfirmationView.swift; sourceTree = "<group>"; };
 		607BD5118553ABEE77F21269 /* PlaySession+DeviceActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaySession+DeviceActivity.swift"; sourceTree = "<group>"; };
 		6D3EE1CC938E2BACFDD3C595 /* ShieldController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldController.swift; sourceTree = "<group>"; };
 		6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBiometricAuthenticator.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				F6819E9535876443E315D598 /* ParentGateView.swift */,
 				5481A5D92767F5C6087EF123 /* ParentPINStore.swift */,
 				BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */,
+				5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */,
 			);
 			name = App;
 			path = Sources/App;
@@ -351,6 +354,7 @@
 				19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */,
 				5D185CDF65C754B286C4321B /* SharedStateStore.swift in Sources */,
 				B3DB58DB9910CA08E04087BC /* ShieldController.swift in Sources */,
+				9CF36FAA7C31A9A1D6BC9244 /* StartConfirmationView.swift in Sources */,
 				AA5208511C027EB5A30ECB39 /* UserSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
