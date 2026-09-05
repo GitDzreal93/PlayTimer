@@ -30,6 +30,8 @@ PlayTimer is a native iPadOS spike for a shared-iPad child mode:
 
 ## Real iPad Checklist
 
+For a beginner-friendly walkthrough, see `REAL_DEVICE_TESTING.md`.
+
 1. Open `PlayTimer.xcodeproj`.
 2. Set your Apple Developer Team on all four targets.
 3. Ensure the app and extension bundle IDs have Family Controls and App Groups enabled.
