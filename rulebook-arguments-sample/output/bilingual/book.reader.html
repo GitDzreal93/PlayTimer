@@ -1,0 +1,1506 @@
+<!doctype html><html><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<link rel="icon" href="data:,">
+<title>《论证规则手册》样章：简短论证</title>
+<style>
+:root {
+  color-scheme: light;
+  --reader-font-size: 18px;
+  --reader-measure: 47rem;
+  --bg: #f6f7f3;
+  --surface: #fffefa;
+  --surface-alt: #eef4ef;
+  --text: #1c211f;
+  --muted: #66716b;
+  --line: rgba(45, 58, 52, .18);
+  --accent: #2d706b;
+  --accent-strong: #174d4a;
+  --accent-soft: #d9ece7;
+  --source: #526166;
+  --target: #171b1a;
+  --header-bg: rgba(246, 247, 243, .86);
+  --shadow: 0 18px 48px rgba(36, 48, 42, .10);
+}
+body.theme-dark {
+  color-scheme: dark;
+  --bg: #121614;
+  --surface: #1b211f;
+  --surface-alt: #242c29;
+  --text: #edf2ee;
+  --muted: #a8b4ad;
+  --line: rgba(214, 226, 218, .17);
+  --accent: #8bcfc4;
+  --accent-strong: #b5eee5;
+  --accent-soft: #233d39;
+  --source: #b9c7c2;
+  --target: #f4f7f3;
+  --header-bg: rgba(18, 22, 20, .88);
+  --shadow: 0 18px 48px rgba(0, 0, 0, .24);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(45, 112, 107, .08), transparent 340px),
+    var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.85;
+  font-size: var(--reader-font-size);
+  letter-spacing: 0;
+}
+.progress-track {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 50;
+  background: transparent;
+}
+.progress-fill {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  transition: width .12s linear;
+}
+header.reader-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+}
+.kicker {
+  margin: 0 0 3px;
+  color: var(--accent-strong);
+  font-size: .74rem;
+  font-weight: 700;
+}
+h1 {
+  margin: 0;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  font-weight: 760;
+}
+.status-line {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+}
+.control-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+}
+.controls,
+.tool-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+button:hover,
+button:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+button.active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+body.theme-dark button.active {
+  color: #09221f;
+}
+.reader-shell {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 30px 24px 88px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 42px;
+}
+.reader-sidebar {
+  position: sticky;
+  top: 112px;
+  align-self: start;
+  max-height: calc(100vh - 136px);
+  overflow: auto;
+}
+.toc-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.toc-panel h2 {
+  margin: 0 0 12px;
+  font-size: .86rem;
+  line-height: 1.25;
+}
+.toc-list {
+  display: grid;
+  gap: 3px;
+}
+.toc-list a {
+  display: block;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.45;
+  padding: 7px 8px;
+  text-decoration: none;
+}
+.toc-list a:hover,
+.toc-list a.is-active {
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+.toc-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: .85rem;
+}
+.reader-main {
+  min-width: 0;
+}
+.pair {
+  max-width: var(--reader-measure);
+  margin: 0 auto 1.65rem;
+  padding: 0 0 1.25rem;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 128px;
+}
+.pair-toolbar {
+  opacity: .38;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0 0 .55rem;
+  transition: opacity .15s;
+}
+.pair:hover .pair-toolbar, .pair:focus-within .pair-toolbar { opacity: 1; }
+.segid {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: .72rem;
+  font-variant-numeric: tabular-nums;
+}
+.pair-toolbar button {
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: .72rem;
+}
+.pair-toolbar button:hover,
+.pair-toolbar button:focus-visible {
+  color: var(--accent-strong);
+  border-color: transparent;
+}
+.src-block, .tgt-block {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.src-block {
+  color: var(--source);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .97em;
+  line-height: 1.72;
+}
+.tgt-block {
+  color: var(--target);
+  font-size: 1.04em;
+  line-height: 1.92;
+}
+.content-grid { display: grid; gap: 12px; }
+
+body.mode-reading .content-grid { grid-template-columns: 1fr; }
+body.mode-reading .src-block { display:none; }
+body.mode-reading .pair.show-source .src-block {
+  display:block;
+  padding: 12px 14px;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  margin-bottom: 10px;
+}
+body.mode-reading .tgt-block { font-size: 1.06em; }
+
+body.mode-study .content-grid { grid-template-columns:1fr; }
+body.mode-study .src-block {
+  display:block;
+  padding: 13px 15px;
+  border-radius: 8px;
+  background: var(--surface-alt);
+  margin-bottom:6px;
+}
+body.mode-study .tgt-block { display:block; }
+
+body.mode-compare .content-grid {
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap: 24px;
+}
+body.mode-compare .pair { max-width: min(100%, 980px); }
+body.mode-compare .src-block, body.mode-compare .tgt-block {
+  display:block;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.heading-pair {
+  border-bottom: 0;
+  margin-top: 2.3rem;
+  margin-bottom: 1.7rem;
+  padding-top: 1rem;
+}
+.heading-pair:first-child { margin-top: .3rem; }
+.heading-source {
+  color: var(--muted);
+  font-size: .95rem;
+  line-height: 1.45;
+}
+.heading-target {
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 780;
+  line-height: 1.3;
+}
+body.mode-reading .heading-pair .src-block { display: none; }
+body.mode-study .heading-pair .src-block {
+  padding: 0;
+  background: transparent;
+}
+body.mode-compare .heading-pair .src-block,
+body.mode-compare .heading-pair .tgt-block {
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.aligned { border-radius:4px; padding:1px 0; cursor:pointer; }
+.aligned.is-active {
+  background: var(--accent-soft);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.toast {
+  position:fixed; right:18px; bottom:18px; z-index:30;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  display:none;
+  font-size: .86rem;
+}
+@media (max-width: 980px) {
+  .header-inner {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .control-panel {
+    justify-content: flex-start;
+  }
+  .reader-shell {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .reader-sidebar {
+    position: static;
+    max-height: none;
+  }
+  .toc-panel {
+    overflow-x: auto;
+  }
+  .toc-list {
+    display: flex;
+    gap: 4px;
+    min-width: max-content;
+  }
+  .toc-list a {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 780px) {
+  :root { --reader-font-size: 17px; }
+  .header-inner { padding: 14px 16px; }
+  .reader-shell { padding: 20px 16px 72px; }
+  h1 { font-size: 1.28rem; }
+  .controls, .tool-group {
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .pair {
+    margin-bottom: 1.35rem;
+    scroll-margin-top: 152px;
+  }
+  .pair-toolbar { opacity: 1; }
+  .heading-target { font-size: 1.55rem; }
+  body.mode-compare .content-grid { grid-template-columns:1fr; gap:8px; }
+}
+@media print {
+  .progress-track, header.reader-header, .reader-sidebar, .pair-toolbar, .toast {
+    display:none !important;
+  }
+  body { background:#fff; color:#000; font-size:11pt; }
+  .reader-shell { display:block; max-width:none; padding:0; }
+  .pair { max-width:none; break-inside:avoid; }
+  .content-grid { grid-template-columns:1fr 1fr !important; gap:18pt !important; }
+  .src-block { display:block !important; color:#000 !important; }
+  .tgt-block { color:#000 !important; }
+}
+</style></head>
+<body class="mode-reading">
+<div class="progress-track" aria-hidden="true"><span id="progress-fill" class="progress-fill"></span></div>
+<header class="reader-header">
+<div class="header-inner">
+<div class="title-block">
+<p class="kicker">双语阅读器</p>
+<h1>《论证规则手册》样章：简短论证</h1>
+<p class="status-line"><span id="reading-position">准备阅读</span> · 8 个目录项 · 55 个正文段落</p>
+</div>
+<div class="control-panel" aria-label="阅读控制">
+<div class="controls" role="group" aria-label="阅读模式">
+<button type="button" data-mode="reading">阅读</button>
+<button type="button" data-mode="study">学习</button>
+<button type="button" data-mode="compare">核对</button>
+</div>
+<div class="tool-group" role="group" aria-label="版式控制">
+<button type="button" data-font="down" title="缩小字号">A-</button>
+<button type="button" data-font="up" title="放大字号">A+</button>
+<button type="button" data-width="narrow">窄</button>
+<button type="button" data-width="normal">适中</button>
+<button type="button" data-width="wide">宽</button>
+<button type="button" data-theme-toggle title="切换深色主题">深色</button>
+</div></div></div></header>
+<div class="reader-shell">
+<aside class="reader-sidebar">
+<nav class="toc-panel" aria-label="章节目录">
+<h2>目录</h2>
+<div class="toc-list"><a href="#ch01-0001" data-toc-link="ch01-0001">简短论证</a>
+<a href="#ch01-0002" data-toc-link="ch01-0002">几条基本规则</a>
+<a href="#ch01-0004" data-toc-link="ch01-0004">先理清前提和结论</a>
+<a href="#ch01-0016" data-toc-link="ch01-0016">按自然顺序展开</a>
+<a href="#ch01-0025" data-toc-link="ch01-0025">从可靠的前提出发</a>
+<a href="#ch01-0031" data-toc-link="ch01-0031">具体，简洁</a>
+<a href="#ch01-0038" data-toc-link="ch01-0038">讲实质，不靠情绪词</a>
+<a href="#ch01-0045" data-toc-link="ch01-0045">用词保持一致</a></div>
+</nav></aside>
+<main class="reader-main" id="reader-main">
+
+<section id="ch01-0001" class="pair heading-pair" data-segid="ch01-0001">
+  <div class="content-grid">
+    <div class="src-block heading-source">Short Arguments</div>
+    <div class="tgt-block heading-target">简短论证</div>
+  </div>
+</section>
+
+<section id="ch01-0002" class="pair heading-pair" data-segid="ch01-0002">
+  <div class="content-grid">
+    <div class="src-block heading-source">Some General Rules</div>
+    <div class="tgt-block heading-target">几条基本规则</div>
+  </div>
+</section>
+
+<section id="ch01-0003" class="pair text-pair" data-segid="ch01-0003">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0003</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Arguments begin by marshaling reasons and organizing them in a clear and fair way. Chapter I offers general rules for composing short arguments. Chapters II–VI discuss specific *kinds* of short arguments.">Arguments begin by marshaling reasons and organizing them in a clear and fair way. Chapter I offers general rules for composing short arguments. Chapters II–VI discuss specific <em>kinds</em> of short arguments.</div>
+    <div class="tgt-block" data-raw="做论证，先要把理由找出来，再把它们清楚、公正地安排好。第 I 章讲的是写简短论证时都用得上的基本规则。第 II–VI 章会分别讨论几种具体的简短论证。">做论证，先要把理由找出来，再把它们清楚、公正地安排好。第 I 章讲的是写简短论证时都用得上的基本规则。第 II–VI 章会分别讨论几种具体的简短论证。</div>
+  </div>
+</section>
+
+<section id="ch01-0004" class="pair heading-pair" data-segid="ch01-0004">
+  <div class="content-grid">
+    <div class="src-block heading-source">Resolve premises and conclusion</div>
+    <div class="tgt-block heading-target">先理清前提和结论</div>
+  </div>
+</section>
+
+<section id="ch01-0005" class="pair text-pair" data-segid="ch01-0005">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0005</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="The very first step in making an argument is to ask yourself what you are trying to prove. What is your conclusion? Remember that the conclusion is the statement for which you are giving reasons. The statements that give your reasons are your *premises.*">The very first step in making an argument is to ask yourself what you are trying to prove. What is your conclusion? Remember that the conclusion is the statement for which you are giving reasons. The statements that give your reasons are your <em>premises.</em></div>
+    <div class="tgt-block" data-raw="要提出一个论证，第一步就是问自己：我到底想证明什么？我的结论是什么？结论，就是你想用理由来支持的那个判断；那些用来支持它的判断，就是你的*前提*。">要提出一个论证，第一步就是问自己：我到底想证明什么？我的结论是什么？结论，就是你想用理由来支持的那个判断；那些用来支持它的判断，就是你的<em>前提</em>。</div>
+  </div>
+</section>
+
+<section id="ch01-0006" class="pair text-pair" data-segid="ch01-0006">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0006</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Let’s say that you want to persuade your friends (or children, or parents, or …) to eat more beans. Probably this does not seem like the world’s most promising proposition, or the most important either. But it is a good first illustration—and diet does matter! Let’s consider how you might make such an argument.">Let’s say that you want to persuade your friends (or children, or parents, or …) to eat more beans. Probably this does not seem like the world’s most promising proposition, or the most important either. But it is a good first illustration—and diet does matter! Let’s consider how you might make such an argument.</div>
+    <div class="tgt-block" data-raw="比方说，你想说服朋友（或者孩子、父母，或者……）多吃豆类。听上去，这大概既不是世界上最有号召力的主张，也不是什么惊天动地的大事。不过，它很适合拿来做第一个例子，而且饮食确实重要！我们就看看，这样一个论证可以怎么说。">比方说，你想说服朋友（或者孩子、父母，或者……）多吃豆类。听上去，这大概既不是世界上最有号召力的主张，也不是什么惊天动地的大事。不过，它很适合拿来做第一个例子，而且饮食确实重要！我们就看看，这样一个论证可以怎么说。</div>
+  </div>
+</section>
+
+<section id="ch01-0007" class="pair text-pair" data-segid="ch01-0007">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0007</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="You have your conclusion: we should eat more beans. That is your belief. But why? What are your *reasons*? You may need to state them for yourself, for clarity first of all, and then to check that they really are *good* reasons. Certainly you have to state good reasons clearly if you expect others to agree or to change how they eat.">You have your conclusion: we should eat more beans. That is your belief. But why? What are your <em>reasons</em>? You may need to state them for yourself, for clarity first of all, and then to check that they really are <em>good</em> reasons. Certainly you have to state good reasons clearly if you expect others to agree or to change how they eat.</div>
+    <div class="tgt-block" data-raw="你的结论已经有了：我们应该多吃豆类。这是你的想法。可是，为什么呢？你的*理由*是什么？你可能得先把理由讲给自己听，一来让思路清楚，二来也检查一下：这些理由是不是真的*站得住*。当然，如果你希望别人同意你，甚至改变吃法，好理由就更得说清楚。">你的结论已经有了：我们应该多吃豆类。这是你的想法。可是，为什么呢？你的<em>理由</em>是什么？你可能得先把理由讲给自己听，一来让思路清楚，二来也检查一下：这些理由是不是真的<em>站得住</em>。当然，如果你希望别人同意你，甚至改变吃法，好理由就更得说清楚。</div>
+  </div>
+</section>
+
+<section id="ch01-0008" class="pair text-pair" data-segid="ch01-0008">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0008</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="So again: What *are* your reasons? One main premise probably is that beans are healthy: higher in fibers and protein and lower in fat and cholesterol than what most people eat now. So, properly supplemented, a diet of more beans could lead to a longer and more active life. You may not want to assume that your friends or family have heard, or really appreciated, this reason before—at least it is useful to be reminded.">So again: What <em>are</em> your reasons? One main premise probably is that beans are healthy: higher in fibers and protein and lower in fat and cholesterol than what most people eat now. So, properly supplemented, a diet of more beans could lead to a longer and more active life. You may not want to assume that your friends or family have heard, or really appreciated, this reason before—at least it is useful to be reminded.</div>
+    <div class="tgt-block" data-raw="那就再问一遍：你的理由*是什么*？一个主要前提大概是：豆类有益健康。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。所以，只要搭配得当，多吃豆类也许能让人活得更久、更有活力。别想当然地以为朋友或家人早就听过这个理由，或者真的把它当回事；至少，提醒一下总有帮助。">那就再问一遍：你的理由<em>是什么</em>？一个主要前提大概是：豆类有益健康。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。所以，只要搭配得当，多吃豆类也许能让人活得更久、更有活力。别想当然地以为朋友或家人早就听过这个理由，或者真的把它当回事；至少，提醒一下总有帮助。</div>
+  </div>
+</section>
+
+<section id="ch01-0009" class="pair text-pair" data-segid="ch01-0009">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0009</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="To get people motivated, it would be helpful to add another main premise as well. Since beans are often stereotyped as boring, why not also argue that bean dishes actually can be varied and exciting? Give some examples, your own favorite bean dishes maybe: spicy black bean taco fillings, for instance, and hummus (made from garbanzo beans). Now you’ve got an argument—good solid reasons for a clear conclusion.">To get people motivated, it would be helpful to add another main premise as well. Since beans are often stereotyped as boring, why not also argue that bean dishes actually can be varied and exciting? Give some examples, your own favorite bean dishes maybe: spicy black bean taco fillings, for instance, and hummus (made from garbanzo beans). Now you’ve got an argument—good solid reasons for a clear conclusion.</div>
+    <div class="tgt-block" data-raw="为了让人更有动力，还可以加上另一个主要前提。豆类常被人想成无聊的食物，那为什么不顺便说明：豆类菜其实也可以很丰富、很有意思？举几个例子，最好是你自己喜欢的，比如辣味黑豆塔可馅，或者鹰嘴豆泥（用鹰嘴豆做的）。这样，一个论证就有了：结论清楚，理由也扎实。">为了让人更有动力，还可以加上另一个主要前提。豆类常被人想成无聊的食物，那为什么不顺便说明：豆类菜其实也可以很丰富、很有意思？举几个例子，最好是你自己喜欢的，比如辣味黑豆塔可馅，或者鹰嘴豆泥（用鹰嘴豆做的）。这样，一个论证就有了：结论清楚，理由也扎实。</div>
+  </div>
+</section>
+
+<section id="ch01-0010" class="pair text-pair" data-segid="ch01-0010">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0010</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Even jokes can be arguments, though the reasons may seem silly.">Even jokes can be arguments, though the reasons may seem silly.</div>
+    <div class="tgt-block" data-raw="就连笑话也可以是论证，只不过理由听起来可能有点傻。">就连笑话也可以是论证，只不过理由听起来可能有点傻。</div>
+  </div>
+</section>
+
+<section id="ch01-0011" class="pair text-pair" data-segid="ch01-0011">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0011</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Living on earth may be tough, but it includes a free ride around the sun every year.[1]">Living on earth may be tough, but it includes a free ride around the sun every year.[1]</div>
+    <div class="tgt-block" data-raw="活在地球上也许不容易，但好处是，每年都能免费绕太阳转一圈。[1]">活在地球上也许不容易，但好处是，每年都能免费绕太阳转一圈。[1]</div>
+  </div>
+</section>
+
+<section id="ch01-0012" class="pair text-pair" data-segid="ch01-0012">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0012</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Getting a free ride around the sun is not the sort of reason you normally expect for bearing up when life gets tough. That’s what makes the joke funny. But it is still a reason: an attempt to justify the claim that life isn’t quite so bad as it may sometimes seem. It’s a funny *argument.*">Getting a free ride around the sun is not the sort of reason you normally expect for bearing up when life gets tough. That’s what makes the joke funny. But it is still a reason: an attempt to justify the claim that life isn’t quite so bad as it may sometimes seem. It’s a funny <em>argument.</em></div>
+    <div class="tgt-block" data-raw="“免费绕太阳转一圈”通常不会是我们在日子难过时拿来安慰自己的理由。这正是笑点所在。但它仍然是一个理由：它在试着说明，生活也许并不像有时候看起来那么糟。换句话说，这是一个好笑的*论证*。">“免费绕太阳转一圈”通常不会是我们在日子难过时拿来安慰自己的理由。这正是笑点所在。但它仍然是一个理由：它在试着说明，生活也许并不像有时候看起来那么糟。换句话说，这是一个好笑的<em>论证</em>。</div>
+  </div>
+</section>
+
+<section id="ch01-0013" class="pair text-pair" data-segid="ch01-0013">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0013</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="In Rule 1—*Resolve* premises and conclusion—the word “resolve” has two related meanings. One is to *distinguish* them. Your reasons are different from your conclusion: keep them clearly separate. Getting a free ride around the sun is a distinct idea from bearing up when life gets tough, and it logically comes first. It’s a premise. Being better able to bear up might be something that follows. It’s a conclusion.">In Rule 1—<em>Resolve</em> premises and conclusion—the word “resolve” has two related meanings. One is to <em>distinguish</em> them. Your reasons are different from your conclusion: keep them clearly separate. Getting a free ride around the sun is a distinct idea from bearing up when life gets tough, and it logically comes first. It’s a premise. Being better able to bear up might be something that follows. It’s a conclusion.</div>
+    <div class="tgt-block" data-raw="规则 1 的英文是 *Resolve premises and conclusion*，这里我译作“先理清前提和结论”。resolve 在这里有两层相关的意思。第一层，是把二者*区分*开。理由和结论不是一回事，要分清楚。“免费绕太阳转一圈”和“日子难过时还能撑下去”是两个不同的想法；前者在逻辑上先出现，是前提。后者如果成立，则是由它推出的结论。">规则 1 的英文是 <em>Resolve premises and conclusion</em>，这里我译作“先理清前提和结论”。resolve 在这里有两层相关的意思。第一层，是把二者<em>区分</em>开。理由和结论不是一回事，要分清楚。“免费绕太阳转一圈”和“日子难过时还能撑下去”是两个不同的想法；前者在逻辑上先出现，是前提。后者如果成立，则是由它推出的结论。</div>
+  </div>
+</section>
+
+<section id="ch01-0014" class="pair text-pair" data-segid="ch01-0014">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0014</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Once you have distinguished your premises and conclusion, be sure that both are claims that you want to *commit to.* This is the other meaning of “resolve.” If so, proceed. If not, change them! In any case, being clear to yourself is necessary before you can be clear to anyone else.">Once you have distinguished your premises and conclusion, be sure that both are claims that you want to <em>commit to.</em> This is the other meaning of “resolve.” If so, proceed. If not, change them! In any case, being clear to yourself is necessary before you can be clear to anyone else.</div>
+    <div class="tgt-block" data-raw="分清前提和结论以后，还要确认：这两个判断你都愿意*认下来*。这是 resolve 的第二层意思。愿意，就继续；不愿意，就改。无论如何，先让自己明白，才可能让别人明白。">分清前提和结论以后，还要确认：这两个判断你都愿意<em>认下来</em>。这是 resolve 的第二层意思。愿意，就继续；不愿意，就改。无论如何，先让自己明白，才可能让别人明白。</div>
+  </div>
+</section>
+
+<section id="ch01-0015" class="pair text-pair" data-segid="ch01-0015">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0015</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="This book offers you a ready list of different forms that arguments can take. Use this list to develop your premises. To defend a generalization, for instance, check Chapter II. It will remind you that you need to give a series of examples as premises, and it will tell you what sorts of examples to look for. If your conclusion requires a deductive argument like those explained in Chapter VI, the rules outlined in that chapter will tell you what types of premises you need. You may have to try several different arguments before you find one that works well.">This book offers you a ready list of different forms that arguments can take. Use this list to develop your premises. To defend a generalization, for instance, check Chapter II. It will remind you that you need to give a series of examples as premises, and it will tell you what sorts of examples to look for. If your conclusion requires a deductive argument like those explained in Chapter VI, the rules outlined in that chapter will tell you what types of premises you need. You may have to try several different arguments before you find one that works well.</div>
+    <div class="tgt-block" data-raw="本书会给你一份现成清单，列出论证常见的几种形式。你可以用这份清单来发展自己的前提。比如，要支持一个概括性判断，可以看第 II 章；那一章会提醒你，需要拿出一组例子作前提，也会告诉你该找什么样的例子。如果你的结论需要第 VI 章那类演绎论证，那里的规则会告诉你需要哪些前提。你也许得试好几种论证，才能找到真正好用的一种。">本书会给你一份现成清单，列出论证常见的几种形式。你可以用这份清单来发展自己的前提。比如，要支持一个概括性判断，可以看第 II 章；那一章会提醒你，需要拿出一组例子作前提，也会告诉你该找什么样的例子。如果你的结论需要第 VI 章那类演绎论证，那里的规则会告诉你需要哪些前提。你也许得试好几种论证，才能找到真正好用的一种。</div>
+  </div>
+</section>
+
+<section id="ch01-0016" class="pair heading-pair" data-segid="ch01-0016">
+  <div class="content-grid">
+    <div class="src-block heading-source">Unfold your ideas in a natural order</div>
+    <div class="tgt-block heading-target">按自然顺序展开</div>
+  </div>
+</section>
+
+<section id="ch01-0017" class="pair text-pair" data-segid="ch01-0017">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0017</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Arguments *move.* Reasons and evidence lead to conclusions. But, like any other form of movement, arguments may be graceful or clumsy, sharp or confused, clean or muddled. You want clarity and efficiency—even grace, if you can manage it.">Arguments <em>move.</em> Reasons and evidence lead to conclusions. But, like any other form of movement, arguments may be graceful or clumsy, sharp or confused, clean or muddled. You want clarity and efficiency—even grace, if you can manage it.</div>
+    <div class="tgt-block" data-raw="论证是要往前走的。理由和证据一步步通向结论。但和任何“往前走”的东西一样，论证可以走得优雅，也可以走得笨拙；可以利落清楚，也可以乱成一团。你要追求清晰和效率；如果可以，再多一点优雅。">论证是要往前走的。理由和证据一步步通向结论。但和任何“往前走”的东西一样，论证可以走得优雅，也可以走得笨拙；可以利落清楚，也可以乱成一团。你要追求清晰和效率；如果可以，再多一点优雅。</div>
+  </div>
+</section>
+
+<section id="ch01-0018" class="pair text-pair" data-segid="ch01-0018">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0018</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Take the argument about beans once more. If you were now going to write your argument out, how might you do it? One good way would be this:">Take the argument about beans once more. If you were now going to write your argument out, how might you do it? One good way would be this:</div>
+    <div class="tgt-block" data-raw="再拿吃豆类这个例子来说。要是现在把这个论证写出来，可以怎么写？一种不错的写法是：">再拿吃豆类这个例子来说。要是现在把这个论证写出来，可以怎么写？一种不错的写法是：</div>
+  </div>
+</section>
+
+<section id="ch01-0019" class="pair text-pair" data-segid="ch01-0019">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0019</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="We should eat more beans. One reason is that beans are healthy. They are higher in fibers and protein and lower in fat and cholesterol than what most people eat now. Meanwhile, bean dishes can be quite varied and exciting too. Think of spicy black bean taco fillings or hummus.">We should eat more beans. One reason is that beans are healthy. They are higher in fibers and protein and lower in fat and cholesterol than what most people eat now. Meanwhile, bean dishes can be quite varied and exciting too. Think of spicy black bean taco fillings or hummus.</div>
+    <div class="tgt-block" data-raw="我们应该多吃豆类。一个理由是，豆类有益健康。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。同时，豆类菜也可以很丰富、很有意思。想想辣味黑豆塔可馅，或者鹰嘴豆泥。">我们应该多吃豆类。一个理由是，豆类有益健康。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。同时，豆类菜也可以很丰富、很有意思。想想辣味黑豆塔可馅，或者鹰嘴豆泥。</div>
+  </div>
+</section>
+
+<section id="ch01-0020" class="pair text-pair" data-segid="ch01-0020">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0020</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Each sentence in this passage prepares the way for the next one, and then the next one steps smoothly up to bat. The argument begins by stating its conclusion. This invites stating premises in turn, and the argument obliges by immediately stating a main premise, and then giving a brief reason for it in turn, explaining why beans are healthy. Then it offers the other main premise and its examples. The argument could be laid out in different ways—for example, the second main premise could be first, and/or the conclusion could be drawn at the end rather than the beginning—but either way, each part is in a good place.">Each sentence in this passage prepares the way for the next one, and then the next one steps smoothly up to bat. The argument begins by stating its conclusion. This invites stating premises in turn, and the argument obliges by immediately stating a main premise, and then giving a brief reason for it in turn, explaining why beans are healthy. Then it offers the other main premise and its examples. The argument could be laid out in different ways—for example, the second main premise could be first, and/or the conclusion could be drawn at the end rather than the beginning—but either way, each part is in a good place.</div>
+    <div class="tgt-block" data-raw="这段话里，每一句都在为下一句铺路，下一句也接得顺。论证一开始先说结论，于是自然引出前提；接着马上给出一个主要前提，再补上一点说明，解释为什么豆类有益健康。然后，它给出另一个主要前提和相应的例子。这个论证当然还可以有别的安排，比如把第二个主要前提放在前面，或者把结论留到最后再说。但不管怎么安排，每一部分都应该出现在合适的位置。">这段话里，每一句都在为下一句铺路，下一句也接得顺。论证一开始先说结论，于是自然引出前提；接着马上给出一个主要前提，再补上一点说明，解释为什么豆类有益健康。然后，它给出另一个主要前提和相应的例子。这个论证当然还可以有别的安排，比如把第二个主要前提放在前面，或者把结论留到最后再说。但不管怎么安排，每一部分都应该出现在合适的位置。</div>
+  </div>
+</section>
+
+<section id="ch01-0021" class="pair text-pair" data-segid="ch01-0021">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0021</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Getting an argument to unfold in this smooth way is an accomplishment, especially as arguments get more detailed and complex. It’s not easy to work out the right place for each part—and plenty of wrong places are usually available. For example, suppose we wrote the argument like this instead:">Getting an argument to unfold in this smooth way is an accomplishment, especially as arguments get more detailed and complex. It’s not easy to work out the right place for each part—and plenty of wrong places are usually available. For example, suppose we wrote the argument like this instead:</div>
+    <div class="tgt-block" data-raw="能让论证这样顺畅地展开，并不容易；论证越细、越复杂，就越不容易。每一部分放在哪里才合适，本来就要琢磨，而不合适的位置通常多得很。比如，我们也可以把这个论证写成这样：">能让论证这样顺畅地展开，并不容易；论证越细、越复杂，就越不容易。每一部分放在哪里才合适，本来就要琢磨，而不合适的位置通常多得很。比如，我们也可以把这个论证写成这样：</div>
+  </div>
+</section>
+
+<section id="ch01-0022" class="pair text-pair" data-segid="ch01-0022">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0022</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Think of spicy black bean taco fillings or hummus. Beans are higher in fibers and protein and lower in fat and cholesterol than what most people eat now. Bean dishes can be quite varied and exciting. We should eat more beans. Beans are healthy.">Think of spicy black bean taco fillings or hummus. Beans are higher in fibers and protein and lower in fat and cholesterol than what most people eat now. Bean dishes can be quite varied and exciting. We should eat more beans. Beans are healthy.</div>
+    <div class="tgt-block" data-raw="想想辣味黑豆塔可馅，或者鹰嘴豆泥。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。豆类菜可以很丰富，也很有意思。我们应该多吃豆类。豆类有益健康。">想想辣味黑豆塔可馅，或者鹰嘴豆泥。和大多数人现在吃的食物相比，豆类纤维和蛋白质更多，脂肪和胆固醇更少。豆类菜可以很丰富，也很有意思。我们应该多吃豆类。豆类有益健康。</div>
+  </div>
+</section>
+
+<section id="ch01-0023" class="pair text-pair" data-segid="ch01-0023">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0023</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="These are the same premises and conclusion, but they are in a different order, and the passage leaves out the signposts and transition words that help readers identify premises and conclusions (such as “one reason is that …”). The result is that the argument is totally garbled. The examples for the main premises, like how tasty bean dishes can be, are scattered through the passage rather than cited right next to the statement of those premises. You have to read the passage twice just to be sure what the conclusion is. Don’t count on your readers to be so patient.">These are the same premises and conclusion, but they are in a different order, and the passage leaves out the signposts and transition words that help readers identify premises and conclusions (such as “one reason is that …”). The result is that the argument is totally garbled. The examples for the main premises, like how tasty bean dishes can be, are scattered through the passage rather than cited right next to the statement of those premises. You have to read the passage twice just to be sure what the conclusion is. Don’t count on your readers to be so patient.</div>
+    <div class="tgt-block" data-raw="前提和结论还是那些，但顺序变了，而且这段话删掉了帮助读者辨认前提和结论的路标和过渡语，比如“一个理由是……”。结果，论证全乱了。那些用来说明主要前提的例子，比如豆类菜有多好吃，被散落在各处，而不是紧跟在相应的前提旁边。读者得读两遍，才弄得清结论到底是什么。别指望读者这么有耐心。">前提和结论还是那些，但顺序变了，而且这段话删掉了帮助读者辨认前提和结论的路标和过渡语，比如“一个理由是……”。结果，论证全乱了。那些用来说明主要前提的例子，比如豆类菜有多好吃，被散落在各处，而不是紧跟在相应的前提旁边。读者得读两遍，才弄得清结论到底是什么。别指望读者这么有耐心。</div>
+  </div>
+</section>
+
+<section id="ch01-0024" class="pair text-pair" data-segid="ch01-0024">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0024</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Expect to rearrange your argument several times to find the most natural order. Again, the rules offered in this book should help. You can use them to figure out not only what kinds of premises you need but also how to arrange them in the best order.">Expect to rearrange your argument several times to find the most natural order. Again, the rules offered in this book should help. You can use them to figure out not only what kinds of premises you need but also how to arrange them in the best order.</div>
+    <div class="tgt-block" data-raw="为了找到最自然的顺序，你很可能要把论证来回调整好几次。还是那句话，本书里的规则会帮上忙。它们不只告诉你需要哪几类前提，也能帮你想清楚这些前提该怎么排。">为了找到最自然的顺序，你很可能要把论证来回调整好几次。还是那句话，本书里的规则会帮上忙。它们不只告诉你需要哪几类前提，也能帮你想清楚这些前提该怎么排。</div>
+  </div>
+</section>
+
+<section id="ch01-0025" class="pair heading-pair" data-segid="ch01-0025">
+  <div class="content-grid">
+    <div class="src-block heading-source">Start from reliable premises</div>
+    <div class="tgt-block heading-target">从可靠的前提出发</div>
+  </div>
+</section>
+
+<section id="ch01-0026" class="pair text-pair" data-segid="ch01-0026">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0026</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="No matter how well you argue from premises to conclusion, your conclusion will be weak if your premises are weak.">No matter how well you argue from premises to conclusion, your conclusion will be weak if your premises are weak.</div>
+    <div class="tgt-block" data-raw="从前提推到结论的过程再漂亮，如果前提不可靠，结论也不会有力。">从前提推到结论的过程再漂亮，如果前提不可靠，结论也不会有力。</div>
+  </div>
+</section>
+
+<section id="ch01-0027" class="pair text-pair" data-segid="ch01-0027">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0027</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Nobody in the world today is really happy. Therefore, it seems that human beings are just not made for happiness. Why should we expect what we can never find?">Nobody in the world today is really happy. Therefore, it seems that human beings are just not made for happiness. Why should we expect what we can never find?</div>
+    <div class="tgt-block" data-raw="今天世界上没有人真正幸福。所以，人类似乎并不是为幸福而生的。既然我们永远找不到幸福，又何必期待它呢？">今天世界上没有人真正幸福。所以，人类似乎并不是为幸福而生的。既然我们永远找不到幸福，又何必期待它呢？</div>
+  </div>
+</section>
+
+<section id="ch01-0028" class="pair text-pair" data-segid="ch01-0028">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0028</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="The premise of this argument is the statement that nobody in the world today is really happy. Sometimes, on certain rainy afternoons or in certain moods, this may almost seem true. But ask yourself if this premise really is plausible. Is *nobody* in the world today really happy? Ever? What about that free ride around the sun every year?">The premise of this argument is the statement that nobody in the world today is really happy. Sometimes, on certain rainy afternoons or in certain moods, this may almost seem true. But ask yourself if this premise really is plausible. Is <em>nobody</em> in the world today really happy? Ever? What about that free ride around the sun every year?</div>
+    <div class="tgt-block" data-raw="这个论证的前提是：今天世界上没有人真正幸福。在某些阴雨的下午，或者某些心情里，这句话也许几乎像真的一样。但你要问问自己：这个前提真的可靠吗？今天世界上真的*没有人*幸福吗？一次都没有？那每年免费绕太阳转一圈这件事呢？">这个论证的前提是：今天世界上没有人真正幸福。在某些阴雨的下午，或者某些心情里，这句话也许几乎像真的一样。但你要问问自己：这个前提真的可靠吗？今天世界上真的<em>没有人</em>幸福吗？一次都没有？那每年免费绕太阳转一圈这件事呢？</div>
+  </div>
+</section>
+
+<section id="ch01-0029" class="pair text-pair" data-segid="ch01-0029">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0029</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="At the very least, this premise needs some serious defense, and very likely it is just not true. This argument cannot show, then, that human beings are not made for happiness or that you or I should not expect to be happy.">At the very least, this premise needs some serious defense, and very likely it is just not true. This argument cannot show, then, that human beings are not made for happiness or that you or I should not expect to be happy.</div>
+    <div class="tgt-block" data-raw="至少，这个前提需要好好辩护；而且它很可能根本不是真的。因此，这个论证不能证明人类不是为幸福而生，也不能证明你我不该期待幸福。">至少，这个前提需要好好辩护；而且它很可能根本不是真的。因此，这个论证不能证明人类不是为幸福而生，也不能证明你我不该期待幸福。</div>
+  </div>
+</section>
+
+<section id="ch01-0030" class="pair text-pair" data-segid="ch01-0030">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0030</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Sometimes it is easy to start from reliable premises. You may have well-known examples at hand or reliable sources that are clearly in agreement. Other times it is harder. If you are not sure about the reliability of a premise, you may need to do some research and/or give an argument for the premise itself (see Rule 31 for more on this point). If you find you *cannot* argue adequately for your premise(s), then, of course, you need to try some other premise!">Sometimes it is easy to start from reliable premises. You may have well-known examples at hand or reliable sources that are clearly in agreement. Other times it is harder. If you are not sure about the reliability of a premise, you may need to do some research and/or give an argument for the premise itself (see Rule 31 for more on this point). If you find you <em>cannot</em> argue adequately for your premise(s), then, of course, you need to try some other premise!</div>
+    <div class="tgt-block" data-raw="有时候，找到可靠的前提并不难。你手边也许就有大家熟悉的例子，或者有几个可靠来源，彼此说法也一致。另一些时候就没这么轻松了。如果你不确定某个前提靠不靠得住，可能需要做点研究，或者给这个前提本身也配上一个论证（这一点见规则 31）。如果你发现自己*没法*充分支持某个前提，那当然就得换一个前提。">有时候，找到可靠的前提并不难。你手边也许就有大家熟悉的例子，或者有几个可靠来源，彼此说法也一致。另一些时候就没这么轻松了。如果你不确定某个前提靠不靠得住，可能需要做点研究，或者给这个前提本身也配上一个论证（这一点见规则 31）。如果你发现自己<em>没法</em>充分支持某个前提，那当然就得换一个前提。</div>
+  </div>
+</section>
+
+<section id="ch01-0031" class="pair heading-pair" data-segid="ch01-0031">
+  <div class="content-grid">
+    <div class="src-block heading-source">Be concrete and concise</div>
+    <div class="tgt-block heading-target">具体，简洁</div>
+  </div>
+</section>
+
+<section id="ch01-0032" class="pair text-pair" data-segid="ch01-0032">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0032</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Avoid abstract, vague, and general terms. “We hiked for hours in the sun” is a hundred times better than “It was an extended period of laborious exertion.” Be concise too. Airy elaboration just loses everyone in a fog of words.">Avoid abstract, vague, and general terms. “We hiked for hours in the sun” is a hundred times better than “It was an extended period of laborious exertion.” Be concise too. Airy elaboration just loses everyone in a fog of words.</div>
+    <div class="tgt-block" data-raw="少用抽象、含糊、笼统的词。“我们在太阳底下走了好几个小时”，比“那是一段持续时间较长、需要付出艰苦体力的活动”好上一百倍。还要简洁。空泛铺陈只会把所有人都带进一团词雾里。">少用抽象、含糊、笼统的词。“我们在太阳底下走了好几个小时”，比“那是一段持续时间较长、需要付出艰苦体力的活动”好上一百倍。还要简洁。空泛铺陈只会把所有人都带进一团词雾里。</div>
+  </div>
+</section>
+
+<section id="ch01-0033" class="pair text-pair" data-segid="ch01-0033">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0033</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**NO:**"><strong>NO:</strong></div>
+    <div class="tgt-block" data-raw="**反例：**"><strong>反例：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0034" class="pair text-pair" data-segid="ch01-0034">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0034</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Regularly turning in for the night at an hour that precedes the time at which most of your compatriots go to bed, combined with the practice of awakening at an hour that is earlier than the hour at which most others arise, will tend to the acquisition of such desirable personal traits as a resilient physical constitution, a comfortably well-established financial situation, and the sort of intellectual abilities and capacity for sagacious discernment and judgment that tend to be conducive to earning the respect of others.">Regularly turning in for the night at an hour that precedes the time at which most of your compatriots go to bed, combined with the practice of awakening at an hour that is earlier than the hour at which most others arise, will tend to the acquisition of such desirable personal traits as a resilient physical constitution, a comfortably well-established financial situation, and the sort of intellectual abilities and capacity for sagacious discernment and judgment that tend to be conducive to earning the respect of others.</div>
+    <div class="tgt-block" data-raw="如果一个人经常在大多数同胞通常上床之前的某个较早时刻，就已经完成就寝并进入夜间休息状态；又经常在大多数其他人通常起床之前的某个更早时刻，便提前从睡眠中醒来，那么这两种生活实践结合起来，往往有助于他获得若干令人向往的个人品质：例如强健而有韧性的身体，相当稳定、令人安心的财务状况，以及那种通常有助于赢得他人尊敬的智力水平、明智的辨别能力和审慎的判断能力。">如果一个人经常在大多数同胞通常上床之前的某个较早时刻，就已经完成就寝并进入夜间休息状态；又经常在大多数其他人通常起床之前的某个更早时刻，便提前从睡眠中醒来，那么这两种生活实践结合起来，往往有助于他获得若干令人向往的个人品质：例如强健而有韧性的身体，相当稳定、令人安心的财务状况，以及那种通常有助于赢得他人尊敬的智力水平、明智的辨别能力和审慎的判断能力。</div>
+  </div>
+</section>
+
+<section id="ch01-0035" class="pair text-pair" data-segid="ch01-0035">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0035</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**YES:**"><strong>YES:</strong></div>
+    <div class="tgt-block" data-raw="**正例：**"><strong>正例：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0036" class="pair text-pair" data-segid="ch01-0036">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0036</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Early to bed and early to rise makes a man healthy, wealthy, and wise.">Early to bed and early to rise makes a man healthy, wealthy, and wise.</div>
+    <div class="tgt-block" data-raw="早睡早起，使人健康、富足而明智。">早睡早起，使人健康、富足而明智。</div>
+  </div>
+</section>
+
+<section id="ch01-0037" class="pair text-pair" data-segid="ch01-0037">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0037</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="The “No” version might overdo it just a bit (you think?), but you see the point. Ben Franklin’s rhyme and rhythm help too, but the most important thing is that his words are sharp, simple, and few.">The “No” version might overdo it just a bit (you think?), but you see the point. Ben Franklin’s rhyme and rhythm help too, but the most important thing is that his words are sharp, simple, and few.</div>
+    <div class="tgt-block" data-raw="“反例”版本也许稍微夸张了一点（你觉得呢？），但意思很清楚。本·富兰克林那句话的押韵和节奏当然也有帮助；不过最重要的是，他的词锋利、简单，而且少。">“反例”版本也许稍微夸张了一点（你觉得呢？），但意思很清楚。本·富兰克林那句话的押韵和节奏当然也有帮助；不过最重要的是，他的词锋利、简单，而且少。</div>
+  </div>
+</section>
+
+<section id="ch01-0038" class="pair heading-pair" data-segid="ch01-0038">
+  <div class="content-grid">
+    <div class="src-block heading-source">Build on substance, not overtone</div>
+    <div class="tgt-block heading-target">讲实质，不靠情绪词</div>
+  </div>
+</section>
+
+<section id="ch01-0039" class="pair text-pair" data-segid="ch01-0039">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0039</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Offer actual reasons; don’t just play on the overtones of words.">Offer actual reasons; don’t just play on the overtones of words.</div>
+    <div class="tgt-block" data-raw="给出真正的理由；别只是利用词语自带的情绪色彩。">给出真正的理由；别只是利用词语自带的情绪色彩。</div>
+  </div>
+</section>
+
+<section id="ch01-0040" class="pair text-pair" data-segid="ch01-0040">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0040</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**NO:**"><strong>NO:</strong></div>
+    <div class="tgt-block" data-raw="**反例：**"><strong>反例：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0041" class="pair text-pair" data-segid="ch01-0041">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0041</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Having so disgracefully allowed her once-proud passenger railroads to fade into obscurity, America is honor-bound to restore them now!">Having so disgracefully allowed her once-proud passenger railroads to fade into obscurity, America is honor-bound to restore them now!</div>
+    <div class="tgt-block" data-raw="美国曾可耻地任由她一度引以为荣的客运铁路衰落下去，如今当然有责任把它们恢复起来！">美国曾可耻地任由她一度引以为荣的客运铁路衰落下去，如今当然有责任把它们恢复起来！</div>
+  </div>
+</section>
+
+<section id="ch01-0042" class="pair text-pair" data-segid="ch01-0042">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0042</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="This is supposed to be an argument for restoring (more) passenger rail service. But it offers no evidence for this conclusion whatsoever, just some emotionally loaded words—shopworn words, too, like a politician on automatic. Did passenger rail “fade” because of something “America” did or didn’t do? What was “disgraceful” about this? Many “once-proud” institutions outlive their times, after all—we’re not obliged to restore them all. What does it mean to say America is “honor-bound” to do this? Have promises been made and broken? By whom?">This is supposed to be an argument for restoring (more) passenger rail service. But it offers no evidence for this conclusion whatsoever, just some emotionally loaded words—shopworn words, too, like a politician on automatic. Did passenger rail “fade” because of something “America” did or didn’t do? What was “disgraceful” about this? Many “once-proud” institutions outlive their times, after all—we’re not obliged to restore them all. What does it mean to say America is “honor-bound” to do this? Have promises been made and broken? By whom?</div>
+    <div class="tgt-block" data-raw="这句话本来想论证：我们应该恢复（更多）客运铁路服务。可它并没有为这个结论拿出任何证据，只是堆了一些情绪很重的词；而且还是些用旧了的套话，像政客开了自动挡。客运铁路“衰落”，是因为“美国”做了什么，或者没做什么吗？这件事到底哪里“可耻”？许多“一度引以为荣”的机构都会过时；我们总不能因此就有义务把它们全都恢复起来。说美国“有责任”这样做，究竟是什么意思？有人许过承诺又违背了吗？谁许的？">这句话本来想论证：我们应该恢复（更多）客运铁路服务。可它并没有为这个结论拿出任何证据，只是堆了一些情绪很重的词；而且还是些用旧了的套话，像政客开了自动挡。客运铁路“衰落”，是因为“美国”做了什么，或者没做什么吗？这件事到底哪里“可耻”？许多“一度引以为荣”的机构都会过时；我们总不能因此就有义务把它们全都恢复起来。说美国“有责任”这样做，究竟是什么意思？有人许过承诺又违背了吗？谁许的？</div>
+  </div>
+</section>
+
+<section id="ch01-0043" class="pair text-pair" data-segid="ch01-0043">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0043</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Much can be said for restoring passenger rail, especially in this era when the ecological and economic costs of highways are becoming enormous. The problem is that this argument does not say it. It lets the emotional charge of the words do all the work, and therefore really does no work at all. We’re left exactly where we started. Overtones may sometimes persuade even when they shouldn’t, of course—but remember, here we are looking for actual, concrete evidence.">Much can be said for restoring passenger rail, especially in this era when the ecological and economic costs of highways are becoming enormous. The problem is that this argument does not say it. It lets the emotional charge of the words do all the work, and therefore really does no work at all. We’re left exactly where we started. Overtones may sometimes persuade even when they shouldn’t, of course—but remember, here we are looking for actual, concrete evidence.</div>
+    <div class="tgt-block" data-raw="支持恢复客运铁路的理由其实有很多，尤其在今天，高速公路带来的生态成本和经济成本越来越高。问题是，这个论证没有把这些理由说出来。它让词语的情绪色彩替它干活，结果等于什么也没干。我们还是停在原地。情绪色彩有时当然能说服人，哪怕它本不该如此；但别忘了，我们这里要找的是实际、具体的证据。">支持恢复客运铁路的理由其实有很多，尤其在今天，高速公路带来的生态成本和经济成本越来越高。问题是，这个论证没有把这些理由说出来。它让词语的情绪色彩替它干活，结果等于什么也没干。我们还是停在原地。情绪色彩有时当然能说服人，哪怕它本不该如此；但别忘了，我们这里要找的是实际、具体的证据。</div>
+  </div>
+</section>
+
+<section id="ch01-0044" class="pair text-pair" data-segid="ch01-0044">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0044</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Likewise, do not try to make your argument look good by using emotionally loaded words to label the other side. Generally, people advocate a position for serious and sincere reasons. Try to figure out their view—try to understand their *reasons*—even if you disagree entirely. For example, people who question a new technology are probably not in favor of “going back to the caves.” (What *are* they in favor of? Maybe you need to ask.) Likewise, a person who believes in evolution is not claiming that her grandparents were monkeys. (And again: what *does* she think?) In general, if you can’t imagine how anyone could hold the view you are attacking, you probably just don’t understand it yet.">Likewise, do not try to make your argument look good by using emotionally loaded words to label the other side. Generally, people advocate a position for serious and sincere reasons. Try to figure out their view—try to understand their <em>reasons</em>—even if you disagree entirely. For example, people who question a new technology are probably not in favor of “going back to the caves.” (What <em>are</em> they in favor of? Maybe you need to ask.) Likewise, a person who believes in evolution is not claiming that her grandparents were monkeys. (And again: what <em>does</em> she think?) In general, if you can’t imagine how anyone could hold the view you are attacking, you probably just don’t understand it yet.</div>
+    <div class="tgt-block" data-raw="同样，也不要为了让自己的论证显得好看，就用情绪化的词给对方贴标签。一般来说，人们支持某种立场，都有严肃而真诚的理由。试着弄清他们的看法，理解他们的*理由*，哪怕你完全不同意。比如，质疑一项新技术的人，大概并不是想“回到洞穴时代”。（他们*到底*想要什么？也许你得问问。）同样，相信进化论的人，也不是在说她的祖父母是猴子。（还是那个问题：她*到底*怎么想？）总之，如果你想象不出怎么会有人相信你正在攻击的观点，你很可能只是还没真正理解它。">同样，也不要为了让自己的论证显得好看，就用情绪化的词给对方贴标签。一般来说，人们支持某种立场，都有严肃而真诚的理由。试着弄清他们的看法，理解他们的<em>理由</em>，哪怕你完全不同意。比如，质疑一项新技术的人，大概并不是想“回到洞穴时代”。（他们<em>到底</em>想要什么？也许你得问问。）同样，相信进化论的人，也不是在说她的祖父母是猴子。（还是那个问题：她<em>到底</em>怎么想？）总之，如果你想象不出怎么会有人相信你正在攻击的观点，你很可能只是还没真正理解它。</div>
+  </div>
+</section>
+
+<section id="ch01-0045" class="pair heading-pair" data-segid="ch01-0045">
+  <div class="content-grid">
+    <div class="src-block heading-source">Use consistent terms</div>
+    <div class="tgt-block heading-target">用词保持一致</div>
+  </div>
+</section>
+
+<section id="ch01-0046" class="pair text-pair" data-segid="ch01-0046">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0046</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Short arguments normally have a single theme or thread. They carry one idea through several steps. Therefore, couch that idea in clear and carefully chosen terms, and mark each new step by using those very same terms again.">Short arguments normally have a single theme or thread. They carry one idea through several steps. Therefore, couch that idea in clear and carefully chosen terms, and mark each new step by using those very same terms again.</div>
+    <div class="tgt-block" data-raw="简短论证通常只有一个主题，或者一条主线。它带着一个想法走过几个步骤。所以，要用清楚、慎重选好的词来表达这个想法；每走到新一步，也要用同一组词把它标出来。">简短论证通常只有一个主题，或者一条主线。它带着一个想法走过几个步骤。所以，要用清楚、慎重选好的词来表达这个想法；每走到新一步，也要用同一组词把它标出来。</div>
+  </div>
+</section>
+
+<section id="ch01-0047" class="pair text-pair" data-segid="ch01-0047">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0047</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="In their classic composition handbook, *The Elements of Style,* William Strunk and E. B. White cite Jesus’s famous Beatitudes as a compelling illustration of what they call “parallel construction” or “expressing coordinate ideas in similar form.”">In their classic composition handbook, <em>The Elements of Style,</em> William Strunk and E. B. White cite Jesus’s famous Beatitudes as a compelling illustration of what they call “parallel construction” or “expressing coordinate ideas in similar form.”</div>
+    <div class="tgt-block" data-raw="在经典写作手册《风格的要素》中，威廉·斯特伦克和 E. B. 怀特引用了耶稣著名的“八福”，作为他们所谓“平行结构”或“用相似形式表达并列观念”的有力例子。">在经典写作手册《风格的要素》中，威廉·斯特伦克和 E. B. 怀特引用了耶稣著名的“八福”，作为他们所谓“平行结构”或“用相似形式表达并列观念”的有力例子。</div>
+  </div>
+</section>
+
+<section id="ch01-0048" class="pair text-pair" data-segid="ch01-0048">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0048</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Blessed are the poor in spirit: for theirs is the kingdom of Heaven.">Blessed are the poor in spirit: for theirs is the kingdom of Heaven.</div>
+    <div class="tgt-block" data-raw="灵里贫穷的人有福了：因为天国是他们的。">灵里贫穷的人有福了：因为天国是他们的。</div>
+  </div>
+</section>
+
+<section id="ch01-0049" class="pair text-pair" data-segid="ch01-0049">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0049</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Blessed are those who mourn: for they will be comforted.">Blessed are those who mourn: for they will be comforted.</div>
+    <div class="tgt-block" data-raw="哀恸的人有福了：因为他们将得安慰。">哀恸的人有福了：因为他们将得安慰。</div>
+  </div>
+</section>
+
+<section id="ch01-0050" class="pair text-pair" data-segid="ch01-0050">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0050</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Blessed are the meek: for they will inherit the earth … (Matthew 5:3–5)">Blessed are the meek: for they will inherit the earth … (Matthew 5:3–5)</div>
+    <div class="tgt-block" data-raw="温柔的人有福了：因为他们将承受大地……（Matthew 5:3–5）">温柔的人有福了：因为他们将承受大地……（Matthew 5:3–5）</div>
+  </div>
+</section>
+
+<section id="ch01-0051" class="pair text-pair" data-segid="ch01-0051">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0051</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="“Blessed are the X: for Y” is the formula. It is not rephrased in each case, like “Also, those who are X will be consecrated, because Y.” Instead, each sentence has exactly the same structure and exactly the same phrasing.">“Blessed are the X: for Y” is the formula. It is not rephrased in each case, like “Also, those who are X will be consecrated, because Y.” Instead, each sentence has exactly the same structure and exactly the same phrasing.</div>
+    <div class="tgt-block" data-raw="公式就是：“X 的人有福了：因为 Y。”它没有每次都换一种说法，比如改成“另外，X 的人将被祝圣，因为 Y。”相反，每一句都用完全相同的结构，完全相同的措辞。">公式就是：“X 的人有福了：因为 Y。”它没有每次都换一种说法，比如改成“另外，X 的人将被祝圣，因为 Y。”相反，每一句都用完全相同的结构，完全相同的措辞。</div>
+  </div>
+</section>
+
+<section id="ch01-0052" class="pair text-pair" data-segid="ch01-0052">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0052</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Do the same for your arguments.">Do the same for your arguments.</div>
+    <div class="tgt-block" data-raw="写论证时也一样。">写论证时也一样。</div>
+  </div>
+</section>
+
+<section id="ch01-0053" class="pair text-pair" data-segid="ch01-0053">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0053</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**NO:**"><strong>NO:</strong></div>
+    <div class="tgt-block" data-raw="**反例：**"><strong>反例：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0054" class="pair text-pair" data-segid="ch01-0054">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0054</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="When you learn to care for a pet, you learn to attend to the needs of a dependent creature. Watching and responding carefully when a cat or a dog needs you, your ability to recognize needs and adjust your behavior accordingly can improve toward young children as well. Becoming a more responsive keeper of domestic animals can therefore enhance your familial caregiving skills too.">When you learn to care for a pet, you learn to attend to the needs of a dependent creature. Watching and responding carefully when a cat or a dog needs you, your ability to recognize needs and adjust your behavior accordingly can improve toward young children as well. Becoming a more responsive keeper of domestic animals can therefore enhance your familial caregiving skills too.</div>
+    <div class="tgt-block" data-raw="学会照顾宠物，也就是学会照料一个依赖你的生命。当猫或狗需要你时，你如果能仔细观察并作出回应，那么你识别需要、相应调整行为的能力，也可能迁移到照顾幼儿上。因此，成为一个更会回应家养动物需要的照看者，也能提升你的家庭照护能力。">学会照顾宠物，也就是学会照料一个依赖你的生命。当猫或狗需要你时，你如果能仔细观察并作出回应，那么你识别需要、相应调整行为的能力，也可能迁移到照顾幼儿上。因此，成为一个更会回应家养动物需要的照看者，也能提升你的家庭照护能力。</div>
+  </div>
+</section>
+
+<section id="ch01-0055" class="pair text-pair" data-segid="ch01-0055">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0055</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="Huh? Each sentence may be fairly clear by itself, but the connections between them are totally lost in the underbrush—interesting underbrush, maybe, but too thick for moving effectively. (Remember, arguments need to *move*!)">Huh? Each sentence may be fairly clear by itself, but the connections between them are totally lost in the underbrush—interesting underbrush, maybe, but too thick for moving effectively. (Remember, arguments need to <em>move</em>!)</div>
+    <div class="tgt-block" data-raw="嗯？每一句单独看也许都还清楚，但句子之间的联系全迷失在灌木丛里了——也许那片灌木还挺有意思，可是太密，根本走不动。（记住，论证要*往前走*！）">嗯？每一句单独看也许都还清楚，但句子之间的联系全迷失在灌木丛里了——也许那片灌木还挺有意思，可是太密，根本走不动。（记住，论证要<em>往前走</em>！）</div>
+  </div>
+</section>
+
+<section id="ch01-0056" class="pair text-pair" data-segid="ch01-0056">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0056</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**YES:**"><strong>YES:</strong></div>
+    <div class="tgt-block" data-raw="**正例：**"><strong>正例：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0057" class="pair text-pair" data-segid="ch01-0057">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0057</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="When you learn to care for a pet, you learn to attend to the needs of a dependent creature. When you learn to attend to the needs of a dependent creature, you learn to be a better parent. Therefore, when you learn to care for a pet, you learn to be a better parent.">When you learn to care for a pet, you learn to attend to the needs of a dependent creature. When you learn to attend to the needs of a dependent creature, you learn to be a better parent. Therefore, when you learn to care for a pet, you learn to be a better parent.</div>
+    <div class="tgt-block" data-raw="学会照顾宠物，就是学会照料一个依赖你的生命。学会照料一个依赖你的生命，就是学会做一个更好的父母。所以，学会照顾宠物，就是学会做一个更好的父母。">学会照顾宠物，就是学会照料一个依赖你的生命。学会照料一个依赖你的生命，就是学会做一个更好的父母。所以，学会照顾宠物，就是学会做一个更好的父母。</div>
+  </div>
+</section>
+
+<section id="ch01-0058" class="pair text-pair" data-segid="ch01-0058">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0058</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="The “Yes” version might not be stylish in a flowery way, but it more than makes up for that by being absolutely crystal clear. One simple feature makes the difference: the “No” version uses a new phrase for each key idea every time the idea recurs—for example, “When you learn to care for a pet” is described again in the “No” version’s conclusion as “Becoming a more responsive keeper of domestic animals”—whereas the “Yes” argument carefully and exactly repeats its key terms.">The “Yes” version might not be stylish in a flowery way, but it more than makes up for that by being absolutely crystal clear. One simple feature makes the difference: the “No” version uses a new phrase for each key idea every time the idea recurs—for example, “When you learn to care for a pet” is described again in the “No” version’s conclusion as “Becoming a more responsive keeper of domestic animals”—whereas the “Yes” argument carefully and exactly repeats its key terms.</div>
+    <div class="tgt-block" data-raw="“正例”版本也许不算文采飞扬，但它足够清楚，而且清楚得多。差别只在一个简单地方：“反例”版本每次提到关键想法，都换一套说法。比如，“学会照顾宠物”到了结论里，就变成了“成为一个更会回应家养动物需要的照看者”；而“正例”论证则小心、准确地重复了关键用词。">“正例”版本也许不算文采飞扬，但它足够清楚，而且清楚得多。差别只在一个简单地方：“反例”版本每次提到关键想法，都换一套说法。比如，“学会照顾宠物”到了结论里，就变成了“成为一个更会回应家养动物需要的照看者”；而“正例”论证则小心、准确地重复了关键用词。</div>
+  </div>
+</section>
+
+<section id="ch01-0059" class="pair text-pair" data-segid="ch01-0059">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0059</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="If you are concerned about style—as sometimes you should be, of course—then go for the tightest argument, not the most flowery.">If you are concerned about style—as sometimes you should be, of course—then go for the tightest argument, not the most flowery.</div>
+    <div class="tgt-block" data-raw="如果你在意文风——有时候当然应该在意——那就追求最紧凑的论证，而不是最花哨的论证。">如果你在意文风——有时候当然应该在意——那就追求最紧凑的论证，而不是最花哨的论证。</div>
+  </div>
+</section>
+
+<section id="ch01-0060" class="pair text-pair" data-segid="ch01-0060">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0060</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="**MOST CONCISE:**"><strong>MOST CONCISE:</strong></div>
+    <div class="tgt-block" data-raw="**最简洁：**"><strong>最简洁：</strong></div>
+  </div>
+</section>
+
+<section id="ch01-0061" class="pair text-pair" data-segid="ch01-0061">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0061</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="When you learn to care for a pet, you learn to attend to the needs of a dependent creature, and therefore in turn learn to be a better parent.">When you learn to care for a pet, you learn to attend to the needs of a dependent creature, and therefore in turn learn to be a better parent.</div>
+    <div class="tgt-block" data-raw="学会照顾宠物，就是学会照料一个依赖你的生命，并由此学会做一个更好的父母。">学会照顾宠物，就是学会照料一个依赖你的生命，并由此学会做一个更好的父母。</div>
+  </div>
+</section>
+
+<section id="ch01-0062" class="pair text-pair" data-segid="ch01-0062">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0062</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="__________________">__________________</div>
+    <div class="tgt-block" data-raw="__________________">__________________</div>
+  </div>
+</section>
+
+<section id="ch01-0063" class="pair text-pair" data-segid="ch01-0063">
+  <div class="pair-toolbar" role="toolbar" aria-label="段落工具">
+    <span class="segid">ch01-0063</span>
+    <button class="reveal-btn" type="button" aria-expanded="false">查看英文</button>
+    <button class="copy-btn" data-copy="src" type="button" title="复制英文原文">英文</button>
+    <button class="copy-btn" data-copy="tgt" type="button" title="复制中文译文">中文</button>
+    <button class="copy-btn" data-copy="both" type="button" title="复制中英双语">双语</button>
+    <button class="copy-btn" data-copy="ai" type="button" title="复制给 AI 解释">AI</button>
+  </div>
+  <div class="content-grid">
+    <div class="src-block" data-raw="1. Anonymous, Cool Funny Quotes, http://coolfunnyquotes.com. Accessed 2/6/17.">1. Anonymous, Cool Funny Quotes, http://coolfunnyquotes.com. Accessed 2/6/17.</div>
+    <div class="tgt-block" data-raw="1. 匿名，Cool Funny Quotes，http://coolfunnyquotes.com。访问日期：2/6/17。">1. 匿名，Cool Funny Quotes，http://coolfunnyquotes.com。访问日期：2/6/17。</div>
+  </div>
+</section>
+</main></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+const body = document.body;
+const root = document.documentElement;
+const modeButtons = document.querySelectorAll("[data-mode]");
+const toast = document.getElementById("toast");
+const progressFill = document.getElementById("progress-fill");
+const positionLabel = document.getElementById("reading-position");
+const tocLinks = Array.from(document.querySelectorAll("[data-toc-link]"));
+const headingPairs = Array.from(document.querySelectorAll(".heading-pair"));
+const fontSteps = [16, 17, 18, 19, 20, 21, 22];
+const measures = { narrow: "40rem", normal: "47rem", wide: "56rem" };
+
+function storageGet(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+function storageSet(key, value) {
+  try { localStorage.setItem(key, value); } catch {}
+}
+
+function setMode(mode) {
+  body.classList.remove("mode-reading","mode-study","mode-compare");
+  body.classList.add("mode-" + mode);
+  modeButtons.forEach(b => {
+    const active = b.dataset.mode === mode;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-pressed", String(active));
+  });
+  storageSet("bilingual-reader-mode", mode);
+}
+
+function setFontSize(size) {
+  const bounded = Math.max(fontSteps[0], Math.min(fontSteps[fontSteps.length - 1], size));
+  root.style.setProperty("--reader-font-size", `${bounded}px`);
+  storageSet("bilingual-reader-font-size", String(bounded));
+}
+
+function adjustFontSize(direction) {
+  const current = parseInt(getComputedStyle(root).getPropertyValue("--reader-font-size"), 10) || 18;
+  const index = fontSteps.reduce((best, step, i) =>
+    Math.abs(step - current) < Math.abs(fontSteps[best] - current) ? i : best, 0);
+  const next = direction === "up" ? index + 1 : index - 1;
+  setFontSize(fontSteps[Math.max(0, Math.min(fontSteps.length - 1, next))]);
+}
+
+function setMeasure(name) {
+  const measure = measures[name] || measures.normal;
+  root.style.setProperty("--reader-measure", measure);
+  document.querySelectorAll("[data-width]").forEach(b => {
+    const active = b.dataset.width === name;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-pressed", String(active));
+  });
+  storageSet("bilingual-reader-measure", name);
+}
+
+function setTheme(theme) {
+  const isDark = theme === "dark";
+  body.classList.toggle("theme-dark", isDark);
+  const toggle = document.querySelector("[data-theme-toggle]");
+  if (toggle) {
+    toggle.textContent = isDark ? "浅色" : "深色";
+    toggle.title = isDark ? "切换到浅色主题" : "切换到深色主题";
+  }
+  storageSet("bilingual-reader-theme", isDark ? "dark" : "light");
+}
+
+function notify(msg) {
+  toast.textContent = msg;
+  toast.style.display = "block";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.style.display = "none", 1400);
+}
+
+async function writeClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.appendChild(area);
+  area.select();
+  document.execCommand("copy");
+  area.remove();
+}
+
+function updateProgress() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  progressFill.style.width = `${Math.min(100, Math.max(0, (scrollTop / max) * 100))}%`;
+
+  let active = headingPairs[0];
+  const probe = scrollTop + 160;
+  for (const heading of headingPairs) {
+    if (heading.offsetTop <= probe) active = heading;
+  }
+  if (active) {
+    const id = active.dataset.segid;
+    const title = active.querySelector(".tgt-block")?.innerText?.trim() || "";
+    if (positionLabel && title) positionLabel.textContent = title;
+    tocLinks.forEach(link => {
+      const isActive = link.dataset.tocLink === id;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  }
+}
+
+document.addEventListener("click", async (e) => {
+  const target = e.target instanceof Element ? e.target : e.target.parentElement;
+  if (!target) return;
+
+  const mode = target.closest("[data-mode]");
+  if (mode) { setMode(mode.dataset.mode); return; }
+
+  const font = target.closest("[data-font]");
+  if (font) { adjustFontSize(font.dataset.font); return; }
+
+  const width = target.closest("[data-width]");
+  if (width) { setMeasure(width.dataset.width); return; }
+
+  const theme = target.closest("[data-theme-toggle]");
+  if (theme) {
+    setTheme(body.classList.contains("theme-dark") ? "light" : "dark");
+    return;
+  }
+
+  const reveal = target.closest(".reveal-btn");
+  if (reveal) {
+    const pair = reveal.closest(".pair");
+    const shown = pair.classList.toggle("show-source");
+    reveal.setAttribute("aria-expanded", String(shown));
+    reveal.textContent = shown ? "收起英文" : "查看英文";
+    return;
+  }
+
+  const copy = target.closest(".copy-btn");
+  if (copy) {
+    const pair = copy.closest(".pair");
+    const srcNode = pair.querySelector(".src-block");
+    const tgtNode = pair.querySelector(".tgt-block");
+    const src = srcNode?.dataset.raw || srcNode?.innerText || "";
+    const tgt = tgtNode?.dataset.raw || tgtNode?.innerText || "";
+    let text = "";
+    if (copy.dataset.copy === "src") text = src;
+    if (copy.dataset.copy === "tgt") text = tgt;
+    if (copy.dataset.copy === "both") text = `English:\n${src}\n\n中文：\n${tgt}`;
+    if (copy.dataset.copy === "ai") text =
+      `请结合英文原文解释这段中文的意思，并指出关键英文表达、语法或可能的翻译取舍。\n\n英文原文：\n${src}\n\n中文译文：\n${tgt}`;
+    try {
+      await writeClipboard(text);
+      notify("已复制");
+    } catch {
+      notify("复制失败，请手动选择文本");
+    }
+    return;
+  }
+
+  const aligned = target.closest(".aligned");
+  if (aligned) {
+    const id = aligned.dataset.align;
+    document.querySelectorAll(".aligned.is-active").forEach(x => x.classList.remove("is-active"));
+    document.querySelectorAll(".aligned").forEach(x => {
+      if (x.dataset.align === id) x.classList.add("is-active");
+    });
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("aligned")) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+const savedFontSize = parseInt(storageGet("bilingual-reader-font-size"), 10);
+if (savedFontSize) setFontSize(savedFontSize);
+setMeasure(storageGet("bilingual-reader-measure") || "normal");
+const savedTheme = storageGet("bilingual-reader-theme");
+const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+setTheme(savedTheme || (prefersDark ? "dark" : "light"));
+const saved = storageGet("bilingual-reader-mode");
+if (saved && ["reading","study","compare"].includes(saved)) setMode(saved);
+else setMode(body.className.match(/mode-(reading|study|compare)/)?.[1] || "reading");
+updateProgress();
+window.addEventListener("scroll", updateProgress, { passive: true });
+window.addEventListener("resize", updateProgress);
+</script></body></html>

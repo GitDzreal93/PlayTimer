@@ -1,0 +1,14 @@
+{
+  "book": "A Rulebook for Arguments, Fifth Edition",
+  "source_file": "/Users/leiwen/Downloads/ai帮我写的有用html/日常实用工具【文蕾常用】/PlayTimer玩耍计时器/rulebook-arguments-sample/input/A Rulebook for Arguments.epub",
+  "current_phase": "sample_chapter_complete",
+  "chapters": {
+    "chapter-01-short-arguments": {
+      "status": "final",
+      "review_pass": "bilingual_reviewed",
+      "source": "/Users/leiwen/Downloads/ai帮我写的有用html/日常实用工具【文蕾常用】/PlayTimer玩耍计时器/rulebook-arguments-sample/work/source/chapter-01-short-arguments.md",
+      "segments": "/Users/leiwen/Downloads/ai帮我写的有用html/日常实用工具【文蕾常用】/PlayTimer玩耍计时器/rulebook-arguments-sample/work/segments/chapter-01-short-arguments.jsonl",
+      "final_zh": "/Users/leiwen/Downloads/ai帮我写的有用html/日常实用工具【文蕾常用】/PlayTimer玩耍计时器/rulebook-arguments-sample/work/final-zh/chapter-01-short-arguments.md"
+    }
+  }
+}
