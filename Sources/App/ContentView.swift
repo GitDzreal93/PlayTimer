@@ -5,7 +5,6 @@ struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var now = Date()
     @State private var activeSheet: ActiveSheet?
-    @State private var lastAnnouncedPhase: SessionPhase?
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -13,7 +12,7 @@ struct ContentView: View {
         NavigationStack {
             ZStack {
                 LinearGradient(
-                    colors: backgroundColors,
+                    colors: [Color(red: 0.95, green: 0.98, blue: 0.97), Color(red: 0.98, green: 0.96, blue: 0.91)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -56,7 +55,6 @@ struct ContentView: View {
         .onReceive(ticker) { value in
             now = value
             model.markWaitingParentIfNeeded()
-            playPhaseCueIfNeeded()
         }
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
@@ -128,32 +126,6 @@ struct ContentView: View {
         )
     }
 
-    private var backgroundColors: [Color] {
-        switch model.phase {
-        case .break:
-            return [Color(red: 0.03, green: 0.10, blue: 0.12), Color(red: 0.05, green: 0.18, blue: 0.19)]
-        case .waitingParent:
-            return [Color(red: 0.05, green: 0.13, blue: 0.11), Color(red: 0.10, green: 0.20, blue: 0.16)]
-        default:
-            return [Color(red: 0.95, green: 0.98, blue: 0.97), Color(red: 0.98, green: 0.96, blue: 0.91)]
-        }
-    }
-
-    private func playPhaseCueIfNeeded() {
-        let phase = model.phase
-        defer { lastAnnouncedPhase = phase }
-
-        guard lastAnnouncedPhase != nil, phase != lastAnnouncedPhase else { return }
-        switch phase {
-        case .break:
-            PlayTimerAudioCueService.playBreakStartedCue()
-        case .waitingParent:
-            PlayTimerAudioCueService.playBreakFinishedCue()
-        case .ready, .playing, .error:
-            break
-        }
-    }
-
     private func perform(_ action: ParentAction) {
         switch action {
         case .start, .nextRound, .continueAfterBreak:
@@ -170,8 +142,8 @@ struct ContentView: View {
         StartConfirmationContext(
             collectionName: model.selectedAllowedAppCollection?.name,
             applicationCount: model.allowedAppCount,
-            playDurationText: AppConstants.durationText(seconds: model.effectivePlaySeconds),
-            breakDurationText: AppConstants.durationText(seconds: model.effectiveBreakSeconds),
+            playMinutes: model.effectivePlayMinutes,
+            breakMinutes: model.settings.selectedBreakMinutes,
             isTestModeEnabled: model.settings.isTestModeEnabled
         )
     }
@@ -317,7 +289,7 @@ private struct ReadyView: View {
             }
 
             if model.settings.isTestModeEnabled {
-                Label("测试模式：选择快速时长", systemImage: "testtube.2")
+                Label("测试模式：本轮会按 1 分钟计时", systemImage: "testtube.2")
                     .font(.headline)
                     .foregroundStyle(.orange)
                     .padding(14)
@@ -328,46 +300,24 @@ private struct ReadyView: View {
             Text("给孩子玩多久？")
                 .font(.largeTitle.bold())
 
-            if model.settings.isTestModeEnabled {
-                DurationSegmentedPicker(
-                    options: AppConstants.testPlaySecondOptions,
-                    unit: .seconds,
-                    selection: Binding(
-                        get: { model.settings.testPlaySeconds },
-                        set: { model.saveSettings(testPlaySeconds: $0) }
-                    )
+            DurationSegmentedPicker(
+                options: AppConstants.playMinuteOptions,
+                selection: Binding(
+                    get: { model.settings.selectedPlayMinutes },
+                    set: { model.saveSettings(playMinutes: $0) }
                 )
-            } else {
-                DurationSegmentedPicker(
-                    options: AppConstants.playMinuteOptions,
-                    selection: Binding(
-                        get: { model.settings.selectedPlayMinutes },
-                        set: { model.saveSettings(playMinutes: $0) }
-                    )
-                )
-            }
+            )
 
             Text("休息多久？")
                 .font(.title.bold())
 
-            if model.settings.isTestModeEnabled {
-                DurationSegmentedPicker(
-                    options: AppConstants.testBreakSecondOptions,
-                    unit: .seconds,
-                    selection: Binding(
-                        get: { model.settings.testBreakSeconds },
-                        set: { model.saveSettings(testBreakSeconds: $0) }
-                    )
+            DurationSegmentedPicker(
+                options: AppConstants.breakMinuteOptions,
+                selection: Binding(
+                    get: { model.settings.selectedBreakMinutes },
+                    set: { model.saveSettings(breakMinutes: $0) }
                 )
-            } else {
-                DurationSegmentedPicker(
-                    options: AppConstants.breakMinuteOptions,
-                    selection: Binding(
-                        get: { model.settings.selectedBreakMinutes },
-                        set: { model.saveSettings(breakMinutes: $0) }
-                    )
-                )
-            }
+            )
 
             Button(action: onStart) {
                 Label("开始儿童模式", systemImage: "play.fill")
@@ -461,23 +411,23 @@ private struct PlayingView: View {
     }
 
     private var totalSeconds: Int {
-        model.session?.playDurationSeconds ?? AppConstants.defaultPlayMinutes * 60
+        (model.session?.playDurationMinutes ?? AppConstants.defaultPlayMinutes) * 60
     }
 
     private var detailText: String {
-        let breakText = model.session?.breakDurationText ?? AppConstants.durationText(seconds: AppConstants.defaultBreakMinutes * 60)
+        let breakMinutes = model.session?.breakDurationMinutes ?? AppConstants.defaultBreakMinutes
         let count = model.session?.allowedApplicationCount ?? 0
         let collectionName = model.session?.allowedCollectionName
         if count == 0 {
             if let collectionName {
-                return "\(collectionName) 里还没有 App，当前按全部 App / 网页统计。时间到后会进入 \(breakText) 休息。"
+                return "\(collectionName) 里还没有 App，当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
             }
-            return "当前按全部 App / 网页统计。时间到后会进入 \(breakText) 休息。"
+            return "当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
         }
         if let collectionName {
-            return "当前允许 \(collectionName) 中的 \(count) 个 App。时间到后会进入 \(breakText) 休息。"
+            return "当前允许 \(collectionName) 中的 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
         }
-        return "当前只允许 \(count) 个 App。时间到后会进入 \(breakText) 休息。"
+        return "当前只允许 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
     }
 }
 
@@ -487,7 +437,7 @@ private struct BreakView: View {
     var onParentControl: () -> Void
 
     var body: some View {
-        RestStatePanel(
+        StatePanel(
             icon: "pause.circle.fill",
             title: "休息一下",
             subtitle: remainingText,
@@ -509,7 +459,7 @@ private struct WaitingParentView: View {
     var onContinue: () -> Void
 
     var body: some View {
-        RestStatePanel(
+        StatePanel(
             icon: "checkmark.circle.fill",
             title: "休息完成",
             subtitle: "请把 iPad 交给爸爸妈妈",
@@ -518,56 +468,6 @@ private struct WaitingParentView: View {
             buttonIcon: "lock.fill",
             action: onContinue
         )
-    }
-}
-
-private struct RestStatePanel: View {
-    var icon: String
-    var title: String
-    var subtitle: String
-    var detail: String
-    var buttonTitle: String
-    var buttonIcon: String
-    var action: () -> Void
-
-    var body: some View {
-        VStack(spacing: 28) {
-            Image(systemName: icon)
-                .font(.system(size: 84))
-                .foregroundStyle(Color(red: 0.52, green: 0.93, blue: 0.86))
-
-            VStack(spacing: 12) {
-                Text(title)
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-
-                Text(subtitle)
-                    .font(.system(size: 80, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
-                    .minimumScaleFactor(0.65)
-                    .multilineTextAlignment(.center)
-
-                if !detail.isEmpty {
-                    Text(detail)
-                        .font(.title2.bold())
-                        .foregroundStyle(Color(red: 0.82, green: 0.94, blue: 0.92))
-                        .multilineTextAlignment(.center)
-                }
-            }
-
-            Button(action: action) {
-                Label(buttonTitle, systemImage: buttonIcon)
-                    .frame(maxWidth: 300)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .tint(Color(red: 0.52, green: 0.93, blue: 0.86))
-            .foregroundStyle(Color(red: 0.03, green: 0.10, blue: 0.11))
-        }
-        .padding(32)
-        .frame(maxWidth: 680)
     }
 }
 
@@ -628,31 +528,16 @@ private struct StatePanel: View {
 }
 
 private struct DurationSegmentedPicker: View {
-    enum Unit {
-        case minutes
-        case seconds
-    }
-
     var options: [Int]
-    var unit: Unit = .minutes
     @Binding var selection: Int
 
     var body: some View {
         Picker("", selection: $selection) {
-            ForEach(options, id: \.self) { value in
-                Text(label(for: value)).tag(value)
+            ForEach(options, id: \.self) { minutes in
+                Text("\(minutes) 分钟").tag(minutes)
             }
         }
         .pickerStyle(.segmented)
-    }
-
-    private func label(for value: Int) -> String {
-        switch unit {
-        case .minutes:
-            return "\(value) 分钟"
-        case .seconds:
-            return "\(value) 秒"
-        }
     }
 }
 

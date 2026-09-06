@@ -27,8 +27,6 @@ PlayTimer is a native iPadOS spike for a shared-iPad child mode:
 - If an app collection is selected, child mode shields all other apps during play and only times the apps in the selected collection.
 - Parent verification now opens a start confirmation sheet showing the selected collection, play duration, and break duration before child mode begins.
 - The app requests notification permission on session start and sends start, five-minute warning, break-start, and break-finished notifications.
-- Break screens use a dark high-contrast treatment so the iPad status bar remains readable.
-- Foreground phase changes play short audio cues, while background transitions rely on local notification sound.
 - Test mode can be toggled from the toolbar and runs the next session with a 1-minute play duration without changing the saved normal duration.
 
 ## Real iPad Checklist

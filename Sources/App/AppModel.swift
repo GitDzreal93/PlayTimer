@@ -41,12 +41,8 @@ final class AppModel: ObservableObject {
         selectedAllowedAppCollection?.applicationCount ?? 0
     }
 
-    var effectivePlaySeconds: Int {
-        settings.isTestModeEnabled ? settings.testPlaySeconds : settings.selectedPlayMinutes * 60
-    }
-
-    var effectiveBreakSeconds: Int {
-        settings.isTestModeEnabled ? settings.testBreakSeconds : settings.selectedBreakMinutes * 60
+    var effectivePlayMinutes: Int {
+        settings.isTestModeEnabled ? 1 : settings.selectedPlayMinutes
     }
 
     var selectedAllowedAppCollection: AllowedAppCollection? {
@@ -87,9 +83,7 @@ final class AppModel: ObservableObject {
         playMinutes: Int? = nil,
         breakMinutes: Int? = nil,
         prefersBiometrics: Bool? = nil,
-        isTestModeEnabled: Bool? = nil,
-        testPlaySeconds: Int? = nil,
-        testBreakSeconds: Int? = nil
+        isTestModeEnabled: Bool? = nil
     ) {
         if let playMinutes {
             settings.selectedPlayMinutes = playMinutes
@@ -102,12 +96,6 @@ final class AppModel: ObservableObject {
         }
         if let isTestModeEnabled {
             settings.isTestModeEnabled = isTestModeEnabled
-        }
-        if let testPlaySeconds {
-            settings.testPlaySeconds = testPlaySeconds
-        }
-        if let testBreakSeconds {
-            settings.testBreakSeconds = testBreakSeconds
         }
 
         do {
@@ -189,10 +177,6 @@ final class AppModel: ObservableObject {
         }
     }
 
-    var isPINLocked: Bool {
-        pinStore.isLocked
-    }
-
     func verifyBiometrics() async -> Bool {
         guard settings.prefersBiometrics else { return false }
         do {
@@ -213,8 +197,8 @@ final class AppModel: ObservableObject {
         defer { isBusy = false }
 
         let newSession = PlaySession.new(
-            playSeconds: effectivePlaySeconds,
-            breakSeconds: effectiveBreakSeconds,
+            playMinutes: effectivePlayMinutes,
+            breakMinutes: settings.selectedBreakMinutes,
             allowedApplicationCount: allowedAppCount,
             allowedCollectionName: selectedAllowedAppCollection?.name
         )

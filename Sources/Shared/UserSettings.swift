@@ -6,17 +6,13 @@ struct UserSettings: Codable, Equatable {
     var prefersBiometrics: Bool
     var isTestModeEnabled: Bool
     var selectedAllowedAppCollectionID: UUID?
-    var testPlaySeconds: Int
-    var testBreakSeconds: Int
 
     static let defaults = UserSettings(
         selectedPlayMinutes: AppConstants.defaultPlayMinutes,
         selectedBreakMinutes: AppConstants.defaultBreakMinutes,
         prefersBiometrics: true,
         isTestModeEnabled: false,
-        selectedAllowedAppCollectionID: nil,
-        testPlaySeconds: AppConstants.defaultTestPlaySeconds,
-        testBreakSeconds: AppConstants.defaultTestBreakSeconds
+        selectedAllowedAppCollectionID: nil
     )
 
     init(
@@ -24,17 +20,13 @@ struct UserSettings: Codable, Equatable {
         selectedBreakMinutes: Int,
         prefersBiometrics: Bool,
         isTestModeEnabled: Bool,
-        selectedAllowedAppCollectionID: UUID?,
-        testPlaySeconds: Int = AppConstants.defaultTestPlaySeconds,
-        testBreakSeconds: Int = AppConstants.defaultTestBreakSeconds
+        selectedAllowedAppCollectionID: UUID?
     ) {
         self.selectedPlayMinutes = selectedPlayMinutes
         self.selectedBreakMinutes = selectedBreakMinutes
         self.prefersBiometrics = prefersBiometrics
         self.isTestModeEnabled = isTestModeEnabled
         self.selectedAllowedAppCollectionID = selectedAllowedAppCollectionID
-        self.testPlaySeconds = testPlaySeconds
-        self.testBreakSeconds = testBreakSeconds
     }
 
     init(from decoder: Decoder) throws {
@@ -44,8 +36,6 @@ struct UserSettings: Codable, Equatable {
         prefersBiometrics = try container.decodeIfPresent(Bool.self, forKey: .prefersBiometrics) ?? true
         isTestModeEnabled = try container.decodeIfPresent(Bool.self, forKey: .isTestModeEnabled) ?? false
         selectedAllowedAppCollectionID = try container.decodeIfPresent(UUID.self, forKey: .selectedAllowedAppCollectionID)
-        testPlaySeconds = try container.decodeIfPresent(Int.self, forKey: .testPlaySeconds) ?? AppConstants.defaultTestPlaySeconds
-        testBreakSeconds = try container.decodeIfPresent(Int.self, forKey: .testBreakSeconds) ?? AppConstants.defaultTestBreakSeconds
     }
 }
 
@@ -56,7 +46,5 @@ extension UserSettings {
         case prefersBiometrics
         case isTestModeEnabled
         case selectedAllowedAppCollectionID
-        case testPlaySeconds
-        case testBreakSeconds
     }
 }

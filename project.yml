@@ -18,12 +18,10 @@ targets:
     sources:
       - Sources/App
       - Sources/Shared
-      - Sources/App/Resources/Assets.xcassets
     info:
       path: Config/PlayTimer-Info.plist
       properties:
         CFBundleDisplayName: PlayTimer
-        NSFaceIDUsageDescription: PlayTimer 使用面容 ID 验证家长身份，用于开始或结束儿童模式。
         UIRequiresFullScreen: true
         UISupportedInterfaceOrientations~ipad:
           - UIInterfaceOrientationPortrait

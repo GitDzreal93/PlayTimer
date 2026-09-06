@@ -3,8 +3,8 @@ import Foundation
 struct PlaySession: Codable, Equatable {
     var sessionID: UUID
     var phase: SessionPhase
-    var playDurationSeconds: Int
-    var breakDurationSeconds: Int
+    var playDurationMinutes: Int
+    var breakDurationMinutes: Int
     var startedAt: Date
     var breakStartedAt: Date?
     var breakEndAt: Date?
@@ -18,8 +18,8 @@ struct PlaySession: Codable, Equatable {
     init(
         sessionID: UUID,
         phase: SessionPhase,
-        playDurationSeconds: Int,
-        breakDurationSeconds: Int,
+        playDurationMinutes: Int,
+        breakDurationMinutes: Int,
         startedAt: Date,
         breakStartedAt: Date?,
         breakEndAt: Date?,
@@ -32,8 +32,8 @@ struct PlaySession: Codable, Equatable {
     ) {
         self.sessionID = sessionID
         self.phase = phase
-        self.playDurationSeconds = playDurationSeconds
-        self.breakDurationSeconds = breakDurationSeconds
+        self.playDurationMinutes = playDurationMinutes
+        self.breakDurationMinutes = breakDurationMinutes
         self.startedAt = startedAt
         self.breakStartedAt = breakStartedAt
         self.breakEndAt = breakEndAt
@@ -46,8 +46,8 @@ struct PlaySession: Codable, Equatable {
     }
 
     static func new(
-        playSeconds: Int,
-        breakSeconds: Int,
+        playMinutes: Int,
+        breakMinutes: Int,
         allowedApplicationCount: Int,
         allowedCollectionName: String?,
         now: Date = Date()
@@ -56,8 +56,8 @@ struct PlaySession: Codable, Equatable {
         return PlaySession(
             sessionID: sessionID,
             phase: .playing,
-            playDurationSeconds: playSeconds,
-            breakDurationSeconds: breakSeconds,
+            playDurationMinutes: playMinutes,
+            breakDurationMinutes: breakMinutes,
             startedAt: now,
             breakStartedAt: nil,
             breakEndAt: nil,
@@ -86,8 +86,8 @@ extension PlaySession {
     enum CodingKeys: String, CodingKey {
         case sessionID
         case phase
-        case playDurationSeconds
-        case breakDurationSeconds
+        case playDurationMinutes
+        case breakDurationMinutes
         case startedAt
         case breakStartedAt
         case breakEndAt
@@ -97,22 +97,14 @@ extension PlaySession {
         case eventNameRawValue
         case allowedApplicationCount
         case allowedCollectionName
-
-        // 旧版本以分钟存储，仅用于解码兼容
-        case legacyPlayDurationMinutes = "playDurationMinutes"
-        case legacyBreakDurationMinutes = "breakDurationMinutes"
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         sessionID = try container.decode(UUID.self, forKey: .sessionID)
         phase = try container.decode(SessionPhase.self, forKey: .phase)
-        playDurationSeconds = try container.decodeIfPresent(Int.self, forKey: .playDurationSeconds)
-            ?? (try container.decodeIfPresent(Int.self, forKey: .legacyPlayDurationMinutes).map { $0 * 60 })
-            ?? AppConstants.defaultPlayMinutes * 60
-        breakDurationSeconds = try container.decodeIfPresent(Int.self, forKey: .breakDurationSeconds)
-            ?? (try container.decodeIfPresent(Int.self, forKey: .legacyBreakDurationMinutes).map { $0 * 60 })
-            ?? AppConstants.defaultBreakMinutes * 60
+        playDurationMinutes = try container.decode(Int.self, forKey: .playDurationMinutes)
+        breakDurationMinutes = try container.decode(Int.self, forKey: .breakDurationMinutes)
         startedAt = try container.decode(Date.self, forKey: .startedAt)
         breakStartedAt = try container.decodeIfPresent(Date.self, forKey: .breakStartedAt)
         breakEndAt = try container.decodeIfPresent(Date.self, forKey: .breakEndAt)
@@ -122,30 +114,5 @@ extension PlaySession {
         eventNameRawValue = try container.decode(String.self, forKey: .eventNameRawValue)
         allowedApplicationCount = try container.decodeIfPresent(Int.self, forKey: .allowedApplicationCount) ?? 0
         allowedCollectionName = try container.decodeIfPresent(String.self, forKey: .allowedCollectionName)
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(sessionID, forKey: .sessionID)
-        try container.encode(phase, forKey: .phase)
-        try container.encode(playDurationSeconds, forKey: .playDurationSeconds)
-        try container.encode(breakDurationSeconds, forKey: .breakDurationSeconds)
-        try container.encode(startedAt, forKey: .startedAt)
-        try container.encodeIfPresent(breakStartedAt, forKey: .breakStartedAt)
-        try container.encodeIfPresent(breakEndAt, forKey: .breakEndAt)
-        try container.encode(lastUpdatedAt, forKey: .lastUpdatedAt)
-        try container.encodeIfPresent(errorMessage, forKey: .errorMessage)
-        try container.encode(activityNameRawValue, forKey: .activityNameRawValue)
-        try container.encode(eventNameRawValue, forKey: .eventNameRawValue)
-        try container.encode(allowedApplicationCount, forKey: .allowedApplicationCount)
-        try container.encodeIfPresent(allowedCollectionName, forKey: .allowedCollectionName)
-    }
-
-    var playDurationText: String {
-        AppConstants.durationText(seconds: playDurationSeconds)
-    }
-
-    var breakDurationText: String {
-        AppConstants.durationText(seconds: breakDurationSeconds)
     }
 }

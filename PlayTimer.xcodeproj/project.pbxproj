@@ -15,7 +15,6 @@
 		21E99802222AC51327F153A0 /* PlayTimerMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */; };
 		2AD99B961988492268928367 /* PlayTimerMonitorExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B65B21B707155C7B312E7D /* AppModel.swift */; };
-		2DD4B7B55B1E6F2F9F7576C6 /* PlayTimerAudioCueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC148E1EEFAFA4D1EFD1DCC9 /* PlayTimerAudioCueService.swift */; };
 		3039013CDE1AFE4EC2CD6BD8 /* SharedStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61719E6FB0D36674ED07C5 /* SharedStateStore.swift */; };
 		3066C2AFCEF3217B7BAE4D16 /* PlayTimerShieldActionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8042705140552FBD9BC2B5E9 /* PlayTimerShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3144BF58D3425CE08D326F05 /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
@@ -40,7 +39,6 @@
 		6D8638DD96A2EAEC8C1CDDB2 /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		6FEA3111DCA995FBD3F7DEB8 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */; };
-		7927EA6102040FD87E14B98F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4C83A9F8516200E9BC09EA5 /* Assets.xcassets */; };
 		7D9DFF97B74D0D54F96385FC /* PlayTimerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */; };
 		8037B05BD5A760AD443F8CA3 /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		8234B8ABB30B57FCDBD8A200 /* PlayTimerShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */; };
@@ -129,11 +127,9 @@
 		AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldConfigurationExtension.swift; sourceTree = "<group>"; };
 		AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerShieldConfigurationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B47A24F139F2A4947C8DE3EE /* PlayTimerNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerNotificationDelegate.swift; sourceTree = "<group>"; };
-		B4C83A9F8516200E9BC09EA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerApp.swift; sourceTree = "<group>"; };
 		D4177E31D40E7A2FFC5D52A2 /* PlayTimerMonitorExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PlayTimerMonitorExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9B65B21B707155C7B312E7D /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
-		EC148E1EEFAFA4D1EFD1DCC9 /* PlayTimerAudioCueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerAudioCueService.swift; sourceTree = "<group>"; };
 		F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		F47A6FB6B9104C503444BAD3 /* SessionPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPhase.swift; sourceTree = "<group>"; };
 		F6819E9535876443E315D598 /* ParentGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentGateView.swift; sourceTree = "<group>"; };
@@ -169,10 +165,8 @@
 				F6819E9535876443E315D598 /* ParentGateView.swift */,
 				5481A5D92767F5C6087EF123 /* ParentPINStore.swift */,
 				BCE129ECF95AA8BC71BCA0DB /* PlayTimerApp.swift */,
-				EC148E1EEFAFA4D1EFD1DCC9 /* PlayTimerAudioCueService.swift */,
 				B47A24F139F2A4947C8DE3EE /* PlayTimerNotificationDelegate.swift */,
 				5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */,
-				AEE41FCBE518CBA246ADA0BC /* Resources */,
 			);
 			name = App;
 			path = Sources/App;
@@ -206,14 +200,6 @@
 			);
 			name = MonitorExtension;
 			path = Sources/MonitorExtension;
-			sourceTree = "<group>";
-		};
-		AEE41FCBE518CBA246ADA0BC /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				B4C83A9F8516200E9BC09EA5 /* Assets.xcassets */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		BA5710045F8BD9F9B7ABEE13 /* ShieldActionExtension */ = {
@@ -295,7 +281,6 @@
 			buildConfigurationList = D0EC32F4194D29631C7B5664 /* Build configuration list for PBXNativeTarget "PlayTimer" */;
 			buildPhases = (
 				1F264D8D014A6932A6574895 /* Sources */,
-				8633D6F7958363F928E7E737 /* Resources */,
 				74897A48C7E32DF45416CDE1 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -361,17 +346,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		8633D6F7958363F928E7E737 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7927EA6102040FD87E14B98F /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		1F264D8D014A6932A6574895 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -390,7 +364,6 @@
 				6C9BCC5E08F47BBF27DB98F7 /* PlaySession+DeviceActivity.swift in Sources */,
 				4912588BFF8ECA190202E5B1 /* PlaySession.swift in Sources */,
 				AFDB429C1DF8462220816CA6 /* PlayTimerApp.swift in Sources */,
-				2DD4B7B55B1E6F2F9F7576C6 /* PlayTimerAudioCueService.swift in Sources */,
 				DDF8E08D3E419488839EC4CE /* PlayTimerNotificationDelegate.swift in Sources */,
 				6D8638DD96A2EAEC8C1CDDB2 /* PlayTimerNotificationService.swift in Sources */,
 				19A016C7E1A7C8A80461C49C /* SessionPhase.swift in Sources */,
