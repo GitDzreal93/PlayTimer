@@ -32,10 +32,10 @@ struct ParentGateView: View {
     var action: ParentAction
     var onVerified: () -> Void
 
+    @StateObject private var biometricAuth = ParentBiometricAuthCoordinator()
     @State private var pin = ""
     @State private var didFail = false
     @State private var isVerified = false
-    @State private var isAuthenticating = false
 
     var body: some View {
         NavigationStack {
@@ -76,7 +76,7 @@ struct ParentGateView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
-                        .disabled(isAuthenticating)
+                        .disabled(biometricAuth.isAuthenticating)
                     }
 
                     SecureField("家长 PIN", text: $pin)
@@ -118,7 +118,7 @@ struct ParentGateView: View {
                 }
             }
         }
-        .interactiveDismissDisabled(isAuthenticating)
+        .interactiveDismissDisabled(biometricAuth.isAuthenticating)
     }
 
     // MARK: - 生物验证
@@ -148,10 +148,8 @@ struct ParentGateView: View {
     }
 
     private func authenticateWithBiometrics() {
-        isAuthenticating = true
         Task {
-            let success = await model.verifyBiometrics()
-            isAuthenticating = false
+            let success = await biometricAuth.authenticate(reason: "验证家长身份")
             if success {
                 completeVerification()
             }

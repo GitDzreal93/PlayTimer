@@ -47,6 +47,7 @@
 		84FACF5A90AD9AFB7B2AE8C4 /* PlayTimerShieldConfigurationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AE7F94876DC35373FD3C40EE /* PlayTimerShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8AD1A1B218B0E670A76FF259 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
 		8CF77146984BD80F16C2BFF2 /* DeviceActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */; };
+		91CD046A931847851DE9C85F /* ParentBiometricAuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367E047C4853D07F71EE24A8 /* ParentBiometricAuthCoordinator.swift */; };
 		93856E745A22D434FB31CC38 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
 		9CF36FAA7C31A9A1D6BC9244 /* StartConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B09757B9BC9EEFA393C4481 /* StartConfirmationView.swift */; };
 		A8B589A9A2CFD0C80A7040FC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */; };
@@ -111,6 +112,7 @@
 		08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerMonitorExtension.swift; sourceTree = "<group>"; };
 		0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedAppCollectionsView.swift; sourceTree = "<group>"; };
+		367E047C4853D07F71EE24A8 /* ParentBiometricAuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBiometricAuthCoordinator.swift; sourceTree = "<group>"; };
 		422E94A560EE265B6AB53709 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		433906970B422A34AEC9E307 /* PlayTimerNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerNotificationService.swift; sourceTree = "<group>"; };
 		4E65C3F77E55E47C85B61770 /* PlayTimerShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerShieldActionExtension.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				D9B65B21B707155C7B312E7D /* AppModel.swift */,
 				422E94A560EE265B6AB53709 /* ContentView.swift */,
 				6E5496B78F02FF647898BEDD /* DeviceActivityService.swift */,
+				367E047C4853D07F71EE24A8 /* ParentBiometricAuthCoordinator.swift */,
 				6E114D604E80CCC49C214A40 /* ParentBiometricAuthenticator.swift */,
 				F6819E9535876443E315D598 /* ParentGateView.swift */,
 				5481A5D92767F5C6087EF123 /* ParentPINStore.swift */,
@@ -384,6 +387,7 @@
 				2C5B3ADE1B6E45F313C69468 /* AppModel.swift in Sources */,
 				C10665A5CE46FEFBE06DFA7A /* ContentView.swift in Sources */,
 				8CF77146984BD80F16C2BFF2 /* DeviceActivityService.swift in Sources */,
+				91CD046A931847851DE9C85F /* ParentBiometricAuthCoordinator.swift in Sources */,
 				756396450AFC33F361E49F49 /* ParentBiometricAuthenticator.swift in Sources */,
 				4AD4C3ACC022343327CE2C7F /* ParentGateView.swift in Sources */,
 				6787870937FF930A08CDB60D /* ParentPINStore.swift in Sources */,
