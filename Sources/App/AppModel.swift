@@ -68,14 +68,19 @@ final class AppModel: ObservableObject {
     }
 
     func requestScreenTimeAuthorization() async {
-        isBusy = true
-        defer { isBusy = false }
+        let statusBeforeRequest = AuthorizationCenter.shared.authorizationStatus
 
         do {
+            try await Task.sleep(nanoseconds: 250_000_000)
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
             authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         } catch {
-            alertMessage = error.localizedDescription
+            authorizationStatus = AuthorizationCenter.shared.authorizationStatus
+            alertMessage = makeScreenTimeAuthorizationFailureMessage(
+                error: error,
+                statusBeforeRequest: statusBeforeRequest,
+                statusAfterRequest: authorizationStatus
+            )
         }
     }
 
@@ -182,7 +187,7 @@ final class AppModel: ObservableObject {
         do {
             return try await ParentBiometricAuthenticator().authenticate()
         } catch {
-            alertMessage = error.localizedDescription
+            alertMessage = makeBiometricFailureMessage(error)
             return false
         }
     }
@@ -290,5 +295,76 @@ final class AppModel: ObservableObject {
         } catch {
             alertMessage = error.localizedDescription
         }
+    }
+
+    private func makeScreenTimeAuthorizationFailureMessage(
+        error: Error,
+        statusBeforeRequest: AuthorizationStatus,
+        statusAfterRequest: AuthorizationStatus
+    ) -> String {
+        var details = [
+            "Screen Time 授权失败。",
+            "授权方式: individual",
+            "FamilyControls: \(familyControlsErrorName(error))",
+            "授权前状态: \(authorizationStatusName(statusBeforeRequest))",
+            "授权后状态: \(authorizationStatusName(statusAfterRequest))"
+        ]
+        details.append(contentsOf: nsErrorDetails(error))
+        return details.joined(separator: "\n")
+    }
+
+    private func makeBiometricFailureMessage(_ error: Error) -> String {
+        var details = ["家长身份验证失败。"]
+        details.append(contentsOf: nsErrorDetails(error))
+        return details.joined(separator: "\n")
+    }
+
+    private func familyControlsErrorName(_ error: Error) -> String {
+        guard let familyControlsError = error as? FamilyControlsError else {
+            return "不是 FamilyControlsError"
+        }
+
+        switch familyControlsError {
+        case .restricted:
+            return "restricted"
+        case .unavailable:
+            return "unavailable"
+        case .invalidAccountType:
+            return "invalidAccountType"
+        case .invalidArgument:
+            return "invalidArgument"
+        case .authorizationConflict:
+            return "authorizationConflict"
+        case .authorizationCanceled:
+            return "authorizationCanceled"
+        case .networkError:
+            return "networkError"
+        case .authenticationMethodUnavailable:
+            return "authenticationMethodUnavailable"
+        @unknown default:
+            return "unknown(\(familyControlsError.localizedDescription))"
+        }
+    }
+
+    private func authorizationStatusName(_ status: AuthorizationStatus) -> String {
+        switch status {
+        case .notDetermined:
+            return "notDetermined"
+        case .denied:
+            return "denied"
+        case .approved:
+            return "approved"
+        @unknown default:
+            return "unknown(\(status.rawValue))"
+        }
+    }
+
+    private func nsErrorDetails(_ error: Error) -> [String] {
+        let nsError = error as NSError
+        return [
+            "NSError domain: \(nsError.domain)",
+            "NSError code: \(nsError.code)",
+            "说明: \(nsError.localizedDescription)"
+        ]
     }
 }

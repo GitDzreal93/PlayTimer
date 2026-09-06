@@ -189,12 +189,17 @@ private struct AuthorizationView: View {
                     await model.requestScreenTimeAuthorization()
                 }
             } label: {
-                Label(model.isBusy ? "授权中" : "授权", systemImage: "checkmark.shield.fill")
+                Label("授权屏幕时间", systemImage: "checkmark.shield.fill")
                     .frame(maxWidth: 280)
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .disabled(model.isBusy)
+
+            Text("这里使用这台 iPad 已录入的家长 Touch ID 或设备密码完成系统授权。")
+                .font(.callout)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: 460)
         }
     }
 }
