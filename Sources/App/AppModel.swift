@@ -255,6 +255,15 @@ final class AppModel: ObservableObject {
         }
     }
 
+    func syncSessionFromStoreAndMarkWaitingParentIfNeeded() {
+        let storedSession = stateStore.loadSession()
+        if storedSession != session {
+            session = storedSession
+        }
+
+        markWaitingParentIfNeeded()
+    }
+
     private func normalizeSelectedCollection() {
         guard let selectedID = settings.selectedAllowedAppCollectionID else { return }
 

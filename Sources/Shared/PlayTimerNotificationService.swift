@@ -40,10 +40,17 @@ struct PlayTimerNotificationService {
     }
 
     func notifyBreakStarted(_ session: PlaySession) {
+        let body: String
+        if let breakEndAt = session.breakEndAt {
+            body = "本轮 \(session.playDurationMinutes) 分钟已用完，休息到 \(Self.timeFormatter.string(from: breakEndAt))。"
+        } else {
+            body = "本轮 \(session.playDurationMinutes) 分钟已用完，现在休息 \(session.breakDurationMinutes) 分钟。"
+        }
+
         addImmediateNotification(
             identifier: "playtimer-break-started-\(session.sessionID.uuidString)",
             title: "休息时间到了",
-            body: "本轮额度已用完，现在休息 \(session.breakDurationMinutes) 分钟。"
+            body: body
         )
     }
 
@@ -98,4 +105,11 @@ struct PlayTimerNotificationService {
         content.sound = .default
         return content
     }
+
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter
+    }()
 }

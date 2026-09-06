@@ -1,22 +1,21 @@
+import AudioToolbox
 import FamilyControls
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var now = Date()
     @State private var activeSheet: ActiveSheet?
+    @State private var lastAnnouncedPhase: SessionPhase?
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [Color(red: 0.95, green: 0.98, blue: 0.97), Color(red: 0.98, green: 0.96, blue: 0.91)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                backgroundView
+                    .ignoresSafeArea()
 
                 Group {
                     if !model.hasParentPIN {
@@ -52,9 +51,15 @@ struct ContentView: View {
                 }
             }
         }
+        .preferredColorScheme(usesRestAppearance ? .dark : nil)
+        .onAppear {
+            lastAnnouncedPhase = model.phase
+        }
         .onReceive(ticker) { value in
             now = value
-            model.markWaitingParentIfNeeded()
+            let phaseBeforeRefresh = model.phase
+            model.syncSessionFromStoreAndMarkWaitingParentIfNeeded()
+            announcePhaseChange(from: phaseBeforeRefresh, to: model.phase)
         }
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
@@ -79,6 +84,47 @@ struct ContentView: View {
             Button("好", role: .cancel) {}
         } message: {
             Text(model.alertMessage ?? "")
+        }
+    }
+
+    @ViewBuilder
+    private var backgroundView: some View {
+        if usesRestAppearance {
+            LinearGradient(
+                colors: [
+                    Color(red: 0.08, green: 0.18, blue: 0.20),
+                    Color(red: 0.03, green: 0.08, blue: 0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            LinearGradient(
+                colors: [
+                    Color(red: 0.95, green: 0.98, blue: 0.97),
+                    Color(red: 0.98, green: 0.96, blue: 0.91)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+
+    private var usesRestAppearance: Bool {
+        model.phase == .break || model.phase == .waitingParent
+    }
+
+    private func announcePhaseChange(from oldPhase: SessionPhase, to newPhase: SessionPhase) {
+        guard newPhase != oldPhase, newPhase != lastAnnouncedPhase else { return }
+        lastAnnouncedPhase = newPhase
+
+        switch newPhase {
+        case .break:
+            SessionFeedback.playBreakStarted()
+        case .waitingParent:
+            SessionFeedback.playBreakFinished()
+        case .ready, .playing, .error:
+            break
         }
     }
 
@@ -442,11 +488,16 @@ private struct BreakView: View {
     var onParentControl: () -> Void
 
     var body: some View {
-        StatePanel(
+        RestStateLayout(
             icon: "pause.circle.fill",
-            title: "休息一下",
-            subtitle: remainingText,
-            detail: "时间到后请把 iPad 交给爸爸妈妈",
+            iconColor: .yellow,
+            title: "休息时间到了",
+            headline: remainingText,
+            detailLines: [
+                "本轮 \(model.session?.playDurationMinutes ?? model.settings.selectedPlayMinutes) 分钟已用完",
+                breakEndText,
+                "可以放下 iPad，喝水、活动一下。"
+            ],
             buttonTitle: "家长控制",
             buttonIcon: "lock.fill",
             action: onParentControl
@@ -458,17 +509,26 @@ private struct BreakView: View {
         let remaining = max(0, Int(end.timeIntervalSince(now)))
         return String(format: "%02d:%02d", remaining / 60, remaining % 60)
     }
+
+    private var breakEndText: String {
+        guard let end = model.session?.breakEndAt else { return "休息到 --:--" }
+        return "休息到 \(end.formatted(date: .omitted, time: .shortened))"
+    }
 }
 
 private struct WaitingParentView: View {
     var onContinue: () -> Void
 
     var body: some View {
-        StatePanel(
+        RestStateLayout(
             icon: "checkmark.circle.fill",
+            iconColor: .mint,
             title: "休息完成",
-            subtitle: "请把 iPad 交给爸爸妈妈",
-            detail: "",
+            headline: "请找爸爸妈妈",
+            detailLines: [
+                "家长验证后可以开始新一轮",
+                "也可以结束儿童模式"
+            ],
             buttonTitle: "家长继续",
             buttonIcon: "lock.fill",
             action: onContinue
@@ -489,6 +549,62 @@ private struct ErrorStateView: View {
             buttonIcon: "arrow.clockwise",
             action: onRetry
         )
+    }
+}
+
+private struct RestStateLayout: View {
+    var icon: String
+    var iconColor: Color
+    var title: String
+    var headline: String
+    var detailLines: [String]
+    var buttonTitle: String
+    var buttonIcon: String
+    var action: () -> Void
+
+    var body: some View {
+        VStack(spacing: 28) {
+            Image(systemName: icon)
+                .font(.system(size: 82))
+                .foregroundStyle(iconColor)
+                .shadow(color: iconColor.opacity(0.35), radius: 18, y: 8)
+
+            VStack(spacing: 14) {
+                Text(title)
+                    .font(.system(size: 46, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+
+                Text(headline)
+                    .font(.system(size: 86, weight: .heavy, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .minimumScaleFactor(0.72)
+                    .lineLimit(1)
+                    .accessibilityLabel("剩余时间 \(headline)")
+
+                VStack(spacing: 8) {
+                    ForEach(detailLines, id: \.self) { line in
+                        Text(line)
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.84))
+                            .multilineTextAlignment(.center)
+                    }
+                }
+            }
+
+            Button(action: action) {
+                Label(buttonTitle, systemImage: buttonIcon)
+                    .font(.title3.weight(.semibold))
+                    .frame(maxWidth: 280)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(.white)
+            .foregroundStyle(Color(red: 0.06, green: 0.16, blue: 0.18))
+        }
+        .frame(maxWidth: 720)
+        .padding(.vertical, 36)
     }
 }
 
@@ -529,6 +645,19 @@ private struct StatePanel: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
         }
+    }
+}
+
+@MainActor
+private enum SessionFeedback {
+    static func playBreakStarted() {
+        UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        AudioServicesPlaySystemSound(1005)
+    }
+
+    static func playBreakFinished() {
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        AudioServicesPlaySystemSound(1025)
     }
 }
 
