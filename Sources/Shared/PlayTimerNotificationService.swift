@@ -27,9 +27,9 @@ struct PlayTimerNotificationService {
     func notifySessionStarted(_ session: PlaySession) {
         let body: String
         if let name = session.allowedCollectionName, session.allowedApplicationCount > 0 {
-            body = "\(name) 已开始，预计剩余 \(session.playDurationMinutes) 分钟。"
+            body = "\(name) 已开始，预计剩余 \(Self.durationText(seconds: session.playDurationSeconds))。"
         } else {
-            body = "儿童模式已开始，预计剩余 \(session.playDurationMinutes) 分钟。"
+            body = "儿童模式已开始，预计剩余 \(Self.durationText(seconds: session.playDurationSeconds))。"
         }
 
         addImmediateNotification(
@@ -42,9 +42,9 @@ struct PlayTimerNotificationService {
     func notifyBreakStarted(_ session: PlaySession) {
         let body: String
         if let breakEndAt = session.breakEndAt {
-            body = "本轮 \(session.playDurationMinutes) 分钟已用完，休息到 \(Self.timeFormatter.string(from: breakEndAt))。"
+            body = "本轮 \(Self.durationText(seconds: session.playDurationSeconds)) 已用完，休息到 \(Self.timeFormatter.string(from: breakEndAt))。"
         } else {
-            body = "本轮 \(session.playDurationMinutes) 分钟已用完，现在休息 \(session.breakDurationMinutes) 分钟。"
+            body = "本轮 \(Self.durationText(seconds: session.playDurationSeconds)) 已用完，现在休息 \(Self.durationText(seconds: session.breakDurationSeconds))。"
         }
 
         addImmediateNotification(
@@ -55,7 +55,7 @@ struct PlayTimerNotificationService {
     }
 
     func scheduleBreakFinished(_ session: PlaySession) {
-        let seconds = max(1, session.breakDurationMinutes * 60)
+        let seconds = max(1, session.breakDurationSeconds)
         let content = makeContent(
             title: "休息结束",
             body: "请家长验证后开始新一轮，或结束儿童模式。"
@@ -104,6 +104,13 @@ struct PlayTimerNotificationService {
         content.body = body
         content.sound = .default
         return content
+    }
+
+    private static func durationText(seconds: Int) -> String {
+        if seconds % 60 == 0 {
+            return "\(seconds / 60) 分钟"
+        }
+        return "\(seconds) 秒"
     }
 
     private static let timeFormatter: DateFormatter = {

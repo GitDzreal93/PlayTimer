@@ -49,7 +49,7 @@ struct ParentGateView: View {
                     Button {
                         onVerified()
                     } label: {
-                        Label("再玩 \(model.effectivePlayMinutes) 分钟", systemImage: "play.fill")
+                        Label("再玩 \(durationText(seconds: model.effectivePlaySeconds))", systemImage: "play.fill")
                             .frame(maxWidth: 280)
                     }
                     .buttonStyle(.borderedProminent)
@@ -128,5 +128,12 @@ struct ParentGateView: View {
         } else {
             onVerified()
         }
+    }
+
+    private func durationText(seconds: Int) -> String {
+        if seconds % 60 == 0 {
+            return "\(seconds / 60) 分钟"
+        }
+        return "\(seconds) 秒"
     }
 }

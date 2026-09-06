@@ -12,4 +12,8 @@ enum AppConstants {
     static let defaultBreakMinutes = 5
     static let playMinuteOptions = [15, 25, 30, 45, 60]
     static let breakMinuteOptions = [5, 10, 15]
+    static let defaultTestPlaySeconds = 60
+    static let defaultTestBreakSeconds = 30
+    static let testPlaySecondOptions = [30, 60]
+    static let testBreakSecondOptions = [30, 60]
 }

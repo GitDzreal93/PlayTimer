@@ -5,6 +5,8 @@ struct PlaySession: Codable, Equatable {
     var phase: SessionPhase
     var playDurationMinutes: Int
     var breakDurationMinutes: Int
+    var playDurationSeconds: Int
+    var breakDurationSeconds: Int
     var startedAt: Date
     var breakStartedAt: Date?
     var breakEndAt: Date?
@@ -20,6 +22,8 @@ struct PlaySession: Codable, Equatable {
         phase: SessionPhase,
         playDurationMinutes: Int,
         breakDurationMinutes: Int,
+        playDurationSeconds: Int,
+        breakDurationSeconds: Int,
         startedAt: Date,
         breakStartedAt: Date?,
         breakEndAt: Date?,
@@ -34,6 +38,8 @@ struct PlaySession: Codable, Equatable {
         self.phase = phase
         self.playDurationMinutes = playDurationMinutes
         self.breakDurationMinutes = breakDurationMinutes
+        self.playDurationSeconds = playDurationSeconds
+        self.breakDurationSeconds = breakDurationSeconds
         self.startedAt = startedAt
         self.breakStartedAt = breakStartedAt
         self.breakEndAt = breakEndAt
@@ -46,8 +52,8 @@ struct PlaySession: Codable, Equatable {
     }
 
     static func new(
-        playMinutes: Int,
-        breakMinutes: Int,
+        playSeconds: Int,
+        breakSeconds: Int,
         allowedApplicationCount: Int,
         allowedCollectionName: String?,
         now: Date = Date()
@@ -56,8 +62,10 @@ struct PlaySession: Codable, Equatable {
         return PlaySession(
             sessionID: sessionID,
             phase: .playing,
-            playDurationMinutes: playMinutes,
-            breakDurationMinutes: breakMinutes,
+            playDurationMinutes: max(1, playSeconds / 60),
+            breakDurationMinutes: max(1, breakSeconds / 60),
+            playDurationSeconds: playSeconds,
+            breakDurationSeconds: breakSeconds,
             startedAt: now,
             breakStartedAt: nil,
             breakEndAt: nil,
@@ -88,6 +96,8 @@ extension PlaySession {
         case phase
         case playDurationMinutes
         case breakDurationMinutes
+        case playDurationSeconds
+        case breakDurationSeconds
         case startedAt
         case breakStartedAt
         case breakEndAt
@@ -105,6 +115,8 @@ extension PlaySession {
         phase = try container.decode(SessionPhase.self, forKey: .phase)
         playDurationMinutes = try container.decode(Int.self, forKey: .playDurationMinutes)
         breakDurationMinutes = try container.decode(Int.self, forKey: .breakDurationMinutes)
+        playDurationSeconds = try container.decodeIfPresent(Int.self, forKey: .playDurationSeconds) ?? playDurationMinutes * 60
+        breakDurationSeconds = try container.decodeIfPresent(Int.self, forKey: .breakDurationSeconds) ?? breakDurationMinutes * 60
         startedAt = try container.decode(Date.self, forKey: .startedAt)
         breakStartedAt = try container.decodeIfPresent(Date.self, forKey: .breakStartedAt)
         breakEndAt = try container.decodeIfPresent(Date.self, forKey: .breakEndAt)

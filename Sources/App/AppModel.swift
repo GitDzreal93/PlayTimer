@@ -42,7 +42,15 @@ final class AppModel: ObservableObject {
     }
 
     var effectivePlayMinutes: Int {
-        settings.isTestModeEnabled ? 1 : settings.selectedPlayMinutes
+        max(1, effectivePlaySeconds / 60)
+    }
+
+    var effectivePlaySeconds: Int {
+        settings.isTestModeEnabled ? settings.selectedTestPlaySeconds : settings.selectedPlayMinutes * 60
+    }
+
+    var effectiveBreakSeconds: Int {
+        settings.isTestModeEnabled ? settings.selectedTestBreakSeconds : settings.selectedBreakMinutes * 60
     }
 
     var selectedAllowedAppCollection: AllowedAppCollection? {
@@ -87,6 +95,8 @@ final class AppModel: ObservableObject {
     func saveSettings(
         playMinutes: Int? = nil,
         breakMinutes: Int? = nil,
+        testPlaySeconds: Int? = nil,
+        testBreakSeconds: Int? = nil,
         prefersBiometrics: Bool? = nil,
         isTestModeEnabled: Bool? = nil
     ) {
@@ -95,6 +105,12 @@ final class AppModel: ObservableObject {
         }
         if let breakMinutes {
             settings.selectedBreakMinutes = breakMinutes
+        }
+        if let testPlaySeconds {
+            settings.selectedTestPlaySeconds = testPlaySeconds
+        }
+        if let testBreakSeconds {
+            settings.selectedTestBreakSeconds = testBreakSeconds
         }
         if let prefersBiometrics {
             settings.prefersBiometrics = prefersBiometrics
@@ -202,8 +218,8 @@ final class AppModel: ObservableObject {
         defer { isBusy = false }
 
         let newSession = PlaySession.new(
-            playMinutes: effectivePlayMinutes,
-            breakMinutes: settings.selectedBreakMinutes,
+            playSeconds: effectivePlaySeconds,
+            breakSeconds: effectiveBreakSeconds,
             allowedApplicationCount: allowedAppCount,
             allowedCollectionName: selectedAllowedAppCollection?.name
         )

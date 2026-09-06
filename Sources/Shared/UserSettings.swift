@@ -3,6 +3,8 @@ import Foundation
 struct UserSettings: Codable, Equatable {
     var selectedPlayMinutes: Int
     var selectedBreakMinutes: Int
+    var selectedTestPlaySeconds: Int
+    var selectedTestBreakSeconds: Int
     var prefersBiometrics: Bool
     var isTestModeEnabled: Bool
     var selectedAllowedAppCollectionID: UUID?
@@ -10,6 +12,8 @@ struct UserSettings: Codable, Equatable {
     static let defaults = UserSettings(
         selectedPlayMinutes: AppConstants.defaultPlayMinutes,
         selectedBreakMinutes: AppConstants.defaultBreakMinutes,
+        selectedTestPlaySeconds: AppConstants.defaultTestPlaySeconds,
+        selectedTestBreakSeconds: AppConstants.defaultTestBreakSeconds,
         prefersBiometrics: true,
         isTestModeEnabled: false,
         selectedAllowedAppCollectionID: nil
@@ -18,12 +22,16 @@ struct UserSettings: Codable, Equatable {
     init(
         selectedPlayMinutes: Int,
         selectedBreakMinutes: Int,
+        selectedTestPlaySeconds: Int,
+        selectedTestBreakSeconds: Int,
         prefersBiometrics: Bool,
         isTestModeEnabled: Bool,
         selectedAllowedAppCollectionID: UUID?
     ) {
         self.selectedPlayMinutes = selectedPlayMinutes
         self.selectedBreakMinutes = selectedBreakMinutes
+        self.selectedTestPlaySeconds = selectedTestPlaySeconds
+        self.selectedTestBreakSeconds = selectedTestBreakSeconds
         self.prefersBiometrics = prefersBiometrics
         self.isTestModeEnabled = isTestModeEnabled
         self.selectedAllowedAppCollectionID = selectedAllowedAppCollectionID
@@ -33,6 +41,8 @@ struct UserSettings: Codable, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         selectedPlayMinutes = try container.decodeIfPresent(Int.self, forKey: .selectedPlayMinutes) ?? AppConstants.defaultPlayMinutes
         selectedBreakMinutes = try container.decodeIfPresent(Int.self, forKey: .selectedBreakMinutes) ?? AppConstants.defaultBreakMinutes
+        selectedTestPlaySeconds = try container.decodeIfPresent(Int.self, forKey: .selectedTestPlaySeconds) ?? AppConstants.defaultTestPlaySeconds
+        selectedTestBreakSeconds = try container.decodeIfPresent(Int.self, forKey: .selectedTestBreakSeconds) ?? AppConstants.defaultTestBreakSeconds
         prefersBiometrics = try container.decodeIfPresent(Bool.self, forKey: .prefersBiometrics) ?? true
         isTestModeEnabled = try container.decodeIfPresent(Bool.self, forKey: .isTestModeEnabled) ?? false
         selectedAllowedAppCollectionID = try container.decodeIfPresent(UUID.self, forKey: .selectedAllowedAppCollectionID)
@@ -43,6 +53,8 @@ extension UserSettings {
     enum CodingKeys: String, CodingKey {
         case selectedPlayMinutes
         case selectedBreakMinutes
+        case selectedTestPlaySeconds
+        case selectedTestBreakSeconds
         case prefersBiometrics
         case isTestModeEnabled
         case selectedAllowedAppCollectionID

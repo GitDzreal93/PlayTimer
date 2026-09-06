@@ -12,10 +12,10 @@ struct DeviceActivityService {
             intervalStart: DateComponents(hour: 0, minute: 0, second: 0),
             intervalEnd: DateComponents(hour: 23, minute: 59, second: 59),
             repeats: true,
-            warningTime: DateComponents(minute: 5)
+            warningTime: session.playDurationSeconds > 5 * 60 ? DateComponents(minute: 5) : nil
         )
 
-        let threshold = DateComponents(minute: session.playDurationMinutes)
+        let threshold = DateComponents(second: session.playDurationSeconds)
         let event: DeviceActivityEvent
         if #available(iOS 17.4, *) {
             event = DeviceActivityEvent(

@@ -4,8 +4,8 @@ struct StartConfirmationContext: Identifiable {
     let id = UUID()
     var collectionName: String?
     var applicationCount: Int
-    var playMinutes: Int
-    var breakMinutes: Int
+    var playSeconds: Int
+    var breakSeconds: Int
     var isTestModeEnabled: Bool
 
     var collectionSummary: String {
@@ -47,14 +47,14 @@ struct StartConfirmationView: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 summaryRow(icon: "square.grid.2x2.fill", title: "允许 App", value: context.collectionSummary)
-                summaryRow(icon: "timer", title: "玩耍时长", value: "\(context.playMinutes) 分钟")
-                summaryRow(icon: "pause.circle.fill", title: "休息时长", value: "\(context.breakMinutes) 分钟")
+                summaryRow(icon: "timer", title: "玩耍时长", value: durationText(seconds: context.playSeconds))
+                summaryRow(icon: "pause.circle.fill", title: "休息时长", value: durationText(seconds: context.breakSeconds))
             }
             .padding(18)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
 
             if context.isTestModeEnabled {
-                Label("测试模式已开启，这一轮会使用 1 分钟额度。", systemImage: "testtube.2")
+                Label("测试模式已开启，这一轮会使用短时间额度。", systemImage: "testtube.2")
                     .font(.headline)
                     .foregroundStyle(.orange)
             }
@@ -99,5 +99,12 @@ struct StartConfirmationView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.trailing)
         }
+    }
+
+    private func durationText(seconds: Int) -> String {
+        if seconds % 60 == 0 {
+            return "\(seconds / 60) 分钟"
+        }
+        return "\(seconds) 秒"
     }
 }
