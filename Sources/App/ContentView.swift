@@ -5,6 +5,7 @@ struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var now = Date()
     @State private var activeSheet: ActiveSheet?
+    @State private var activeParentAction: ParentAction?
     @State private var lastAnnouncedPhase: SessionPhase?
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -60,11 +61,6 @@ struct ContentView: View {
         }
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
-            case .parentGate(let action):
-                ParentGateView(action: action) {
-                    perform(action)
-                }
-                .environmentObject(model)
             case .appCollections:
                 AllowedAppCollectionsView()
                     .environmentObject(model)
@@ -76,6 +72,13 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+        .fullScreenCover(item: $activeParentAction) { action in
+            ParentGateView(action: action) {
+                activeParentAction = nil
+                perform(action)
+            }
+            .environmentObject(model)
         }
         .alert("提示", isPresented: alertBinding) {
             Button("好", role: .cancel) {}
@@ -89,21 +92,21 @@ struct ContentView: View {
         switch model.phase {
         case .ready:
             ReadyView(onStart: {
-                activeSheet = .parentGate(.start)
+                activeParentAction = .start
             }, onEditAllowedApps: {
-                activeSheet = .parentGate(.editAllowedApps)
+                activeParentAction = .editAllowedApps
             })
         case .playing:
             PlayingView(now: now, onParentControl: {
-                activeSheet = .parentGate(.end)
+                activeParentAction = .end
             })
         case .break:
             BreakView(now: now, onParentControl: {
-                activeSheet = .parentGate(.end)
+                activeParentAction = .end
             })
         case .waitingParent:
             WaitingParentView {
-                activeSheet = .parentGate(.continueAfterBreak)
+                activeParentAction = .continueAfterBreak
             }
         case .error:
             ErrorStateView {
@@ -178,14 +181,11 @@ struct ContentView: View {
 }
 
 private enum ActiveSheet: Identifiable {
-    case parentGate(ParentAction)
     case appCollections
     case startConfirmation(StartConfirmationContext)
 
     var id: String {
         switch self {
-        case .parentGate(let action):
-            return "parent-\(action.id)"
         case .appCollections:
             return "app-collections"
         case .startConfirmation(let context):
