@@ -317,63 +317,57 @@ private struct ReadyView: View {
             }
 
             if model.settings.isTestModeEnabled {
-                VStack(spacing: 12) {
-                    Label("测试模式：本轮使用下面的快速时长", systemImage: "testtube.2")
-                        .font(.headline)
-                        .foregroundStyle(.orange)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    HStack(spacing: 16) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("玩耍").font(.subheadline.bold())
-                            DurationSegmentedPicker(
-                                options: AppConstants.testPlaySecondOptions,
-                                unit: .seconds,
-                                selection: Binding(
-                                    get: { model.settings.testPlaySeconds },
-                                    set: { model.saveSettings(testPlaySeconds: $0) }
-                                )
-                            )
-                        }
-
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("休息").font(.subheadline.bold())
-                            DurationSegmentedPicker(
-                                options: AppConstants.testBreakSecondOptions,
-                                unit: .seconds,
-                                selection: Binding(
-                                    get: { model.settings.testBreakSeconds },
-                                    set: { model.saveSettings(testBreakSeconds: $0) }
-                                )
-                            )
-                        }
-                    }
-                }
-                .padding(14)
-                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                Label("测试模式：选择快速时长", systemImage: "testtube.2")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
 
             Text("给孩子玩多久？")
                 .font(.largeTitle.bold())
 
-            DurationSegmentedPicker(
-                options: AppConstants.playMinuteOptions,
-                selection: Binding(
-                    get: { model.settings.selectedPlayMinutes },
-                    set: { model.saveSettings(playMinutes: $0) }
+            if model.settings.isTestModeEnabled {
+                DurationSegmentedPicker(
+                    options: AppConstants.testPlaySecondOptions,
+                    unit: .seconds,
+                    selection: Binding(
+                        get: { model.settings.testPlaySeconds },
+                        set: { model.saveSettings(testPlaySeconds: $0) }
+                    )
                 )
-            )
+            } else {
+                DurationSegmentedPicker(
+                    options: AppConstants.playMinuteOptions,
+                    selection: Binding(
+                        get: { model.settings.selectedPlayMinutes },
+                        set: { model.saveSettings(playMinutes: $0) }
+                    )
+                )
+            }
 
             Text("休息多久？")
                 .font(.title.bold())
 
-            DurationSegmentedPicker(
-                options: AppConstants.breakMinuteOptions,
-                selection: Binding(
-                    get: { model.settings.selectedBreakMinutes },
-                    set: { model.saveSettings(breakMinutes: $0) }
+            if model.settings.isTestModeEnabled {
+                DurationSegmentedPicker(
+                    options: AppConstants.testBreakSecondOptions,
+                    unit: .seconds,
+                    selection: Binding(
+                        get: { model.settings.testBreakSeconds },
+                        set: { model.saveSettings(testBreakSeconds: $0) }
+                    )
                 )
-            )
+            } else {
+                DurationSegmentedPicker(
+                    options: AppConstants.breakMinuteOptions,
+                    selection: Binding(
+                        get: { model.settings.selectedBreakMinutes },
+                        set: { model.saveSettings(breakMinutes: $0) }
+                    )
+                )
+            }
 
             Button(action: onStart) {
                 Label("开始儿童模式", systemImage: "play.fill")
