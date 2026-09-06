@@ -16,7 +16,7 @@ final class PlayTimerMonitorExtension: DeviceActivityMonitor {
         let now = Date()
         session.phase = .break
         session.breakStartedAt = now
-        session.breakEndAt = Calendar.current.date(byAdding: .minute, value: session.breakDurationMinutes, to: now)
+        session.breakEndAt = Calendar.current.date(byAdding: .second, value: session.breakDurationSeconds, to: now)
         session.lastUpdatedAt = now
         session.errorMessage = nil
 

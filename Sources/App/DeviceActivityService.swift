@@ -11,31 +11,33 @@ struct DeviceActivityService {
         // 窗口锚定会话开始时刻，覆盖玩耍 + 休息总时长并预留缓冲，
         // 避免日历日窗口在午夜重建导致用量清零。
         let calendar = Calendar.current
-        let bufferMinutes = 30
-        let windowMinutes = session.playDurationMinutes + session.breakDurationMinutes + bufferMinutes
+        let bufferSeconds = 30 * 60
+        let windowSeconds = session.playDurationSeconds + session.breakDurationSeconds + bufferSeconds
         let intervalStart = calendar.dateComponents(
             [.year, .month, .day, .hour, .minute, .second],
             from: session.startedAt
         )
-        let intervalEndDate = calendar.date(
-            byAdding: .minute,
-            value: windowMinutes,
-            to: session.startedAt
-        ) ?? session.startedAt.addingTimeInterval(TimeInterval(windowMinutes * 60))
+        let intervalEndDate = session.startedAt.addingTimeInterval(TimeInterval(windowSeconds))
         let intervalEnd = calendar.dateComponents(
             [.year, .month, .day, .hour, .minute, .second],
             from: intervalEndDate
         )
 
-        let warningOffset = min(5, max(0, session.playDurationMinutes - 1))
+        // 5 分钟预警；会话本身不足 5 分钟时按剩余时间的一半给预警（至少 5 秒）
+        let warningSeconds: Int
+        if session.playDurationSeconds > 5 * 60 {
+            warningSeconds = 5 * 60
+        } else {
+            warningSeconds = max(5, session.playDurationSeconds / 2)
+        }
         let schedule = DeviceActivitySchedule(
             intervalStart: intervalStart,
             intervalEnd: intervalEnd,
             repeats: false,
-            warningTime: DateComponents(minute: warningOffset)
+            warningTime: DateComponents(second: warningSeconds)
         )
 
-        let threshold = DateComponents(minute: session.playDurationMinutes)
+        let threshold = DateComponents(second: session.playDurationSeconds)
         let event: DeviceActivityEvent
         if #available(iOS 17.4, *) {
             event = DeviceActivityEvent(

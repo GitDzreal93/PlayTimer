@@ -170,8 +170,8 @@ struct ContentView: View {
         StartConfirmationContext(
             collectionName: model.selectedAllowedAppCollection?.name,
             applicationCount: model.allowedAppCount,
-            playMinutes: model.effectivePlayMinutes,
-            breakMinutes: model.settings.selectedBreakMinutes,
+            playDurationText: AppConstants.durationText(seconds: model.effectivePlaySeconds),
+            breakDurationText: AppConstants.durationText(seconds: model.effectiveBreakSeconds),
             isTestModeEnabled: model.settings.isTestModeEnabled
         )
     }
@@ -317,12 +317,40 @@ private struct ReadyView: View {
             }
 
             if model.settings.isTestModeEnabled {
-                Label("测试模式：本轮会按 1 分钟计时", systemImage: "testtube.2")
-                    .font(.headline)
-                    .foregroundStyle(.orange)
-                    .padding(14)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                VStack(spacing: 12) {
+                    Label("测试模式：本轮使用下面的快速时长", systemImage: "testtube.2")
+                        .font(.headline)
+                        .foregroundStyle(.orange)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("玩耍").font(.subheadline.bold())
+                            DurationSegmentedPicker(
+                                options: AppConstants.testPlaySecondOptions,
+                                unit: .seconds,
+                                selection: Binding(
+                                    get: { model.settings.testPlaySeconds },
+                                    set: { model.saveSettings(testPlaySeconds: $0) }
+                                )
+                            )
+                        }
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("休息").font(.subheadline.bold())
+                            DurationSegmentedPicker(
+                                options: AppConstants.testBreakSecondOptions,
+                                unit: .seconds,
+                                selection: Binding(
+                                    get: { model.settings.testBreakSeconds },
+                                    set: { model.saveSettings(testBreakSeconds: $0) }
+                                )
+                            )
+                        }
+                    }
+                }
+                .padding(14)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
 
             Text("给孩子玩多久？")
@@ -439,23 +467,23 @@ private struct PlayingView: View {
     }
 
     private var totalSeconds: Int {
-        (model.session?.playDurationMinutes ?? AppConstants.defaultPlayMinutes) * 60
+        model.session?.playDurationSeconds ?? AppConstants.defaultPlayMinutes * 60
     }
 
     private var detailText: String {
-        let breakMinutes = model.session?.breakDurationMinutes ?? AppConstants.defaultBreakMinutes
+        let breakText = model.session?.breakDurationText ?? AppConstants.durationText(seconds: AppConstants.defaultBreakMinutes * 60)
         let count = model.session?.allowedApplicationCount ?? 0
         let collectionName = model.session?.allowedCollectionName
         if count == 0 {
             if let collectionName {
-                return "\(collectionName) 里还没有 App，当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
+                return "\(collectionName) 里还没有 App，当前按全部 App / 网页统计。时间到后会进入 \(breakText) 休息。"
             }
-            return "当前按全部 App / 网页统计。时间到后会进入 \(breakMinutes) 分钟休息。"
+            return "当前按全部 App / 网页统计。时间到后会进入 \(breakText) 休息。"
         }
         if let collectionName {
-            return "当前允许 \(collectionName) 中的 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
+            return "当前允许 \(collectionName) 中的 \(count) 个 App。时间到后会进入 \(breakText) 休息。"
         }
-        return "当前只允许 \(count) 个 App。时间到后会进入 \(breakMinutes) 分钟休息。"
+        return "当前只允许 \(count) 个 App。时间到后会进入 \(breakText) 休息。"
     }
 }
 
@@ -606,16 +634,31 @@ private struct StatePanel: View {
 }
 
 private struct DurationSegmentedPicker: View {
+    enum Unit {
+        case minutes
+        case seconds
+    }
+
     var options: [Int]
+    var unit: Unit = .minutes
     @Binding var selection: Int
 
     var body: some View {
         Picker("", selection: $selection) {
-            ForEach(options, id: \.self) { minutes in
-                Text("\(minutes) 分钟").tag(minutes)
+            ForEach(options, id: \.self) { value in
+                Text(label(for: value)).tag(value)
             }
         }
         .pickerStyle(.segmented)
+    }
+
+    private func label(for value: Int) -> String {
+        switch unit {
+        case .minutes:
+            return "\(value) 分钟"
+        case .seconds:
+            return "\(value) 秒"
+        }
     }
 }
 

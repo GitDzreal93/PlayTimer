@@ -49,7 +49,7 @@ struct ParentGateView: View {
                     Button {
                         onVerified()
                     } label: {
-                        Label("再玩 \(model.effectivePlayMinutes) 分钟", systemImage: "play.fill")
+                        Label("再玩 \(AppConstants.durationText(seconds: model.effectivePlaySeconds))", systemImage: "play.fill")
                             .frame(maxWidth: 280)
                     }
                     .buttonStyle(.borderedProminent)

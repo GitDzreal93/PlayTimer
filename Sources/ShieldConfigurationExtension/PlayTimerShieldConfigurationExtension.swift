@@ -43,11 +43,11 @@ final class PlayTimerShieldConfigurationExtension: ShieldConfigurationDataSource
             let formatter = DateFormatter()
             formatter.dateFormat = "HH:mm"
             if session.allowedApplicationCount == 0 {
-                return "本轮 \(session.playDurationMinutes) 分钟已经用完。休息到 \(formatter.string(from: breakEndAt))。"
+                return "本轮 \(session.playDurationText) 已经用完。休息到 \(formatter.string(from: breakEndAt))。"
             }
-            return "允许 App 的 \(session.playDurationMinutes) 分钟已经用完。休息到 \(formatter.string(from: breakEndAt))。"
+            return "允许 App 的 \(session.playDurationText) 已经用完。休息到 \(formatter.string(from: breakEndAt))。"
         }
 
-        return "本轮 \(session.playDurationMinutes) 分钟已经用完。"
+        return "本轮 \(session.playDurationText) 已经用完。"
     }
 }
