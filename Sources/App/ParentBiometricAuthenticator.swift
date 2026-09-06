@@ -4,11 +4,10 @@ import LocalAuthentication
 struct ParentBiometricAuthenticator {
     func authenticate() async throws -> Bool {
         let context = LAContext()
-        context.localizedCancelTitle = "取消"
-        context.localizedFallbackTitle = "输入 iPad 密码"
+        context.localizedFallbackTitle = ""
 
         var error: NSError?
-        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
             if let error {
                 throw error
             }
@@ -17,7 +16,7 @@ struct ParentBiometricAuthenticator {
 
         do {
             return try await context.evaluatePolicy(
-                .deviceOwnerAuthentication,
+                .deviceOwnerAuthenticationWithBiometrics,
                 localizedReason: "验证家长身份"
             )
         } catch {

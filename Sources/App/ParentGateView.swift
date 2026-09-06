@@ -1,4 +1,3 @@
-import LocalAuthentication
 import SwiftUI
 
 enum ParentAction: String, Identifiable {
@@ -32,7 +31,6 @@ struct ParentGateView: View {
     var action: ParentAction
     var onVerified: () -> Void
 
-    @StateObject private var biometricAuth = ParentBiometricAuthCoordinator()
     @State private var pin = ""
     @State private var didFail = false
     @State private var isVerified = false
@@ -67,16 +65,19 @@ struct ParentGateView: View {
                     .buttonStyle(.bordered)
                     .controlSize(.large)
                 } else {
-                    if model.settings.prefersBiometrics, biometryTitle != nil {
+                    if model.settings.prefersBiometrics {
                         Button {
-                            authenticateWithBiometrics()
+                            Task {
+                                if await model.verifyBiometrics() {
+                                    completeVerification()
+                                }
+                            }
                         } label: {
-                            Label(biometryTitle ?? "生物验证", systemImage: biometryIcon)
+                            Label("Face ID / Touch ID", systemImage: "faceid")
                                 .frame(maxWidth: 280)
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
-                        .disabled(biometricAuth.isAuthenticating)
                     }
 
                     SecureField("家长 PIN", text: $pin)
@@ -118,42 +119,7 @@ struct ParentGateView: View {
                 }
             }
         }
-        .interactiveDismissDisabled(biometricAuth.isAuthenticating)
-    }
-
-    // MARK: - 生物验证
-
-    private static let biometryInfo: (title: String?, icon: String) = {
-        let context = LAContext()
-        var error: NSError?
-        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-            return (nil, "faceid")
-        }
-        switch context.biometryType {
-        case .faceID:
-            return ("面容 ID", "faceid")
-        case .touchID:
-            return ("触控 ID", "touchid")
-        default:
-            return (nil, "faceid")
-        }
-    }()
-
-    private var biometryTitle: String? {
-        Self.biometryInfo.title
-    }
-
-    private var biometryIcon: String {
-        Self.biometryInfo.icon
-    }
-
-    private func authenticateWithBiometrics() {
-        Task {
-            let success = await biometricAuth.authenticate(reason: "验证家长身份")
-            if success {
-                completeVerification()
-            }
-        }
+        .presentationDetents([.medium])
     }
 
     private func completeVerification() {
