@@ -177,6 +177,10 @@ final class AppModel: ObservableObject {
         }
     }
 
+    var isPINLocked: Bool {
+        pinStore.isLocked
+    }
+
     func verifyBiometrics() async -> Bool {
         guard settings.prefersBiometrics else { return false }
         do {

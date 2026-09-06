@@ -18,6 +18,7 @@ targets:
     sources:
       - Sources/App
       - Sources/Shared
+      - Sources/App/Resources/Assets.xcassets
     info:
       path: Config/PlayTimer-Info.plist
       properties:
