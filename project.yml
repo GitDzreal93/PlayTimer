@@ -24,8 +24,6 @@ targets:
         CFBundleDisplayName: PlayTimer
         UIRequiresFullScreen: true
         UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
     entitlements:
