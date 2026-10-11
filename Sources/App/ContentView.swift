@@ -7,53 +7,38 @@ struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var now = Date()
     @State private var activeSheet: ActiveSheet?
+    @State private var parentAction: ParentAction?
     @State private var lastAnnouncedPhase: SessionPhase?
+    @Environment(\.scenePhase) private var scenePhase
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundView
-                    .ignoresSafeArea()
+        ZStack {
+            PlayTimerTheme.canvas.ignoresSafeArea()
 
-                Group {
-                    if !model.hasParentPIN {
-                        PINSetupView()
-                    } else if !model.isAuthorized {
-                        AuthorizationView()
-                    } else {
-                        sessionContent
-                    }
-                }
-                .padding(32)
-                .frame(maxWidth: 720)
-            }
-            .navigationTitle("PlayTimer")
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    if model.hasParentPIN, model.isAuthorized {
-                        Toggle(isOn: biometricBinding) {
-                            Label("Face ID", systemImage: "faceid")
-                        }
-                        .toggleStyle(.button)
-
-                        Button {
-                            model.saveSettings(isTestModeEnabled: !model.settings.isTestModeEnabled)
-                        } label: {
-                            Label(
-                                model.settings.isTestModeEnabled ? "关闭测试模式" : "测试模式",
-                                systemImage: "testtube.2"
-                            )
-                        }
-                        .tint(model.settings.isTestModeEnabled ? .orange : .accentColor)
-                    }
-                }
+            if !model.hasParentPIN {
+                PINSetupView()
+                    .padding(24)
+                    .frame(maxWidth: 680)
+            } else if !model.isAuthorized {
+                AuthorizationView()
+                    .padding(24)
+                    .frame(maxWidth: 680)
+            } else {
+                sessionContent
             }
         }
-        .preferredColorScheme(usesRestAppearance ? .dark : nil)
+        .preferredColorScheme(.light)
         .onAppear {
             lastAnnouncedPhase = model.phase
+            #if DEBUG
+            #if targetEnvironment(simulator)
+            if ProcessInfo.processInfo.arguments.contains("-PlayTimerPreviewGate") {
+                parentAction = .end
+            }
+            #endif
+            #endif
         }
         .onReceive(ticker) { value in
             now = value
@@ -61,13 +46,19 @@ struct ContentView: View {
             model.syncSessionFromStoreAndMarkWaitingParentIfNeeded()
             announcePhaseChange(from: phaseBeforeRefresh, to: model.phase)
         }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                Task { await model.refresh() }
+            }
+        }
+        .fullScreenCover(item: $parentAction) { action in
+            ParentGateView(action: action) {
+                perform(action)
+            }
+            .environmentObject(model)
+        }
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
-            case .parentGate(let action):
-                ParentGateView(action: action) {
-                    perform(action)
-                }
-                .environmentObject(model)
             case .appCollections:
                 AllowedAppCollectionsView()
                     .environmentObject(model)
@@ -85,33 +76,6 @@ struct ContentView: View {
         } message: {
             Text(model.alertMessage ?? "")
         }
-    }
-
-    @ViewBuilder
-    private var backgroundView: some View {
-        if usesRestAppearance {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.08, green: 0.18, blue: 0.20),
-                    Color(red: 0.03, green: 0.08, blue: 0.10)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        } else {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.95, green: 0.98, blue: 0.97),
-                    Color(red: 0.98, green: 0.96, blue: 0.91)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        }
-    }
-
-    private var usesRestAppearance: Bool {
-        model.phase == .break || model.phase == .waitingParent
     }
 
     private func announcePhaseChange(from oldPhase: SessionPhase, to newPhase: SessionPhase) {
@@ -132,23 +96,23 @@ struct ContentView: View {
     private var sessionContent: some View {
         switch model.phase {
         case .ready:
-            ReadyView(onStart: {
-                activeSheet = .parentGate(.start)
+            ParentReadyScreen(onStart: {
+                parentAction = .start
             }, onEditAllowedApps: {
-                activeSheet = .parentGate(.editAllowedApps)
+                parentAction = .editAllowedApps
             })
         case .playing:
-            PlayingView(now: now, onParentControl: {
-                activeSheet = .parentGate(.end)
+            ChildSessionScreen(now: now, onParentControl: {
+                parentAction = .end
             })
         case .break:
-            BreakView(now: now, onParentControl: {
-                activeSheet = .parentGate(.end)
+            ChildSessionScreen(now: now, onParentControl: {
+                parentAction = .end
             })
         case .waitingParent:
-            WaitingParentView {
-                activeSheet = .parentGate(.continueAfterBreak)
-            }
+            ChildSessionScreen(now: now, onParentControl: {
+                parentAction = .continueAfterBreak
+            })
         case .error:
             ErrorStateView {
                 Task {
@@ -156,13 +120,6 @@ struct ContentView: View {
                 }
             }
         }
-    }
-
-    private var biometricBinding: Binding<Bool> {
-        Binding(
-            get: { model.settings.prefersBiometrics },
-            set: { model.saveSettings(prefersBiometrics: $0) }
-        )
     }
 
     private var alertBinding: Binding<Bool> {
@@ -175,12 +132,19 @@ struct ContentView: View {
     private func perform(_ action: ParentAction) {
         switch action {
         case .start, .nextRound, .continueAfterBreak:
-            activeSheet = .startConfirmation(makeStartConfirmationContext())
+            let context = makeStartConfirmationContext()
+            parentAction = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                activeSheet = .startConfirmation(context)
+            }
         case .end:
             model.endChildMode()
-            activeSheet = nil
+            parentAction = nil
         case .editAllowedApps:
-            activeSheet = .appCollections
+            parentAction = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                activeSheet = .appCollections
+            }
         }
     }
 
@@ -196,14 +160,11 @@ struct ContentView: View {
 }
 
 private enum ActiveSheet: Identifiable {
-    case parentGate(ParentAction)
     case appCollections
     case startConfirmation(StartConfirmationContext)
 
     var id: String {
         switch self {
-        case .parentGate(let action):
-            return "parent-\(action.id)"
         case .appCollections:
             return "app-collections"
         case .startConfirmation(let context):
@@ -216,36 +177,45 @@ private struct AuthorizationView: View {
     @EnvironmentObject private var model: AppModel
 
     var body: some View {
-        VStack(spacing: 28) {
-            Image(systemName: "hourglass.circle.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.teal)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                Image("BlueCatPlaying")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 96, height: 96)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .accessibilityHidden(true)
 
-            VStack(spacing: 10) {
+                Text("再完成一步")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(PlayTimerTheme.teal)
                 Text("授权屏幕时间")
-                    .font(.largeTitle.bold())
-                Text("PlayTimer 需要本机 Screen Time 权限，才能在额度用完后自动暂停可限制的 App 使用。")
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(PlayTimerTheme.ink)
+                Text("PlayTimer 需要这台 iPad 的屏幕时间权限，才能在游玩时间结束时暂停受限 App。")
                     .font(.title3)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-            }
+                    .foregroundStyle(PlayTimerTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
 
-            Button {
-                Task {
-                    await model.requestScreenTimeAuthorization()
+                Button {
+                    Task { await model.requestScreenTimeAuthorization() }
+                } label: {
+                    Label(model.isBusy ? "正在请求授权…" : "授权屏幕时间", systemImage: "checkmark.shield.fill")
                 }
-            } label: {
-                Label("授权屏幕时间", systemImage: "checkmark.shield.fill")
-                    .frame(maxWidth: 280)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+                .buttonStyle(PrimaryActionStyle())
+                .disabled(model.isBusy)
+                .padding(.top, 8)
 
-            Text("这里使用这台 iPad 已录入的家长 Touch ID 或设备密码完成系统授权。")
-                .font(.callout)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 460)
+                Text("请按系统提示完成授权。")
+                    .font(.subheadline)
+                    .foregroundStyle(PlayTimerTheme.mutedInk)
+            }
+            .padding(32)
+            .frame(maxWidth: 560, alignment: .leading)
+            .background(PlayTimerTheme.surface, in: RoundedRectangle(cornerRadius: 28))
+            .overlay(RoundedRectangle(cornerRadius: 28).stroke(PlayTimerTheme.border))
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 560)
         }
     }
 }
@@ -257,48 +227,62 @@ private struct PINSetupView: View {
     @State private var mismatch = false
 
     var body: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "lock.circle.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.teal)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Image("BlueCatPeekaboo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 96, height: 96)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .accessibilityHidden(true)
 
-            Text("创建家长 PIN")
-                .font(.largeTitle.bold())
+                Text("家长设置")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(PlayTimerTheme.teal)
+                Text("创建家长 PIN")
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(PlayTimerTheme.ink)
+                Text("设置 4–6 位数字。结束或继续儿童模式时，需要家长验证。")
+                    .font(.title3)
+                    .foregroundStyle(PlayTimerTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
 
-            VStack(spacing: 12) {
-                SecureField("4-6 位数字", text: $pin)
-                    .keyboardType(.numberPad)
-                    .textContentType(.oneTimeCode)
-                    .onChange(of: pin) { value in
-                        pin = sanitizedPIN(value)
-                    }
-                SecureField("再输入一次", text: $confirmPIN)
-                    .keyboardType(.numberPad)
-                    .textContentType(.oneTimeCode)
-                    .onChange(of: confirmPIN) { value in
-                        confirmPIN = sanitizedPIN(value)
-                    }
+                VStack(spacing: 12) {
+                    SecureField("输入 4–6 位数字", text: $pin)
+                        .onChange(of: pin) { value in pin = sanitizedPIN(value) }
+                    SecureField("再次输入 PIN", text: $confirmPIN)
+                        .onChange(of: confirmPIN) { value in confirmPIN = sanitizedPIN(value) }
+                }
+                .keyboardType(.numberPad)
+                .textContentType(.oneTimeCode)
+                .font(.title3)
+                .padding(16)
+                .background(.white, in: RoundedRectangle(cornerRadius: 16))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(PlayTimerTheme.border))
+
+                if mismatch {
+                    Text("两次输入不一致，请重试。")
+                        .font(.subheadline)
+                        .foregroundStyle(.red)
+                }
+
+                Button {
+                    mismatch = pin != confirmPIN
+                    guard !mismatch else { return }
+                    _ = model.createPIN(pin)
+                } label: {
+                    Label("保存 PIN", systemImage: "key.fill")
+                }
+                .buttonStyle(PrimaryActionStyle())
+                .disabled(!canAttemptSave)
+                .padding(.top, 8)
             }
-            .textFieldStyle(.roundedBorder)
-            .font(.title3)
-            .frame(maxWidth: 360)
-
-            if mismatch {
-                Text("两次输入不一致。")
-                    .foregroundStyle(.red)
-            }
-
-            Button {
-                mismatch = pin != confirmPIN
-                guard !mismatch else { return }
-                _ = model.createPIN(pin)
-            } label: {
-                Label("保存 PIN", systemImage: "key.fill")
-                    .frame(maxWidth: 240)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(!canAttemptSave)
+            .padding(32)
+            .frame(maxWidth: 560, alignment: .leading)
+            .background(PlayTimerTheme.surface, in: RoundedRectangle(cornerRadius: 28))
+            .overlay(RoundedRectangle(cornerRadius: 28).stroke(PlayTimerTheme.border))
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 620)
         }
     }
 

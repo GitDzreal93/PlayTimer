@@ -27,14 +27,61 @@ final class AppModel: ObservableObject {
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         hasParentPIN = pinStore.hasPIN
         normalizeSelectedCollection()
+
+        #if DEBUG
+        #if targetEnvironment(simulator)
+        if let previewPhase = Self.simulatorPreviewPhase {
+            hasParentPIN = true
+            authorizationStatus = .approved
+            if previewPhase == .ready {
+                session = nil
+            } else {
+                var sample = PlaySession.new(
+                    playSeconds: 25 * 60,
+                    breakSeconds: 5 * 60,
+                    allowedApplicationCount: 0,
+                    allowedCollectionName: nil,
+                    now: Date().addingTimeInterval(-6 * 60)
+                )
+                sample.phase = previewPhase
+                if previewPhase == .break {
+                    sample.breakStartedAt = Date().addingTimeInterval(-32)
+                    sample.breakEndAt = Date().addingTimeInterval(4 * 60 + 28)
+                }
+                session = sample
+            }
+        } else if ProcessInfo.processInfo.arguments.contains("-PlayTimerPreviewAuthorization") {
+            hasParentPIN = true
+            authorizationStatus = .notDetermined
+        }
+        #endif
+        #endif
     }
+
+    #if DEBUG
+    #if targetEnvironment(simulator)
+    private static var simulatorPreviewPhase: SessionPhase? {
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-PlayTimerPreviewReady") { return .ready }
+        if arguments.contains("-PlayTimerPreviewPlaying") { return .playing }
+        if arguments.contains("-PlayTimerPreviewBreak") { return .break }
+        if arguments.contains("-PlayTimerPreviewWaiting") { return .waitingParent }
+        if arguments.contains("-PlayTimerPreviewGate") { return .playing }
+        return nil
+    }
+    #endif
+    #endif
 
     var phase: SessionPhase {
         session?.refreshed().phase ?? .ready
     }
 
     var isAuthorized: Bool {
-        authorizationStatus == .approved
+        if authorizationStatus == .approved { return true }
+        if #available(iOS 26.4, *) {
+            return authorizationStatus == .approvedWithDataAccess
+        }
+        return false
     }
 
     var allowedAppCount: Int {
@@ -65,6 +112,11 @@ final class AppModel: ObservableObject {
     }
 
     func refresh() async {
+        #if DEBUG
+        #if targetEnvironment(simulator)
+        if Self.simulatorPreviewPhase != nil || ProcessInfo.processInfo.arguments.contains("-PlayTimerPreviewAuthorization") { return }
+        #endif
+        #endif
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         allowedAppCollections = stateStore.loadAllowedAppCollections()
         normalizeSelectedCollection()
@@ -76,19 +128,27 @@ final class AppModel: ObservableObject {
     }
 
     func requestScreenTimeAuthorization() async {
+        guard !isBusy else { return }
+        isBusy = true
+        defer { isBusy = false }
         let statusBeforeRequest = AuthorizationCenter.shared.authorizationStatus
 
         do {
             try await Task.sleep(nanoseconds: 250_000_000)
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
             authorizationStatus = AuthorizationCenter.shared.authorizationStatus
+            if !isAuthorized {
+                alertMessage = "屏幕时间权限尚未获批。请检查系统设置后重试。"
+            }
         } catch {
             authorizationStatus = AuthorizationCenter.shared.authorizationStatus
-            alertMessage = makeScreenTimeAuthorizationFailureMessage(
-                error: error,
-                statusBeforeRequest: statusBeforeRequest,
-                statusAfterRequest: authorizationStatus
-            )
+            if !isAuthorized {
+                alertMessage = makeScreenTimeAuthorizationFailureMessage(
+                    error: error,
+                    statusBeforeRequest: statusBeforeRequest,
+                    statusAfterRequest: authorizationStatus
+                )
+            }
         }
     }
 
@@ -203,7 +263,6 @@ final class AppModel: ObservableObject {
         do {
             return try await ParentBiometricAuthenticator().authenticate()
         } catch {
-            alertMessage = makeBiometricFailureMessage(error)
             return false
         }
     }
@@ -272,6 +331,11 @@ final class AppModel: ObservableObject {
     }
 
     func syncSessionFromStoreAndMarkWaitingParentIfNeeded() {
+        #if DEBUG
+        #if targetEnvironment(simulator)
+        if Self.simulatorPreviewPhase != nil { return }
+        #endif
+        #endif
         let storedSession = stateStore.loadSession()
         if storedSession != session {
             session = storedSession
@@ -327,51 +391,40 @@ final class AppModel: ObservableObject {
         statusBeforeRequest: AuthorizationStatus,
         statusAfterRequest: AuthorizationStatus
     ) -> String {
-        var details = [
-            "Screen Time 授权失败。",
-            "授权方式: individual",
-            "FamilyControls: \(familyControlsErrorName(error))",
-            "授权前状态: \(authorizationStatusName(statusBeforeRequest))",
-            "授权后状态: \(authorizationStatusName(statusAfterRequest))"
-        ]
-        details.append(contentsOf: nsErrorDetails(error))
-        return details.joined(separator: "\n")
-    }
+        #if DEBUG
+        let nsError = error as NSError
+        print("Screen Time authorization failed: \(authorizationStatusName(statusBeforeRequest)) → \(authorizationStatusName(statusAfterRequest)), \(nsError.domain) \(nsError.code): \(nsError.localizedDescription)")
+        #endif
 
-    private func makeBiometricFailureMessage(_ error: Error) -> String {
-        var details = ["家长身份验证失败。"]
-        details.append(contentsOf: nsErrorDetails(error))
-        return details.joined(separator: "\n")
-    }
-
-    private func familyControlsErrorName(_ error: Error) -> String {
-        guard let familyControlsError = error as? FamilyControlsError else {
-            return "不是 FamilyControlsError"
+        if statusAfterRequest == .denied {
+            return "屏幕时间权限未获批准。请在系统设置中检查授权后重试。"
         }
 
-        switch familyControlsError {
-        case .restricted:
-            return "restricted"
-        case .unavailable:
-            return "unavailable"
-        case .invalidAccountType:
-            return "invalidAccountType"
-        case .invalidArgument:
-            return "invalidArgument"
-        case .authorizationConflict:
-            return "authorizationConflict"
-        case .authorizationCanceled:
-            return "authorizationCanceled"
-        case .networkError:
-            return "networkError"
-        case .authenticationMethodUnavailable:
-            return "authenticationMethodUnavailable"
-        @unknown default:
-            return "unknown(\(familyControlsError.localizedDescription))"
+        if let familyControlsError = error as? FamilyControlsError {
+            switch familyControlsError {
+            case .authorizationCanceled:
+                return "已取消屏幕时间授权，可以稍后重试。"
+            case .restricted, .unavailable, .authenticationMethodUnavailable:
+                return "这台 iPad 当前无法完成屏幕时间授权，请检查设备限制与系统设置。"
+            default:
+                break
+            }
         }
+
+        #if targetEnvironment(simulator)
+        let simulatorError = error as NSError
+        if simulatorError.domain == NSCocoaErrorDomain && simulatorError.code == 4099 {
+            return "模拟器无法连接屏幕时间系统服务。请在真机上完成授权验证。"
+        }
+        #endif
+
+        return "屏幕时间授权未完成，请稍后重试。"
     }
 
     private func authorizationStatusName(_ status: AuthorizationStatus) -> String {
+        if #available(iOS 26.4, *), status == .approvedWithDataAccess {
+            return "approvedWithDataAccess"
+        }
         switch status {
         case .notDetermined:
             return "notDetermined"
@@ -379,17 +432,9 @@ final class AppModel: ObservableObject {
             return "denied"
         case .approved:
             return "approved"
-        @unknown default:
+        default:
             return "unknown(\(status.rawValue))"
         }
     }
 
-    private func nsErrorDetails(_ error: Error) -> [String] {
-        let nsError = error as NSError
-        return [
-            "NSError domain: \(nsError.domain)",
-            "NSError code: \(nsError.code)",
-            "说明: \(nsError.localizedDescription)"
-        ]
-    }
 }

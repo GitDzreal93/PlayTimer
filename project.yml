@@ -9,7 +9,6 @@ settings:
     SWIFT_VERSION: "5.0"
     TARGETED_DEVICE_FAMILY: "2"
     IPHONEOS_DEPLOYMENT_TARGET: "16.0"
-    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     DEVELOPMENT_TEAM: FUU4946D45
 targets:
   PlayTimer:
@@ -23,7 +22,10 @@ targets:
       properties:
         CFBundleDisplayName: PlayTimer
         UIRequiresFullScreen: true
+        UIRequiresFullScreenIgnoredStartingWithVersion: "26"
         UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
     entitlements:
@@ -34,6 +36,7 @@ targets:
         com.apple.developer.family-controls: true
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: FUU4946D45
         PRODUCT_BUNDLE_IDENTIFIER: com.wenlei.PlayTimer

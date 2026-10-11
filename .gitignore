@@ -17,3 +17,4 @@ Package.resolved
 
 # Playwright / test artifacts
 .playwright-mcp/
+.superpowers/
