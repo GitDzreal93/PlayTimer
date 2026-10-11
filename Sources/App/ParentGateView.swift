@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum ParentAction: String, Identifiable {
-    case start, end, continueAfterBreak, nextRound, editAllowedApps
+    case start, end, continueAfterBreak, nextRound, editAllowedApps, configureRecoveryQuestions
 
     var id: String { rawValue }
 }
@@ -18,6 +18,18 @@ struct ParentGateView: View {
     @State private var biometricFailure = false
     @State private var isVerified = false
     @State private var isBreathing = false
+    @State private var isRecoveringPIN = false
+    @State private var recoveryAnswersVerified = false
+    @State private var deviceOwnerRecoveryVerified = false
+    @State private var recoveryAnswer1 = ""
+    @State private var recoveryAnswer2 = ""
+    @State private var replacementPIN = ""
+    @State private var replacementPINConfirmation = ""
+    @State private var recoveryError: String?
+    @State private var recoverySuccessMessage: String?
+    @State private var recoveryQuestion = ""
+    @State private var recoveryAnswer = ""
+    @State private var recoveryQuestionMismatch = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -102,19 +114,22 @@ struct ParentGateView: View {
                 .tracking(2)
                 .foregroundStyle(PlayTimerTheme.teal)
                 .padding(.bottom, 9)
-            Text(isVerified ? "接下来怎么做？" : "家长验证")
+            Text(title)
                 .font(.system(.largeTitle, design: .rounded, weight: .bold))
                 .foregroundStyle(PlayTimerTheme.ink)
                 .padding(.bottom, 10)
-            Text(isVerified ? "休息已经结束，可以开始新一轮或结束儿童模式。"
-                 : "输入家长 PIN，才能结束或继续儿童模式。")
+            Text(description)
                 .font(.body)
                 .foregroundStyle(PlayTimerTheme.mutedInk)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom, 26)
 
-            if isVerified {
+            if isVerified && action == .configureRecoveryQuestions {
+                recoveryQuestionSetupForm
+            } else if isVerified {
                 verifiedActions
+            } else if isRecoveringPIN {
+                recoveryControls
             } else {
                 verificationControls
             }
@@ -128,6 +143,29 @@ struct ParentGateView: View {
         .padding(30)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(PlayTimerTheme.surface)
+    }
+
+    private var title: String {
+        if isVerified && action == .configureRecoveryQuestions { return "设置 PIN 找回问题" }
+        if isVerified { return "接下来怎么做？" }
+        if isRecoveringPIN { return "找回 PIN" }
+        return "家长验证"
+    }
+
+    private var description: String {
+        if isVerified && action == .configureRecoveryQuestions {
+            return "选择一道只有家长知道答案的问题。答案只保存在这台 iPad 的钥匙串中。"
+        }
+        if isVerified { return "休息已经结束，可以开始新一轮或结束儿童模式。" }
+        if isRecoveringPIN && model.recoveryQuestionPrompts.isEmpty {
+            return "这台 iPad 尚未设置找回问题。请先验证 iPad 设备所有者身份，然后在此设置新 PIN 和找回问题。"
+        }
+        if isRecoveringPIN {
+            return model.recoveryQuestionPrompts.count == 1
+                ? "回答设置 PIN 时选择的问题，验证通过后即可创建新 PIN。"
+                : "回答设置 PIN 时设置的问题，验证通过后即可创建新 PIN。"
+        }
+        return "输入家长 PIN，才能结束或继续儿童模式。"
     }
 
     private var verificationControls: some View {
@@ -146,7 +184,14 @@ struct ParentGateView: View {
                     pin = String(value.filter(\.isNumber).prefix(6))
                     didFail = false
                     biometricFailure = false
+                    recoverySuccessMessage = nil
                 }
+
+            if let recoverySuccessMessage {
+                Text(recoverySuccessMessage)
+                    .font(.subheadline)
+                    .foregroundStyle(PlayTimerTheme.teal)
+            }
 
             if didFail {
                 Text("PIN 不正确，请重试。")
@@ -190,7 +235,185 @@ struct ParentGateView: View {
                     .font(.subheadline)
                     .foregroundStyle(PlayTimerTheme.mutedInk)
             }
+
+            Button("忘记 PIN？") {
+                isRecoveringPIN = true
+                didFail = false
+                recoveryError = nil
+                deviceOwnerRecoveryVerified = false
+                recoveryAnswersVerified = false
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(PlayTimerTheme.teal)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 4)
         }
+    }
+
+    private var recoveryControls: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if model.recoveryQuestionPrompts.isEmpty && deviceOwnerRecoveryVerified {
+                legacyRecoverySetupForm
+            } else if model.recoveryQuestionPrompts.isEmpty {
+                Text("此 PIN 尚无找回问题。通过 Face ID、Touch ID 或 iPad 设备密码验证后，就能直接设置新 PIN 和找回问题。")
+                    .font(.subheadline)
+                    .foregroundStyle(PlayTimerTheme.mutedInk)
+
+                Button("验证设备身份并重设") {
+                    Task {
+                        if await model.verifyDeviceOwnerForPINRecovery() {
+                            deviceOwnerRecoveryVerified = true
+                            recoveryError = nil
+                        } else {
+                            recoveryError = "设备身份验证未完成。请确认 iPad 已设置设备密码后重试。"
+                        }
+                    }
+                }
+                .buttonStyle(PrimaryActionStyle())
+            } else if recoveryAnswersVerified {
+                Text("设置新 PIN")
+                    .font(.subheadline.weight(.bold))
+                SecureField("输入新的 4–6 位 PIN", text: $replacementPIN)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .onChange(of: replacementPIN) { replacementPIN = String($0.filter(\.isNumber).prefix(6)) }
+                SecureField("再次输入新 PIN", text: $replacementPINConfirmation)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .onChange(of: replacementPINConfirmation) { replacementPINConfirmation = String($0.filter(\.isNumber).prefix(6)) }
+
+                Button("保存新 PIN") {
+                    guard replacementPIN == replacementPINConfirmation else {
+                        recoveryError = "两次输入的新 PIN 不一致。"
+                        return
+                    }
+                    guard model.resetPINUsingRecoveryQuestions(replacementPIN) else { return }
+                    finishPINRecovery()
+                }
+                .buttonStyle(PrimaryActionStyle())
+                .disabled(!(4...6).contains(replacementPIN.count) || !(4...6).contains(replacementPINConfirmation.count))
+            } else {
+                ForEach(Array(model.recoveryQuestionPrompts.enumerated()), id: \.offset) { index, prompt in
+                    Text(prompt)
+                        .font(.subheadline.weight(.semibold))
+                    SecureField("答案 \(index + 1)", text: index == 0 ? $recoveryAnswer1 : $recoveryAnswer2)
+                        .textFieldStyle(.roundedBorder)
+                }
+
+                Button("验证答案") {
+                    switch model.verifyPINRecoveryAnswers([recoveryAnswer1, recoveryAnswer2]) {
+                    case .verified:
+                        recoveryAnswersVerified = true
+                        recoveryError = nil
+                    case .incorrect:
+                        recoveryError = "答案不正确。连续答错 5 次后将暂停 5 分钟。"
+                    case .cooldown(let seconds):
+                        recoveryError = "尝试次数过多，请在 \(max(1, seconds / 60)) 分钟后重试。"
+                    case .notConfigured:
+                        recoveryError = "尚未设置找回问题。"
+                    }
+                }
+                .buttonStyle(PrimaryActionStyle())
+                .disabled(model.recoveryQuestionPrompts.count == 1
+                    ? recoveryAnswer1.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    : recoveryAnswer1.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || recoveryAnswer2.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+
+            if let recoveryError {
+                Text(recoveryError)
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            }
+
+            Button("返回 PIN 验证") {
+                isRecoveringPIN = false
+                recoveryError = nil
+                recoveryAnswersVerified = false
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(PlayTimerTheme.teal)
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    private var legacyRecoverySetupForm: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("设置新 PIN 和找回问题")
+                .font(.subheadline.weight(.bold))
+            SecureField("输入新的 4–6 位 PIN", text: $replacementPIN)
+                .keyboardType(.numberPad)
+                .textFieldStyle(.roundedBorder)
+                .onChange(of: replacementPIN) { replacementPIN = String($0.filter(\.isNumber).prefix(6)) }
+            SecureField("再次输入新 PIN", text: $replacementPINConfirmation)
+                .keyboardType(.numberPad)
+                .textFieldStyle(.roundedBorder)
+                .onChange(of: replacementPINConfirmation) { replacementPINConfirmation = String($0.filter(\.isNumber).prefix(6)) }
+
+            RecoveryQuestionField(question: $recoveryQuestion, answer: $recoveryAnswer)
+
+            if recoveryQuestionMismatch {
+                Text("两次输入的新 PIN 不一致，请检查后重试。")
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            }
+
+            Button("保存新 PIN 和找回问题") {
+                recoveryQuestionMismatch = replacementPIN != replacementPINConfirmation
+                guard !recoveryQuestionMismatch else { return }
+                guard model.resetPINAndConfigureRecovery(replacementPIN, questionsAndAnswers: [
+                    (question: recoveryQuestion, answer: recoveryAnswer)
+                ]) else { return }
+                finishPINRecovery()
+            }
+            .buttonStyle(PrimaryActionStyle())
+            .disabled(!legacyRecoveryCanSave)
+        }
+    }
+
+    private var legacyRecoveryCanSave: Bool {
+        (4...6).contains(replacementPIN.count) && (4...6).contains(replacementPINConfirmation.count) &&
+            !recoveryQuestion.isEmpty && !recoveryAnswer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func finishPINRecovery() {
+        isRecoveringPIN = false
+        recoveryAnswersVerified = false
+        deviceOwnerRecoveryVerified = false
+        recoveryAnswer1 = ""
+        recoveryAnswer2 = ""
+        replacementPIN = ""
+        replacementPINConfirmation = ""
+        recoveryQuestion = ""
+        recoveryAnswer = ""
+        pin = ""
+        recoveryError = nil
+        recoveryQuestionMismatch = false
+        recoverySuccessMessage = "PIN 已重置，请使用新 PIN 验证。"
+    }
+
+    private var recoveryQuestionSetupForm: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            RecoveryQuestionField(question: $recoveryQuestion, answer: $recoveryAnswer)
+
+            if recoveryQuestionMismatch {
+                Text("请选择问题并填写答案。")
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            }
+
+            Button("保存找回问题") {
+                guard model.configurePINRecoveryQuestions([
+                    (question: recoveryQuestion, answer: recoveryAnswer)
+                ]) else { return }
+                dismiss()
+            }
+            .buttonStyle(PrimaryActionStyle())
+            .disabled(!recoveryQuestionsCanSave)
+        }
+    }
+
+    private var recoveryQuestionsCanSave: Bool {
+        !recoveryQuestion.isEmpty && !recoveryAnswer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private var verifiedActions: some View {
@@ -214,7 +437,7 @@ struct ParentGateView: View {
     }
 
     private func completeVerification() {
-        if action == .continueAfterBreak {
+        if action == .continueAfterBreak || action == .configureRecoveryQuestions {
             isVerified = true
         } else {
             onVerified()

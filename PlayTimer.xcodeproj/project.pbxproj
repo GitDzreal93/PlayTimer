@@ -322,18 +322,34 @@
 					45C70FCFE2B307A01F9DCA05 = {
 						DevelopmentTeam = FUU4946D45;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = { enabled = 1; };
+							com.apple.FamilyControls = { enabled = 1; };
+						};
 					};
 					659B41839666073F38A1AD4F = {
 						DevelopmentTeam = FUU4946D45;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = { enabled = 1; };
+							com.apple.FamilyControls = { enabled = 1; };
+						};
 					};
 					728F7B0DF785807A8D8DAB33 = {
 						DevelopmentTeam = FUU4946D45;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = { enabled = 1; };
+							com.apple.FamilyControls = { enabled = 1; };
+						};
 					};
 					FEBAD3096FDB763EB51AB4E6 = {
 						DevelopmentTeam = FUU4946D45;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = { enabled = 1; };
+							com.apple.FamilyControls = { enabled = 1; };
+						};
 					};
 				};
 			};

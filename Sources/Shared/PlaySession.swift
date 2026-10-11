@@ -79,13 +79,23 @@ struct PlaySession: Codable, Equatable {
     }
 
     func refreshed(now: Date = Date()) -> PlaySession {
-        guard phase == .break, let breakEndAt, now >= breakEndAt else {
-            return self
+        var copy = self
+
+        if phase == .playing {
+            let playEndAt = startedAt.addingTimeInterval(TimeInterval(playDurationSeconds))
+            guard now >= playEndAt else { return self }
+
+            copy.phase = .break
+            copy.breakStartedAt = playEndAt
+            copy.breakEndAt = playEndAt.addingTimeInterval(TimeInterval(breakDurationSeconds))
+            copy.lastUpdatedAt = now
         }
 
-        var copy = self
-        copy.phase = .waitingParent
-        copy.lastUpdatedAt = now
+        if copy.phase == .break, let breakEndAt = copy.breakEndAt, now >= breakEndAt {
+            copy.phase = .waitingParent
+            copy.lastUpdatedAt = now
+        }
+
         return copy
     }
 }

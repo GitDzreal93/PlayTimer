@@ -4,6 +4,7 @@ struct ParentReadyScreen: View {
     @EnvironmentObject private var model: AppModel
     var onStart: () -> Void
     var onEditAllowedApps: () -> Void
+    var onSetupRecoveryQuestions: () -> Void
 
     var body: some View {
         GeometryReader { geometry in
@@ -63,9 +64,27 @@ struct ParentReadyScreen: View {
                     .padding(18)
                     .background(PlayTimerTheme.surface, in: RoundedRectangle(cornerRadius: 18))
 
+                    Button(action: onSetupRecoveryQuestions) {
+                        Label(
+                            model.hasPINRecoveryQuestions ? "更改 PIN 找回问题" : "设置 PIN 找回问题",
+                            systemImage: "key.horizontal.fill"
+                        )
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(PlayTimerTheme.teal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
                     Text("开始前会再次确认本轮的 App 与时间设置。")
                         .font(.subheadline)
                         .foregroundStyle(PlayTimerTheme.mutedInk)
+
+                    HStack(spacing: 10) {
+                        Link("隐私政策", destination: URL(string: "https://app.notion.com/p/PlayTimer-3f6bbf47946b81a6866cc5c5c280b0c6")!)
+                        Text("·").foregroundStyle(PlayTimerTheme.mutedInk)
+                        Link("使用条款", destination: URL(string: "https://app.notion.com/p/PlayTimer-3f6bbf47946b814bb7bdea30dd517900")!)
+                    }
+                    .font(.footnote.weight(.medium))
+                    .tint(PlayTimerTheme.teal)
 
                 }
                 .padding(.horizontal, geometry.size.width < 600 ? 20 : 36)

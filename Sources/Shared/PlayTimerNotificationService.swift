@@ -55,7 +55,14 @@ struct PlayTimerNotificationService {
     }
 
     func scheduleBreakFinished(_ session: PlaySession) {
-        let seconds = max(1, session.breakDurationSeconds)
+        let seconds: Int
+        if let breakEndAt = session.breakEndAt {
+            let remaining = Int(ceil(breakEndAt.timeIntervalSinceNow))
+            guard remaining > 0 else { return }
+            seconds = remaining
+        } else {
+            seconds = max(1, session.breakDurationSeconds)
+        }
         let content = makeContent(
             title: "休息结束",
             body: "请家长验证后开始新一轮，或结束儿童模式。"

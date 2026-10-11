@@ -5,7 +5,7 @@ final class PlayTimerMonitorExtension: DeviceActivityMonitor {
     private let stateStore = SharedStateStore.shared
 
     override func eventDidReachThreshold(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
-        guard var session = stateStore.loadSession(),
+        guard var session = stateStore.loadPersistedSession(),
               session.phase == .playing,
               session.activityNameRawValue == activity.rawValue,
               session.eventNameRawValue == event.rawValue
@@ -13,11 +13,11 @@ final class PlayTimerMonitorExtension: DeviceActivityMonitor {
             return
         }
 
-        let now = Date()
+        let playEndAt = session.startedAt.addingTimeInterval(TimeInterval(session.playDurationSeconds))
         session.phase = .break
-        session.breakStartedAt = now
-        session.breakEndAt = Calendar.current.date(byAdding: .second, value: session.breakDurationSeconds, to: now)
-        session.lastUpdatedAt = now
+        session.breakStartedAt = playEndAt
+        session.breakEndAt = playEndAt.addingTimeInterval(TimeInterval(session.breakDurationSeconds))
+        session.lastUpdatedAt = Date()
         session.errorMessage = nil
 
         do {
@@ -31,7 +31,7 @@ final class PlayTimerMonitorExtension: DeviceActivityMonitor {
     }
 
     override func eventWillReachThresholdWarning(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
-        guard let session = stateStore.loadSession(),
+        guard let session = stateStore.loadPersistedSession(),
               session.phase == .playing,
               session.activityNameRawValue == activity.rawValue,
               session.eventNameRawValue == event.rawValue

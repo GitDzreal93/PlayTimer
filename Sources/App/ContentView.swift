@@ -37,12 +37,20 @@ struct ContentView: View {
             if ProcessInfo.processInfo.arguments.contains("-PlayTimerPreviewGate") {
                 parentAction = .end
             }
+            if ProcessInfo.processInfo.arguments.contains("-MarketingCaptureParentGate") {
+                parentAction = .continueAfterBreak
+            }
+            if ProcessInfo.processInfo.arguments.contains("-MarketingCaptureCollection") {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    activeSheet = .appCollections
+                }
+            }
             #endif
             #endif
         }
         .onReceive(ticker) { value in
             now = value
-            let phaseBeforeRefresh = model.phase
+            let phaseBeforeRefresh = model.session?.phase ?? model.phase
             model.syncSessionFromStoreAndMarkWaitingParentIfNeeded()
             announcePhaseChange(from: phaseBeforeRefresh, to: model.phase)
         }
@@ -100,6 +108,8 @@ struct ContentView: View {
                 parentAction = .start
             }, onEditAllowedApps: {
                 parentAction = .editAllowedApps
+            }, onSetupRecoveryQuestions: {
+                parentAction = .configureRecoveryQuestions
             })
         case .playing:
             ChildSessionScreen(now: now, onParentControl: {
@@ -145,6 +155,8 @@ struct ContentView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 activeSheet = .appCollections
             }
+        case .configureRecoveryQuestions:
+            parentAction = nil
         }
     }
 
@@ -225,6 +237,8 @@ private struct PINSetupView: View {
     @State private var pin = ""
     @State private var confirmPIN = ""
     @State private var mismatch = false
+    @State private var recoveryQuestion = ""
+    @State private var recoveryAnswer = ""
 
     var body: some View {
         ScrollView {
@@ -260,6 +274,15 @@ private struct PINSetupView: View {
                 .background(.white, in: RoundedRectangle(cornerRadius: 16))
                 .overlay(RoundedRectangle(cornerRadius: 16).stroke(PlayTimerTheme.border))
 
+                Text("设置 PIN 找回问题")
+                    .font(.headline)
+                    .foregroundStyle(PlayTimerTheme.ink)
+                Text("忘记 PIN 时，回答这道问题即可重设。请选择孩子不容易猜到、且自己能记住的问题。")
+                    .font(.subheadline)
+                    .foregroundStyle(PlayTimerTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
+                RecoveryQuestionField(question: $recoveryQuestion, answer: $recoveryAnswer)
+
                 if mismatch {
                     Text("两次输入不一致，请重试。")
                         .font(.subheadline)
@@ -269,7 +292,7 @@ private struct PINSetupView: View {
                 Button {
                     mismatch = pin != confirmPIN
                     guard !mismatch else { return }
-                    _ = model.createPIN(pin)
+                    _ = model.createPIN(pin, questionsAndAnswers: [(question: recoveryQuestion, answer: recoveryAnswer)])
                 } label: {
                     Label("保存 PIN", systemImage: "key.fill")
                 }
@@ -287,7 +310,41 @@ private struct PINSetupView: View {
     }
 
     private var canAttemptSave: Bool {
-        (4...6).contains(pin.count) && (4...6).contains(confirmPIN.count)
+        (4...6).contains(pin.count) && (4...6).contains(confirmPIN.count) &&
+            !recoveryQuestion.isEmpty && !recoveryAnswer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
+
+enum PINRecoveryQuestion: String, CaseIterable, Identifiable {
+    case familyCode = "你们家的家庭暗号是什么？"
+    case parentNickname = "家长小时候的昵称是什么？"
+    case firstPet = "家长小时候第一只宠物叫什么？"
+    case favoriteTeacher = "家长最喜欢的老师姓什么？"
+    case firstTrip = "家长第一次独自旅行去了哪里？"
+    case favoriteBook = "家长小时候最喜欢的一本书叫什么？"
+
+    var id: String { rawValue }
+}
+
+struct RecoveryQuestionField: View {
+    @Binding var question: String
+    @Binding var answer: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("找回问题")
+                .font(.subheadline.weight(.semibold))
+            Picker("选择一个问题", selection: $question) {
+                Text("请选择问题").tag("")
+                ForEach(PINRecoveryQuestion.allCases) { option in
+                    Text(option.rawValue).tag(option.rawValue)
+                }
+            }
+            .pickerStyle(.menu)
+            .tint(PlayTimerTheme.teal)
+            SecureField("答案", text: $answer)
+                .textFieldStyle(.roundedBorder)
+        }
     }
 }
 

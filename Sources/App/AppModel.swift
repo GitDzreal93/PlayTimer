@@ -19,6 +19,14 @@ final class AppModel: ObservableObject {
     private let notificationDelegate = PlayTimerNotificationDelegate()
     private let pinStore = ParentPINStore()
 
+    var recoveryQuestionPrompts: [String] {
+        pinStore.recoveryQuestionPrompts
+    }
+
+    var hasPINRecoveryQuestions: Bool {
+        pinStore.hasRecoveryQuestions
+    }
+
     init() {
         UNUserNotificationCenter.current().delegate = notificationDelegate
         settings = stateStore.loadSettings()
@@ -62,6 +70,7 @@ final class AppModel: ObservableObject {
     #if targetEnvironment(simulator)
     private static var simulatorPreviewPhase: SessionPhase? {
         let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-MarketingCaptureParentGate") { return .waitingParent }
         if arguments.contains("-PlayTimerPreviewReady") { return .ready }
         if arguments.contains("-PlayTimerPreviewPlaying") { return .playing }
         if arguments.contains("-PlayTimerPreviewBreak") { return .break }
@@ -120,11 +129,7 @@ final class AppModel: ObservableObject {
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         allowedAppCollections = stateStore.loadAllowedAppCollections()
         normalizeSelectedCollection()
-        session = stateStore.loadSession()
-        if let session, session != self.session {
-            try? stateStore.saveSession(session)
-            self.session = session
-        }
+        refreshSessionFromStore()
     }
 
     func requestScreenTimeAuthorization() async {
@@ -238,13 +243,63 @@ final class AppModel: ObservableObject {
         persistCollectionsAndSettings()
     }
 
-    func createPIN(_ pin: String) -> Bool {
+    func createPIN(_ pin: String, questionsAndAnswers: [(question: String, answer: String)]) -> Bool {
         do {
-            try pinStore.createPIN(pin)
+            try pinStore.createPIN(pin, questionsAndAnswers: questionsAndAnswers)
             hasParentPIN = true
             return true
         } catch {
             alertMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func configurePINRecoveryQuestions(_ questionsAndAnswers: [(question: String, answer: String)]) -> Bool {
+        do {
+            try pinStore.configureRecoveryQuestions(questionsAndAnswers)
+            return true
+        } catch {
+            alertMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func verifyPINRecoveryAnswers(_ answers: [String]) -> RecoveryAnswerResult {
+        do {
+            return try pinStore.verifyRecoveryAnswers(answers)
+        } catch {
+            alertMessage = error.localizedDescription
+            return .incorrect
+        }
+    }
+
+    func resetPINUsingRecoveryQuestions(_ pin: String) -> Bool {
+        do {
+            try pinStore.resetPIN(pin)
+            return true
+        } catch {
+            alertMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func resetPINAndConfigureRecovery(
+        _ pin: String,
+        questionsAndAnswers: [(question: String, answer: String)]
+    ) -> Bool {
+        do {
+            try pinStore.resetPINAndConfigureRecovery(pin, questionsAndAnswers: questionsAndAnswers)
+            return true
+        } catch {
+            alertMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func verifyDeviceOwnerForPINRecovery() async -> Bool {
+        do {
+            return try await ParentBiometricAuthenticator().authenticateDeviceOwnerForPINRecovery()
+        } catch {
             return false
         }
     }
@@ -320,28 +375,42 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func markWaitingParentIfNeeded() {
-        guard let refreshed = session?.refreshed(), refreshed != session else { return }
-        do {
-            try stateStore.saveSession(refreshed)
-            session = refreshed
-        } catch {
-            alertMessage = error.localizedDescription
-        }
-    }
-
     func syncSessionFromStoreAndMarkWaitingParentIfNeeded() {
         #if DEBUG
         #if targetEnvironment(simulator)
         if Self.simulatorPreviewPhase != nil { return }
         #endif
         #endif
-        let storedSession = stateStore.loadSession()
-        if storedSession != session {
-            session = storedSession
+        refreshSessionFromStore()
+    }
+
+    private func refreshSessionFromStore(now: Date = .now) {
+        guard let storedSession = stateStore.loadPersistedSession() else {
+            session = nil
+            return
         }
 
-        markWaitingParentIfNeeded()
+        let refreshedSession = storedSession.refreshed(now: now)
+        if refreshedSession != storedSession {
+            do {
+                try stateStore.saveSession(refreshedSession)
+            } catch {
+                alertMessage = error.localizedDescription
+            }
+        }
+
+        let previousPhase = session?.phase
+        session = refreshedSession
+        let isRestrictedPhase = refreshedSession.phase == .break || refreshedSession.phase == .waitingParent
+        let justEnteredRestrictedPhase = previousPhase != refreshedSession.phase ||
+            (storedSession.phase == .playing && refreshedSession.phase != .playing)
+        if isRestrictedPhase && justEnteredRestrictedPhase {
+            ShieldController.applyChildModeShield()
+        }
+        if storedSession.phase == .playing && refreshedSession.phase == .break {
+            notificationService.notifyBreakStarted(refreshedSession)
+            notificationService.scheduleBreakFinished(refreshedSession)
+        }
     }
 
     private func normalizeSelectedCollection() {

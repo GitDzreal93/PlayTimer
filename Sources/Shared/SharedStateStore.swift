@@ -13,7 +13,11 @@ final class SharedStateStore {
     }
 
     func loadSession() -> PlaySession? {
-        read(PlaySession.self, filename: AppConstants.sessionFilename)?.refreshed()
+        loadPersistedSession()?.refreshed()
+    }
+
+    func loadPersistedSession() -> PlaySession? {
+        read(PlaySession.self, filename: AppConstants.sessionFilename)
     }
 
     func saveSession(_ session: PlaySession?) throws {
