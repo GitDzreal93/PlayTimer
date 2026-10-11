@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07A3828E5D4F81C0B1C96128 /* ChildSessionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEDF669551E68DB832BBEBB /* ChildSessionScreen.swift */; };
 		0B49C734541503D809D6D3DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 309348542D850EE211024684 /* Assets.xcassets */; };
+		0D2FC2435A144D12AA8E5511 /* blue-cat-resting.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D2FC2435A144D12AA8E5512 /* blue-cat-resting.png */; };
 		0FB2101BD2B79B899BD31B1B /* AllowedAppCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EC23BA1A79B80225F4BBD0 /* AllowedAppCollection.swift */; };
 		156B5F576ADEE4A31A71FFC4 /* ActivityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6F931217AF8ACC50C454F5 /* ActivityIdentifiers.swift */; };
 		166D280A9F1C332F9CC97111 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0162CE73A1058B5B1FF95 /* UserSettings.swift */; };
@@ -112,6 +113,7 @@
 /* Begin PBXFileReference section */
 		08D4D8C862B2DA80EC4FAD84 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		0AFACAA5332F9C6759B62524 /* PlayTimerMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTimerMonitorExtension.swift; sourceTree = "<group>"; };
+		0D2FC2435A144D12AA8E5512 /* blue-cat-resting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-cat-resting.png"; sourceTree = "<group>"; };
 		0E6F22965451CDF995294D0A /* AllowedAppCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedAppCollectionsView.swift; sourceTree = "<group>"; };
 		309348542D850EE211024684 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AEDF669551E68DB832BBEBB /* ChildSessionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildSessionScreen.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				AA7E189C47292F8CBDCAC15F /* PlayTimerShieldConfigurationExtension.swift */,
+				0D2FC2435A144D12AA8E5512 /* blue-cat-resting.png */,
 			);
 			name = ShieldConfigurationExtension;
 			path = Sources/ShieldConfigurationExtension;
@@ -276,6 +279,7 @@
 			buildConfigurationList = D5D56850D34FC88438517C15 /* Build configuration list for PBXNativeTarget "PlayTimerShieldConfigurationExtension" */;
 			buildPhases = (
 				DC9DE8E204069D179232FF65 /* Sources */,
+				0D2FC2435A144D12AA8E5513 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -376,6 +380,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0D2FC2435A144D12AA8E5513 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D2FC2435A144D12AA8E5511 /* blue-cat-resting.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8633D6F7958363F928E7E737 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;

@@ -9,4 +9,8 @@ extension PlaySession {
     var eventName: DeviceActivityEvent.Name {
         DeviceActivityEvent.Name(eventNameRawValue)
     }
+
+    var deadlineActivityName: DeviceActivityName {
+        DeviceActivityName("PlayTimerDeadline-\(sessionID.uuidString)")
+    }
 }

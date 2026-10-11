@@ -225,7 +225,7 @@ struct ChildSessionScreen: View {
         switch model.phase {
         case .playing: return "距离休息还有一段时间"
         case .break: return "喝口水，看看远处"
-        case .waitingParent: return "家长验证后可以开始新一轮"
+        case .waitingParent: return "快去找你的爸爸妈妈吧"
         case .ready, .error: return ""
         }
     }

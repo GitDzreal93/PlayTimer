@@ -21,33 +21,33 @@ final class PlayTimerShieldConfigurationExtension: ShieldConfigurationDataSource
 
     private func configuration() -> ShieldConfiguration {
         let session = SharedStateStore.shared.loadSession()
-        let subtitle = subtitleText(for: session)
+        let isWaitingForParent = session?.phase == .waitingParent
+        let catImage = UIImage(named: "blue-cat-resting", in: Bundle.main, compatibleWith: nil)
 
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterial,
-            backgroundColor: UIColor(red: 0.95, green: 0.98, blue: 0.97, alpha: 1),
-            icon: UIImage(systemName: "pause.circle.fill"),
-            title: ShieldConfiguration.Label(text: "该休息一下了", color: .label),
-            subtitle: ShieldConfiguration.Label(text: subtitle, color: .secondaryLabel),
-            primaryButtonLabel: ShieldConfiguration.Label(text: "查看休息时间", color: .white),
-            primaryButtonBackgroundColor: UIColor.systemTeal
+            backgroundColor: UIColor(red: 1, green: 0.86, blue: 0.73, alpha: 1),
+            icon: catImage,
+            title: ShieldConfiguration.Label(
+                text: isWaitingForParent ? "休息结束啦" : "眼睛也要休息啦",
+                color: UIColor(red: 0.12, green: 0.24, blue: 0.29, alpha: 1)
+            ),
+            subtitle: ShieldConfiguration.Label(
+                text: isWaitingForParent ? "快去找你的爸爸妈妈吧。" : breakText(for: session),
+                color: UIColor(red: 0.20, green: 0.32, blue: 0.35, alpha: 1)
+            ),
+            primaryButtonLabel: ShieldConfiguration.Label(
+                text: isWaitingForParent ? "知道了" : "继续休息",
+                color: .white
+            ),
+            primaryButtonBackgroundColor: UIColor(red: 0.05, green: 0.45, blue: 0.46, alpha: 1)
         )
     }
 
-    private func subtitleText(for session: PlaySession?) -> String {
-        guard let session else {
-            return "本轮时间已经用完。"
-        }
-
-        if let breakEndAt = session.breakEndAt {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            if session.allowedApplicationCount == 0 {
-                return "本轮 \(session.playDurationMinutes) 分钟已经用完。休息到 \(formatter.string(from: breakEndAt))。"
-            }
-            return "允许 App 的 \(session.playDurationMinutes) 分钟已经用完。休息到 \(formatter.string(from: breakEndAt))。"
-        }
-
-        return "本轮 \(session.playDurationMinutes) 分钟已经用完。"
+    private func breakText(for session: PlaySession?) -> String {
+        guard let end = session?.breakEndAt else { return "放下 iPad，喝口水，看看远处。" }
+        let remaining = max(0, Int(ceil(end.timeIntervalSinceNow)))
+        let clock = String(format: "%02d:%02d", remaining / 60, remaining % 60)
+        let endTime = DateFormatter.localizedString(from: end, dateStyle: .none, timeStyle: .short)
+        return "还要休息 \(clock) · 休息到 \(endTime)"
     }
 }

@@ -33,6 +33,23 @@ struct ContentView: View {
         .onAppear {
             lastAnnouncedPhase = model.phase
             #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-PlayTimerSmokeStart") {
+                Task {
+                    await model.refresh()
+                    let previousSettings = model.settings
+                    model.settings.isTestModeEnabled = true
+                    model.settings.selectedTestPlaySeconds = 30
+                    model.settings.selectedTestBreakSeconds = 30
+                    await model.startChildMode()
+                    print("PlayTimer smoke start: \(model.session?.sessionID.uuidString ?? "none"), error: \(model.alertMessage ?? "none")")
+                    let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppConstants.appGroupID)
+                    print("PlayTimer smoke group: \(groupURL?.path ?? "nil"), file: \(FileManager.default.fileExists(atPath: groupURL?.appendingPathComponent(AppConstants.sessionFilename).path ?? ""))")
+                    model.settings = previousSettings
+                }
+            }
+            if ProcessInfo.processInfo.arguments.contains("-PlayTimerSmokeEnd") {
+                model.endChildMode()
+            }
             #if targetEnvironment(simulator)
             if ProcessInfo.processInfo.arguments.contains("-PlayTimerPreviewGate") {
                 parentAction = .end
