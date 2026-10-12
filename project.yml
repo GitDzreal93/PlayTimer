@@ -63,6 +63,7 @@ targets:
     info:
       path: Config/PlayTimerMonitorExtension-Info.plist
       properties:
+        CFBundleDisplayName: PlayTimer Monitor
         NSExtension:
           NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerMonitorExtension
@@ -88,6 +89,7 @@ targets:
     info:
       path: Config/PlayTimerShieldConfigurationExtension-Info.plist
       properties:
+        CFBundleDisplayName: PlayTimer Shield Configuration
         NSExtension:
           NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerShieldConfigurationExtension
@@ -113,6 +115,7 @@ targets:
     info:
       path: Config/PlayTimerShieldActionExtension-Info.plist
       properties:
+        CFBundleDisplayName: PlayTimer Shield Action
         NSExtension:
           NSExtensionPointIdentifier: com.apple.ManagedSettings.shield-action-service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PlayTimerShieldActionExtension
