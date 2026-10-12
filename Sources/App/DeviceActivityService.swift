@@ -40,7 +40,10 @@ struct DeviceActivityService {
         // foreground game playable after that countdown ends.
         let deadline = session.startedAt.addingTimeInterval(TimeInterval(session.playDurationSeconds))
         let scheduledEnd = Date(timeIntervalSince1970: ceil(deadline.timeIntervalSince1970))
-        let scheduledStart = min(session.startedAt, scheduledEnd.addingTimeInterval(-16 * 60))
+        // Device Activity requires an interval of at least 15 minutes. Starting
+        // the interval before a short test session is valid because the current
+        // time still falls inside it, while its end remains the play deadline.
+        let scheduledStart = scheduledEnd.addingTimeInterval(-16 * 60)
         let calendar = Calendar.current
         let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
         let deadlineSchedule = DeviceActivitySchedule(

@@ -301,7 +301,10 @@ struct ParentGateView: View {
                 }
 
                 Button("验证答案") {
-                    switch model.verifyPINRecoveryAnswers([recoveryAnswer1, recoveryAnswer2]) {
+                    let answers = model.recoveryQuestionPrompts.count == 1
+                        ? [recoveryAnswer1]
+                        : [recoveryAnswer1, recoveryAnswer2]
+                    switch model.verifyPINRecoveryAnswers(answers) {
                     case .verified:
                         recoveryAnswersVerified = true
                         recoveryError = nil
